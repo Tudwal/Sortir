@@ -1,13 +1,33 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ParticipantController!{% endblock %}
+{% block title %} Hello ParticipantController! {% endblock %}
 
 {% block body %}
-{{ participant.pseudo }}
-<p>Prénom :</p>{{ participant.firstName }}
-<p>Nom :</p>{{ participant.lastName }}
-<p>Téléphone :</p>{{ participant.phone }}
-<p>Email :</p>{{ participant.email }}
-<p>Campus :</p>{{ participant.campus.name }}
+
+    <div class="container-fluid px-4">
+
+        {{ participant.pseudo }}
+        <div class="d-flex">
+            <p>Prénom :</p>
+            <p>{{ participant.firstName }}</p>
+        </div>
+        <div class="d-flex">
+            <p>Nom :</p>
+            <p>{{ participant.lastName }}</p>
+        </div>
+        <div class="d-flex">
+            <p>Téléphone :</p>
+            <p>{{ participant.phone }}</p>
+        </div>
+        <div class="d-flex">
+            <p>Email :</p>
+            <p> {{ participant.email }}</p>
+        </div>
+        <div class="d-flex">
+            <p>Campus :</p>
+            <p>{{ participant.campus.name }}</p>
+        </div>
+
+    </div>
 
 {% endblock %}
