@@ -10,7 +10,7 @@
 
     {% if app.user %}
         <div class="mb-3">
-            You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+            You are logged in as {{ app.user.firstname }}, <a href="{{ path('app_logout') }}">Logout</a>
         </div>
     {% endif %}
 
@@ -25,8 +25,7 @@
     >
 
     {#..Jerome: j'ai décommenté ce pavé pour activer le Remember me..#}
-        Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
-        See https://symfony.com/doc/current/security/remember_me.html
+      
 
         <div class="checkbox mb-3">
             <label>

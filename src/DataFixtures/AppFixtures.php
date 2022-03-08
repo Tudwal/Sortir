@@ -19,9 +19,9 @@ class AppFixtures extends Fixture
     {
         $this->manager = $manager;
 
-          $this->addCampus();
+        $this->addCampus();
 
-          $this->addParticipants();
+        $this->addParticipants();
 
         // $this->addEvents();
     }
@@ -58,7 +58,7 @@ class AppFixtures extends Fixture
     {
         $faker = Factory::create('fr_FR');
 
-        for($i = 0; $i<10; $i++){
+        for ($i = 0; $i < 10; $i++) {
             $participant = new Participant();
 
             $participant->setFirstName($faker->firstName)
