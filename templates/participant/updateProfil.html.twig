@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon Profil{% endblock %}
+
+{% block body %}
+
+{{ form_start (formulaire)}}
+
+{{ form_widget (formulaire)}}
+<button class="btn btn-primary" type="submit">Enregistrer</button> 
+{{ form_end (formulaire)}}
+<a href="{{ path('app_participant')}}" class="btn btn-warning">
+{% endblock %}
