@@ -14,11 +14,11 @@ use Symfony\Component\Routing\Annotation\Route;
 class ParticipantController extends AbstractController
 {
     /**
-     * @Route("/", name="app_participant")
+     * @Route("/", name="home")
      */
     public function index(): Response
     {
-        return $this->render('participant/index.html.twig', [
+        return $this->render('base.html.twig', [
             'controller_name' => 'ParticipantController',
         ]);
     }
@@ -45,7 +45,7 @@ class ParticipantController extends AbstractController
         $form->handleRequest($req);
         if ($form->isSubmitted() && $form->isValid() && !(in_array($pseudo, $tab))) {
             $em->flush();
-            return $this->redirectToRoute('app_participant');
+            return $this->redirectToRoute('home');
         }
 
         return $this->render('participant/updateProfil.html.twig', [
