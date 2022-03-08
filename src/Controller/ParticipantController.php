@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Participant;
 use App\Form\ProfilType;
+use App\Repository\ParticipantRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,11 +14,11 @@ use Symfony\Component\Routing\Annotation\Route;
 class ParticipantController extends AbstractController
 {
     /**
-     * @Route("/", name="app_participant")
+     * @Route("/", name="home")
      */
     public function index(): Response
     {
-        return $this->render('participant/index.html.twig', [
+        return $this->render('base.html.twig', [
             'controller_name' => 'ParticipantController',
         ]);
     }
@@ -35,13 +36,16 @@ class ParticipantController extends AbstractController
     /**
      * @Route("/update/{id}", name="app_update_participant")
      */
-    public function update(Participant $p ,Request $req, EntityManagerInterface $em): Response
+    public function update(ParticipantRepository $repo ,Participant $p ,Request $req, EntityManagerInterface $em): Response
     {
+        $pseudo = $p->getPseudo();
+        $tab = $repo->findBy([],["pseudo"]);
+       // if(in_array($pseudo, $tab))
         $form = $this->createForm(ProfilType::class, $p);
         $form->handleRequest($req);
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid() && !(in_array($pseudo, $tab))) {
             $em->flush();
-            return $this->redirectToRoute('app_participant');
+            return $this->redirectToRoute('home');
         }
 
         return $this->render('participant/updateProfil.html.twig', [
