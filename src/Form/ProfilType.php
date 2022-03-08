@@ -12,17 +12,14 @@ class ProfilType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('email')
-            ->add('roles')
-            ->add('password')
-            ->add('lastName')
-            ->add('firstName')
-            ->add('phone')
             ->add('pseudo')
-            ->add('isActif')
-            ->add('campus')
-            ->add('eventRegistrations')
-        ;
+            ->add('firstName')
+            ->add('lastName')
+            ->add('phone')
+            ->add('email')
+            ->add('password')
+            ->add('confirmation', null, ["mapped" => false])
+            ->add('campus');
     }
 
     public function configureOptions(OptionsResolver $resolver): void
