@@ -5,33 +5,35 @@
 {% endblock %}
 
 {% block body %}
-	<style>
-		.example-wrapper {
-			margin: 1em auto;
-			max-width: 800px;
-			width: 95%;
-			font: 18px / 1.5 sans-serif;
-		}
-		.example-wrapper code {
-			background: #F5F5F5;
-			padding: 2px 6px;
-		}
-	</style>
 
-	<div class="example-wrapper">
+	<div class="container-fluid px-4 mt-4">
+		<table id="datatablesSimple">
+			<thead>
+				<tr>
+					<th>Event</th>
+					<th>Date</th>
+					<th>End of register</th>
+					<th>Participant/number of place</th>
+					<th>State</th>
+					<th>Register</th>
+					<th>Organizer</th>
+					<th>Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				{%for event of events %}
+					<tr>
+						<td>event.name</td>
+						<td>event.startDateTime</td>
+						<td>Edinburgh</td>
+						<td>61</td>
+						<td>2011/04/25</td>
+						<td>$320,800</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
 
-		This friendly message is coming from:
-		<ul>
-			<li>Your controller at
-				<code>
-					<a href="{{ 'D:/InstallpourPhp/www/Sortir/src/Controller/EventController.php'|file_link(0) }}">src/Controller/EventController.php</a>
-				</code>
-			</li>
-			<li>Your template at
-				<code>
-					<a href="{{ 'D:/InstallpourPhp/www/Sortir/templates/event/index.html.twig'|file_link(0) }}">templates/event/index.html.twig</a>
-				</code>
-			</li>
-		</ul>
 	</div>
+
 {% endblock %}
