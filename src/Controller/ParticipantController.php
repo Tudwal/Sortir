@@ -25,17 +25,17 @@ class ParticipantController extends AbstractController
     }
 
     /**
-     * @Route("/update/{id}", name="app_update_participant")
+     * @Route("/update", name="app_update_participant")
      */
-    public function update($id ,ParticipantRepository $repo,  Request $req, EntityManagerInterface $em): Response
+    public function update(ParticipantRepository $repo,  Request $req, EntityManagerInterface $em): Response
     {
        // $pseudo = $p->getPseudo();
       //  $tab = $repo->findBy([], ["pseudo"]);
         // if(in_array($pseudo, $tab))
         //&& !(in_array($pseudo, $tab))
-        $p = $repo->find($id);
+       //
         
-        $form = $this->createForm(ProfilType::class, $p);
+        $form = $this->createForm(ProfilType::class, $this->getUser());
         $form->handleRequest($req);
         if ($form->isSubmitted() && $form->isValid()) {
             $em->flush();
@@ -43,8 +43,7 @@ class ParticipantController extends AbstractController
         }
 
         return $this->render('participant/updateProfil.html.twig', [
-            'formulaire' => $form->createView(),
-            'participant'=> $p,      
+            'formulaire' => $form->createView(),      
          ]);
     }
 }
