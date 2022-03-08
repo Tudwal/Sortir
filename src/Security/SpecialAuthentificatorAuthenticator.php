@@ -58,4 +58,12 @@ class SpecialAuthentificatorAuthenticator extends AbstractLoginFormAuthenticator
     {
         return $this->urlGenerator->generate(self::LOGIN_ROUTE);
     }
+
+
+    // Jérôme: Pour pouvoir utiliser le serveur Wamp avec l'identification:
+
+    public function supports(Request $request): bool
+    {
+        return $request->isMethod('POST') && self::LOGIN_ROUTE == $request->get("_route");
+    }
 }
