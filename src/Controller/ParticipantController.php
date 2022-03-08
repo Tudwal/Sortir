@@ -29,12 +29,20 @@ class ParticipantController extends AbstractController
      */
     public function update(ParticipantRepository $repo, Participant $p, Request $req, EntityManagerInterface $em): Response
     {
+<<<<<<< HEAD
         $pseudo = $p->getPseudo();
         $tab = $repo->findBy([], ["pseudo"]);
         // if(in_array($pseudo, $tab))
+=======
+       // $pseudo = $p->getPseudo();
+      //  $tab = $repo->findBy([], ["pseudo"]);
+        // if(in_array($pseudo, $tab))
+        //&& !(in_array($pseudo, $tab))
+        $p = new Participant();
+>>>>>>> 85174e0fc1b050f341f8a340693be0dabfba6431
         $form = $this->createForm(ProfilType::class, $p);
         $form->handleRequest($req);
-        if ($form->isSubmitted() && $form->isValid() && !(in_array($pseudo, $tab))) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $em->flush();
             return $this->redirectToRoute('home');
         }
