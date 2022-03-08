@@ -33,15 +33,13 @@ class ParticipantController extends AbstractController
     }
 
     /**
-     * @Route("/update", name="app_update_participant")
+     * @Route("/update/{id}", name="app_update_participant")
      */
-    public function update(Request $req, EntityManagerInterface $em): Response
+    public function update(Participant $p ,Request $req, EntityManagerInterface $em): Response
     {
-        $p = new Participant();
         $form = $this->createForm(ProfilType::class, $p);
         $form->handleRequest($req);
-        if ($form->isSubmitted()) {
-            $em->persist($p);
+        if ($form->isSubmitted() && $form->isValid()) {
             $em->flush();
             return $this->redirectToRoute('app_participant');
         }
