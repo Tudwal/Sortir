@@ -21,14 +21,16 @@
 				</tr>
 			</thead>
 			<tbody>
-				{%for event of events %}
+				{% for event in events %}
 					<tr>
-						<td>event.name</td>
-						<td>event.startDateTime</td>
-						<td>Edinburgh</td>
-						<td>61</td>
-						<td>2011/04/25</td>
-						<td>$320,800</td>
+						<td>{{event.name}}</td>
+						<td>{{event.startDateTime | date('d-m-Y H:i:s') }}</td>
+						<td>{{event.endRegisterDate | date('d-m-Y')}}</td>
+						<td>{{event.nbParticipantMax}}</td>
+						<td>{{event.state.label}}</td>
+						<td></td>
+						<td>{{event.organizer.pseudo}}</td>
+						<td></td>
 					</tr>
 				{% endfor %}
 			</tbody>
