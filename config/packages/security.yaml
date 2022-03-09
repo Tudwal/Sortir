@@ -23,14 +23,14 @@ security:
       custom_authenticator: App\Security\SpecialAuthentificatorAuthenticator
       logout:
         path: app_logout
-        # where to redirect after logout
-        # target: app_any_route
+        # where to redirect after logout: info jérome c'est pour indiquer où aller après logout
+        target: app_login
 
-        #Jerome: j'ai rajouter ces 3 lignes pour activer le remember me
+        #Jerome: j'ai rajouter ces 4 lignes pour activer le remember me
       remember_me:
         secret: "%kernel.secret%"
         lifetime: 604800
-
+        always_remember_me: true
       # activate different ways to authenticate
       # https://symfony.com/doc/current/security.html#the-firewall
 

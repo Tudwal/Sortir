@@ -5,33 +5,89 @@
 {% endblock %}
 
 {% block body %}
-	<style>
-		.example-wrapper {
-			margin: 1em auto;
-			max-width: 800px;
-			width: 95%;
-			font: 18px / 1.5 sans-serif;
-		}
-		.example-wrapper code {
-			background: #F5F5F5;
-			padding: 2px 6px;
-		}
-	</style>
 
-	<div class="example-wrapper">
+	<div class="container-fluid px-4 mt-4">
+		<h2>
+			Filter les sorties
+		</h2>
+		<form action="" method="POST">
+			<div class="d-flex mt-4">
+				<div>
+					<div class="d-flex">
+						<label for="campus">
+							Campus
+						</label>
+						<select name="campus" id="campus">
+							{% for campus in campusList %}
+								<option value="campus">{{campus}}</option>
+							{% endfor %}
+						</select>
+					</div>
+					<div class="d-flex">
+						<label for="startDate">Between</label>
+						<input type="date">
+						<label for="startDate">and</label>
+						<input type="date">
+					</div>
+				</div>
+				<div>
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
+						<label class="form-check-label" for="flexCheckChecked">
+							Sorties dont je suis l'organisatrice/teur
+						</label>
+					</div>
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
+						<label class="form-check-label" for="flexCheckChecked">
+							Sorties auxquelles je suis inscrit.e
+						</label>
+					</div>
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
+						<label class="form-check-label" for="flexCheckChecked">
+							Sorties auxquelles je ne suis pas inscrit.e
+						</label>
+					</div>
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+						<label class="form-check-label" for="flexCheckDefault">
+							Sorties passées
+						</label>
+					</div>
+				</div>
+			</div>
+			<button class="btn btn-info">Filter le tableau</button>
+		</form>
+		<table id="datatablesSimple">
+			<thead>
+				<tr>
+					<th>Event</th>
+					<th>Date</th>
+					<th>End of register</th>
+					<th>Participant/number of place</th>
+					<th>State</th>
+					<th>Register</th>
+					<th>Organizer</th>
+					<th>Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for event in events %}
+					<tr>
+						<td>{{event.name}}</td>
+						<td>{{event.startDateTime | date('d-m-Y H:i:s') }}</td>
+						<td>{{event.endRegisterDate | date('d-m-Y')}}</td>
+						<td>{{event.nbParticipantMax}}</td>
+						<td>{{event.state.label}}</td>
+						<td></td>
+						<td>{{event.organizer.pseudo}}</td>
+						<td></td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
 
-		This friendly message is coming from:
-		<ul>
-			<li>Your controller at
-				<code>
-					<a href="{{ 'D:/InstallpourPhp/www/Sortir/src/Controller/EventController.php'|file_link(0) }}">src/Controller/EventController.php</a>
-				</code>
-			</li>
-			<li>Your template at
-				<code>
-					<a href="{{ 'D:/InstallpourPhp/www/Sortir/templates/event/index.html.twig'|file_link(0) }}">templates/event/index.html.twig</a>
-				</code>
-			</li>
-		</ul>
 	</div>
+
 {% endblock %}

@@ -163,8 +163,8 @@ class AppFixtures extends Fixture
         $now = new DateTime('now', new DateTimeZone('Europe/Paris'));
         $today = new DateTime('now', new DateTimeZone('Europe/Paris'));
         $end = $today->add(new DateInterval('P15D'));
-        $piscine = new Event();
 
+        $piscine = new Event();
         $piscine->setName('Sortie piscine')
             ->setStartDateTime($now)
             ->setDuration(90)
@@ -177,6 +177,90 @@ class AppFixtures extends Fixture
             ->setOrganizer($faker->randomElement($this->manager->getRepository(Participant::class)->findAll()));
 
         $this->manager->persist($piscine);
+
+        $patinoire = new Event();
+        $patinoire->setName('Sortie patinoire')
+            ->setStartDateTime($now)
+            ->setDuration(90)
+            ->setEndRegisterDate($end)
+            ->setNbParticipantMax(10)
+            ->setDetails('Patiner en toute liberté et sans complexe')
+            ->setState($faker->randomElement($this->manager->getRepository(State::class)->findAll()))
+            ->setLocation($faker->randomElement($this->manager->getRepository(Location::class)->findAll()))
+            ->setCampus($faker->randomElement($this->manager->getRepository(Campus::class)->findAll()))
+            ->setOrganizer($faker->randomElement($this->manager->getRepository(Participant::class)->findAll()));
+
+        $this->manager->persist($patinoire);
+
+        $cinema = new Event();
+        $cinema->setName('Sortie cinéma')
+            ->setStartDateTime($now)
+            ->setDuration(90)
+            ->setEndRegisterDate($end)
+            ->setNbParticipantMax(10)
+            ->setDetails('Aller au cinéma en toute liberté et sans complexe')
+            ->setState($faker->randomElement($this->manager->getRepository(State::class)->findAll()))
+            ->setLocation($faker->randomElement($this->manager->getRepository(Location::class)->findAll()))
+            ->setCampus($faker->randomElement($this->manager->getRepository(Campus::class)->findAll()))
+            ->setOrganizer($faker->randomElement($this->manager->getRepository(Participant::class)->findAll()));
+
+        $this->manager->persist($cinema);
+
+        $karaoke = new Event();
+        $karaoke->setName('Sortie karaoké')
+            ->setStartDateTime($now)
+            ->setDuration(90)
+            ->setEndRegisterDate($end)
+            ->setNbParticipantMax(10)
+            ->setDetails('Chanter en toute liberté et sans complexe')
+            ->setState($faker->randomElement($this->manager->getRepository(State::class)->findAll()))
+            ->setLocation($faker->randomElement($this->manager->getRepository(Location::class)->findAll()))
+            ->setCampus($faker->randomElement($this->manager->getRepository(Campus::class)->findAll()))
+            ->setOrganizer($faker->randomElement($this->manager->getRepository(Participant::class)->findAll()));
+
+        $this->manager->persist($karaoke);
+
+        $restaurant = new Event();
+        $restaurant->setName('Sortie restaurant')
+            ->setStartDateTime($now)
+            ->setDuration(90)
+            ->setEndRegisterDate($end)
+            ->setNbParticipantMax(10)
+            ->setDetails('Manger en toute liberté et sans complexe')
+            ->setState($faker->randomElement($this->manager->getRepository(State::class)->findAll()))
+            ->setLocation($faker->randomElement($this->manager->getRepository(Location::class)->findAll()))
+            ->setCampus($faker->randomElement($this->manager->getRepository(Campus::class)->findAll()))
+            ->setOrganizer($faker->randomElement($this->manager->getRepository(Participant::class)->findAll()));
+
+        $this->manager->persist($restaurant);
+
+        $bowling = new Event();
+        $bowling->setName('Sortie bowling')
+            ->setStartDateTime($now)
+            ->setDuration(90)
+            ->setEndRegisterDate($end)
+            ->setNbParticipantMax(10)
+            ->setDetails('Bowler en toute liberté et sans complexe')
+            ->setState($faker->randomElement($this->manager->getRepository(State::class)->findAll()))
+            ->setLocation($faker->randomElement($this->manager->getRepository(Location::class)->findAll()))
+            ->setCampus($faker->randomElement($this->manager->getRepository(Campus::class)->findAll()))
+            ->setOrganizer($faker->randomElement($this->manager->getRepository(Participant::class)->findAll()));
+
+        $this->manager->persist($bowling);
+
+        $plage = new Event();
+        $plage->setName('Sortie plage')
+            ->setStartDateTime($now)
+            ->setDuration(90)
+            ->setEndRegisterDate($end)
+            ->setNbParticipantMax(10)
+            ->setDetails('Nager en toute liberté et sans complexe')
+            ->setState($faker->randomElement($this->manager->getRepository(State::class)->findAll()))
+            ->setLocation($faker->randomElement($this->manager->getRepository(Location::class)->findAll()))
+            ->setCampus($faker->randomElement($this->manager->getRepository(Campus::class)->findAll()))
+            ->setOrganizer($faker->randomElement($this->manager->getRepository(Participant::class)->findAll()));
+
+        $this->manager->persist($plage);
 
         $this->manager->flush();
     }
