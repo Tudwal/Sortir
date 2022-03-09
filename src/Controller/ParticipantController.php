@@ -13,15 +13,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ParticipantController extends AbstractController
 {
-    /**
-     * @Route("/", name="home")
-     */
-    public function index(): Response
-    {
-        return $this->render('base.html.twig', [
-            'controller_name' => 'ParticipantController',
-        ]);
-    }
 
     /**
      * @Route("/profil/{id}", name="app_view_participant")
@@ -34,22 +25,25 @@ class ParticipantController extends AbstractController
     }
 
     /**
-     * @Route("/update/{id}", name="app_update_participant")
+     * @Route("/update", name="app_update_participant")
      */
-    public function update(ParticipantRepository $repo ,Participant $p ,Request $req, EntityManagerInterface $em): Response
+    public function update(ParticipantRepository $repo,  Request $req, EntityManagerInterface $em): Response
     {
-        $pseudo = $p->getPseudo();
-        $tab = $repo->findBy([],["pseudo"]);
-       // if(in_array($pseudo, $tab))
-        $form = $this->createForm(ProfilType::class, $p);
+       // $pseudo = $p->getPseudo();
+      //  $tab = $repo->findBy([], ["pseudo"]);
+        // if(in_array($pseudo, $tab))
+        //&& !(in_array($pseudo, $tab))
+       //
+        
+        $form = $this->createForm(ProfilType::class, $this->getUser());
         $form->handleRequest($req);
-        if ($form->isSubmitted() && $form->isValid() && !(in_array($pseudo, $tab))) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $em->flush();
             return $this->redirectToRoute('home');
         }
 
         return $this->render('participant/updateProfil.html.twig', [
-            'formulaire' => $form->createView(),
-        ]);
+            'formulaire' => $form->createView(),      
+         ]);
     }
 }

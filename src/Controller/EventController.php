@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class EventController extends AbstractController
 {
     /**
-     * @Route("/envent-list", name="event_list")
+     * @Route("/", name="home")
      */
     public function eventList(EventRepository $repo): Response
     {

@@ -3,11 +3,18 @@
 namespace App\DataFixtures;
 
 use App\Entity\Campus;
+use App\Entity\City;
 use App\Entity\Event;
+use App\Entity\Location;
 use App\Entity\Participant;
+use App\Entity\State;
+use DateInterval;
+use DateTime;
+use DateTimeZone;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
+use Faker\Provider\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
@@ -23,7 +30,13 @@ class AppFixtures extends Fixture
 
         $this->addParticipants();
 
-        // $this->addEvents();
+        $this->addState();
+
+        $this->addCity();
+
+        $this->addLocations();
+
+        $this->addEvents();
     }
 
     public function __construct(UserPasswordHasherInterface $passwordHasher)
@@ -77,11 +90,94 @@ class AppFixtures extends Fixture
         $this->manager->flush();
     }
 
-    // public function addEvents()
-    // {
-    //     $piscine = new Event();
+    public function addState()
+    {
+        $creee = new State();
+        $creee->setLabel('Créée');
+        $this->manager->persist($creee);
 
-    //     $piscine->setName('Sortie piscine')
+        $ouverte = new State();
+        $ouverte->setLabel('Ouverte');
+        $this->manager->persist($ouverte);
 
-    // }
+        $cloturee = new State();
+        $cloturee->setLabel('Clôturée');
+        $this->manager->persist($cloturee);
+
+        $enCours = new State();
+        $enCours->setLabel('Activité en cours');
+        $this->manager->persist($enCours);
+
+        $passee = new State();
+        $passee->setLabel('Passée');
+        $this->manager->persist($passee);
+
+        $annulee = new State();
+        $annulee->setLabel('Annulée');
+        $this->manager->persist($annulee);
+
+        $this->manager->flush();
+    }
+
+
+    public function addCity()
+    {
+        $faker = Factory::create('fr_FR');
+
+        for ($i = 0; $i < 10; $i++) {
+            $city = new City();
+            $city->setName($faker->city)
+                ->setPostalCode(Address::postcode());
+
+            $this->manager->persist($city);
+        }
+
+
+        $this->manager->flush();
+    }
+
+    public function addLocations()
+    {
+        $faker = Factory::create('fr_FR');
+
+        for ($i = 0; $i < 10; $i++) {
+            $location = new Location();
+
+            $location->setName($faker->streetName)
+                ->setStreet($faker->streetAddress)
+                ->setLatitude($faker->randomNumber(5, true))
+                ->setLongitude($faker->randomNumber(5, true))
+                ->setCity($faker->randomElement($this->manager->getRepository(City::class)->findAll()));
+
+            $this->manager->persist($location);
+        }
+
+        $this->manager->flush();
+    }
+
+
+    public function addEvents()
+    {
+        $faker = Factory::create('fr_FR');
+
+        $now = new DateTime('now', new DateTimeZone('Europe/Paris'));
+        $today = new DateTime('now', new DateTimeZone('Europe/Paris'));
+        $end = $today->add(new DateInterval('P15D'));
+        $piscine = new Event();
+
+        $piscine->setName('Sortie piscine')
+            ->setStartDateTime($now)
+            ->setDuration(90)
+            ->setEndRegisterDate($end)
+            ->setNbParticipantMax(10)
+            ->setDetails('Nager la brasse coulée en toute liberté et sans complexe')
+            ->setState($faker->randomElement($this->manager->getRepository(State::class)->findAll()))
+            ->setLocation($faker->randomElement($this->manager->getRepository(Location::class)->findAll()))
+            ->setCampus($faker->randomElement($this->manager->getRepository(Campus::class)->findAll()))
+            ->setOrganizer($faker->randomElement($this->manager->getRepository(Participant::class)->findAll()));
+
+        $this->manager->persist($piscine);
+
+        $this->manager->flush();
+    }
 }
