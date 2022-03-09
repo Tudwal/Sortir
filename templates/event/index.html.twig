@@ -7,87 +7,108 @@
 {% block body %}
 
 	<div class="container-fluid px-4 mt-4">
-		<h2>
-			Filter les sorties
-		</h2>
-		<form action="" method="POST">
-			<div class="d-flex mt-4">
-				<div>
-					<div class="d-flex">
-						<label for="campus">
-							Campus
+
+
+		{{form_start(formulaire)}}
+		<fieldset>
+			<legend>Rechercher dans la liste</legend>
+			<div class="d-flex">
+				<div class="col-6">
+					<div class="form-group row">
+						<label for="select" class="col-4 col-form-label">
+							{{form_label(formulaire.campus)}}
 						</label>
-						<select name="campus" id="campus">
-							{% for campus in campusList %}
-								<option value="campus">{{campus}}</option>
-							{% endfor %}
-						</select>
+						<div class="col-8">
+							{{form_widget(formulaire.campus)}}
+						</div>
 					</div>
-					<div class="d-flex">
-						<label for="startDate">Between</label>
-						<input type="date">
-						<label for="startDate">and</label>
-						<input type="date">
+
+					<div class="form-group row">
+						<label for="startDate" class="col-4 col-form-label">
+							{{form_label(formulaire.startDate)}}
+						</label>
+						<div class="col-8">
+							{{form_widget(formulaire.startDate)}}
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label for="startDate" class="col-4 col-form-label">
+							{{form_label(formulaire.endDate)}}
+						</label>
+						<div class="col-8">
+							{{form_widget(formulaire.endDate)}}
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label class="col-md-4 control-label" for="searchinput">{{form_label(formulaire.search)}}</label>
+						<div class="col-md-4">
+							{{form_widget(formulaire.search)}}
+						</div>
 					</div>
 				</div>
-				<div>
-					<div class="form-check">
-						<input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-						<label class="form-check-label" for="flexCheckChecked">
-							Sorties dont je suis l'organisatrice/teur
-						</label>
+				<div class="col-6">
+					<div class="form-group row">
+						<div class="col-8">
+							<div class="custom-control custom-checkbox custom-control-inline">
+								{{form_widget(formulaire.eventOrganizer)}}
+								<label for="checkbox_1" class="custom-control-label">{{form_label(formulaire.eventOrganizer)}}</label>
+							</div>
+							<div class="custom-control custom-checkbox custom-control-inline">
+								{{form_widget(formulaire.eventRegister)}}
+								<label for="checkbox_1" class="custom-control-label">{{form_label(formulaire.eventRegister)}}</label>
+							</div>
+							<div class="custom-control custom-checkbox custom-control-inline">
+								{{form_widget(formulaire.eventNotRegister)}}
+								<label for="checkbox_1" class="custom-control-label">{{form_label(formulaire.eventNotRegister)}}</label>
+							</div>
+							<div class="custom-control custom-checkbox custom-control-inline">
+								{{form_widget(formulaire.pastEvent)}}
+								<label for="checkbox_1" class="custom-control-label">{{form_label(formulaire.pastEvent)}}</label>
+							</div>
+						</div>
 					</div>
-					<div class="form-check">
-						<input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-						<label class="form-check-label" for="flexCheckChecked">
-							Sorties auxquelles je suis inscrit.e
-						</label>
-					</div>
-					<div class="form-check">
-						<input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-						<label class="form-check-label" for="flexCheckChecked">
-							Sorties auxquelles je ne suis pas inscrit.e
-						</label>
-					</div>
-					<div class="form-check">
-						<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-						<label class="form-check-label" for="flexCheckDefault">
-							Sorties passées
-						</label>
+					<div class="form-group row">
+						<div class="offset-4 col-8">
+							<button name="submit" type="submit" class="btn btn-primary">Submit</button>
+						</div>
 					</div>
 				</div>
 			</div>
-			<button class="btn btn-info">Filter le tableau</button>
-		</form>
-		<table id="datatablesSimple">
-			<thead>
-				<tr>
-					<th>Event</th>
-					<th>Date</th>
-					<th>End of register</th>
-					<th>Participant/number of place</th>
-					<th>State</th>
-					<th>Register</th>
-					<th>Organizer</th>
-					<th>Action</th>
-				</tr>
-			</thead>
-			<tbody>
-				{% for event in events %}
+
+		</fieldset>
+		{{form_end(formulaire)}}
+
+		<div class="table-responsive mt-5">
+			<table class="table table-hover">
+				<thead>
 					<tr>
-						<td>{{event.name}}</td>
-						<td>{{event.startDateTime | date('d-m-Y H:i:s') }}</td>
-						<td>{{event.endRegisterDate | date('d-m-Y')}}</td>
-						<td>{{event.nbParticipantMax}}</td>
-						<td>{{event.state.label}}</td>
-						<td></td>
-						<td>{{event.organizer.pseudo}}</td>
-						<td></td>
+						<th scope="col">Event</th>
+						<th scope="col">Date</th>
+						<th scope="col">End of register</th>
+						<th scope="col">Participant/number of place</th>
+						<th scope="col">State</th>
+						<th scope="col">Register</th>
+						<th scope="col">Organizer</th>
+						<th scope="col">Action</th>
 					</tr>
-				{% endfor %}
-			</tbody>
-		</table>
-
+				</thead>
+				<tbody>
+					{% for event in events %}
+						<tr>
+							<td>{{event.name}}</td>
+							<td>{{event.startDateTime | date('d-m-Y H:i:s') }}</td>
+							<td>{{event.endRegisterDate | date('d-m-Y')}}</td>
+							<td>{{event.nbParticipantMax}}</td>
+							<td>{{event.state.label}}</td>
+							<td></td>
+							<td>{{event.organizer.pseudo}}</td>
+							<td></td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
 	</div>
-
 {% endblock %}
