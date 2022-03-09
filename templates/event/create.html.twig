@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvelle sortie
+{% endblock %}
+
+{% block body %}
+	<div class="col-3 my-3">
+
+		<div class="position-relative">
+			<div class="position-absolute top-50 start-50 translate-middle-x">
+				{{ form_start (formulaire)}}
+
+				{{ form_widget (formulaire)}}
+
+				<div class="my-4">
+					<button class="btn btn-primary" type="submit">Enregistrer
+						<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary"></span>
+					</button>
+					<a href="{{ path('app_view_participant',{id:5})}}" class="btn btn-warning">
+						Annuler
+						<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary"></span>
+					</a>
+				</div>
+				#}
+				{{ form_end (formulaire)}}
+			</div>
+		</div>
+	</div>
+{% endblock %}
