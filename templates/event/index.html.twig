@@ -104,7 +104,11 @@
 							<td>{{event.state.label}}</td>
 							<td></td>
 							<td>{{event.organizer.pseudo}}</td>
-							<td></td>
+							<td>
+								<a href="{{ path('event_details',{id:event.id })}}" class="btn btn-warning">
+                				<i class="fa-solid fa-eye">View</i>
+               					 </a>
+							</td>
 						</tr>
 					{% endfor %}
 				</tbody>

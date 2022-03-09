@@ -106,4 +106,17 @@ class EventController extends AbstractController
 
         return $this->redirectToRoute('event/create.html.twig');
     }
+    
+    /**
+     * @Route("/details/{id}", name="event_details")
+     */
+    public function detail(Event $e, EventRepository $repo): Response
+    {
+        $participants = $repo->findAll();
+        
+        return $this->render('event/detail.html.twig', [
+            'event' => $e,
+            'participants' => $participants,
+        ]);
+    }
 }
