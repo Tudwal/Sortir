@@ -29,33 +29,17 @@ class EventController extends AbstractController
         $createSearchType = new ModelSearchType();
         $form = $this->createForm(EventSearchType::class, $createSearchType);
         $form->handleRequest($request);
+        // dump($form->isSubmitted());
+        // dd($form->isValid());
 
         if ($form->isSubmitted() && $form->isValid()) {
-            return $this->redirectToRoute('home');
+            $form->getData();
+            dd($form);
         }
 
         return $this->render('event/index.html.twig', [
             'events' => $events,
             'campusList' => $campus,
-            'formulaire' => $form->createView(),
-        ]);
-    }
-
-    /**
-     * @Route("/search", name="search")
-     */
-    public function search(Request $request): Response
-    {
-
-        $createSearchType = new ModelSearchType();
-        $form = $this->createForm(EventSearchType::class, $createSearchType);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            return $this->redirectToRoute('home');
-        }
-
-        return $this->render('event/search.html.twig', [
             'formulaire' => $form->createView(),
         ]);
     }
@@ -119,6 +103,19 @@ class EventController extends AbstractController
         }
         return $this->render('event/create.html.twig', [
             'formulaire' => $form->createView(),
+        ]);
+    }
+    
+    /**
+     * @Route("/details/{id}", name="event_details")
+     */
+    public function detail(Event $e, EventRepository $repo): Response
+    {
+        $participants = $repo->findAll();
+        
+        return $this->render('event/detail.html.twig', [
+            'event' => $e,
+            'participants' => $participants,
         ]);
     }
 }
