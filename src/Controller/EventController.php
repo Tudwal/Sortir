@@ -4,12 +4,13 @@ namespace App\Controller;
 
 use App\Entity\Event;
 use App\Entity\State;
+use App\Form\EventSearchType;
 use App\Form\EventType;
+use App\Form\ModelSearchType;
 use App\Repository\CampusRepository;
 use App\Repository\EventRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\MakerBundle\EventRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -19,14 +20,42 @@ class EventController extends AbstractController
     /**
      * @Route("/", name="home")
      */
-    public function eventList(EventRepository $repoE, CampusRepository $repoC): Response
+    public function eventList(EventRepository $repoE, CampusRepository $repoC, Request $request): Response
     {
         $events = $repoE->findAll();
         $campus = $repoC->findAll();
 
+        $createSearchType = new ModelSearchType();
+        $form = $this->createForm(EventSearchType::class, $createSearchType);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            return $this->redirectToRoute('home');
+        }
+
         return $this->render('event/index.html.twig', [
             'events' => $events,
-            'campusList' => $campus
+            'campusList' => $campus,
+            'formulaire' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/search", name="search")
+     */
+    public function search(Request $request): Response
+    {
+
+        $createSearchType = new ModelSearchType();
+        $form = $this->createForm(EventSearchType::class, $createSearchType);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            return $this->redirectToRoute('home');
+        }
+
+        return $this->render('event/search.html.twig', [
+            'formulaire' => $form->createView(),
         ]);
     }
 
