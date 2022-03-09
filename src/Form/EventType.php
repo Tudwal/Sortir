@@ -44,7 +44,7 @@ class EventType extends AbstractType
             ->add('details', TextareaType::class, ['label' => 'Description et infos: '])
             //->add('state')
             //->add('location')
-            //->add('campus')
+            ->add('campus')
             //->add('organizer')
             //->add('participants')
         ;
