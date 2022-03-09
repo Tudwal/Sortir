@@ -9,6 +9,7 @@ use App\Repository\CampusRepository;
 use App\Repository\EventRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\MakerBundle\EventRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -18,14 +19,17 @@ class EventController extends AbstractController
     /**
      * @Route("/", name="home")
      */
-    public function eventList(EventRepository $repo): Response
+    public function eventList(EventRepository $repoE, CampusRepository $repoC): Response
     {
-        $events = $repo->findAll();
+        $events = $repoE->findAll();
+        $campus = $repoC->findAll();
 
         return $this->render('event/index.html.twig', [
             'events' => $events,
+            'campusList' => $campus
         ]);
     }
+
 
     /**
      * @Route("/event-delete/{id}", name="event_delete")
