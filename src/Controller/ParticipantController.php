@@ -29,6 +29,10 @@ class ParticipantController extends AbstractController
      */
     public function update(ParticipantRepository $repo,  Request $req, EntityManagerInterface $em): Response
     {
+        /**
+        * @var Participant $p 
+        */
+        $p = $this->getUser();
        // $pseudo = $p->getPseudo();
       //  $tab = $repo->findBy([], ["pseudo"]);
         // if(in_array($pseudo, $tab))
@@ -37,7 +41,17 @@ class ParticipantController extends AbstractController
         
         $form = $this->createForm(ProfilType::class, $this->getUser());
         $form->handleRequest($req);
+        
+        dd($form->get('password')->getData());
+        $password = $p->getPassword();
+        
+        // if($form->getData()->getPassword())
+        
         if ($form->isSubmitted() && $form->isValid()) {
+            if($form->get('password')->getData()){
+                //haché le mot de passe et set le password + persit
+            }
+            dd($form->getData);
             $em->flush();
             return $this->redirectToRoute('home');
         }
