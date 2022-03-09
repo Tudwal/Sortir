@@ -9,6 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ParticipantController extends AbstractController
@@ -27,37 +28,38 @@ class ParticipantController extends AbstractController
     /**
      * @Route("/update", name="app_update_participant")
      */
-    public function update(ParticipantRepository $repo,  Request $req, EntityManagerInterface $em): Response
+    public function update(ParticipantRepository $repo,  Request $req, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher): Response
     {
         /**
-        * @var Participant $p 
-        */
+         * @var Participant $p 
+         */
         $p = $this->getUser();
-       // $pseudo = $p->getPseudo();
-      //  $tab = $repo->findBy([], ["pseudo"]);
-        // if(in_array($pseudo, $tab))
-        //&& !(in_array($pseudo, $tab))
-       //
-        
+
+
         $form = $this->createForm(ProfilType::class, $this->getUser());
         $form->handleRequest($req);
-        
-        dd($form->get('password')->getData());
-        $password = $p->getPassword();
-        
-        // if($form->getData()->getPassword())
-        
+
+        $cleanPassword = $form->get('password')->getData();
+
         if ($form->isSubmitted() && $form->isValid()) {
-            if($form->get('password')->getData()){
+
+            if ($cleanPassword) {
+                dd('je suis dans le elseif');
                 //haché le mot de passe et set le password + persit
+                $hashedPassword = $passwordHasher->hashPassword(
+                    $p,
+                    $cleanPassword,
+                );
+                $p->setPassword($hashedPassword);
+                $em->persist($p);
             }
-            dd($form->getData);
+
             $em->flush();
             return $this->redirectToRoute('home');
         }
 
         return $this->render('participant/updateProfil.html.twig', [
-            'formulaire' => $form->createView(),      
-         ]);
+            'formulaire' => $form->createView(),
+        ]);
     }
 }
