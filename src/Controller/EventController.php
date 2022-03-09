@@ -47,32 +47,34 @@ class EventController extends AbstractController
     /**
      * @Route("/event-delete/{id}", name="event_delete")
      */
-    public function eventDelete(Event $e, Request $req, EntityManagerInterface $em): Response
+    public function eventDelete(Event $e, EntityManagerInterface $em): Response
     {
         $em->remove($e);
         $em->flush();
 
-        return $this->redirectToRoute('event/index.html.twig');
+        return $this->redirectToRoute('home');
     }
 
     /**
      * @Route("/event-create", name="event_create")
      */
-    public function eventCreate(Request $req, EntityManagerInterface $em): Response
+    public function eventCreate(EntityManagerInterface $em, Request $req): Response
     {
         $event = new Event();
+        $event->setOrganizer($this->getUser()); //getParticipant() n'est pas connu !!
+        //$event->setCampus($this->getUser()->getCampus());
+
+
         $form = $this->createForm(EventType::class, $event);
-        $form->handleRequest($event);
+        $form->handleRequest($req);
+
+
         if ($form->isSubmitted() && $form->isValid()) {
 
             $state = new State;
             $state->setLabel('Created');
 
-
             $event->setState($state);
-            $event->setOrganizer($this->getUser()); //getParticipant() n'est pas connu !!
-            $event->setCampus($this->getUser()->getCampus);
-
 
             $this->addFlash(
                 'success',
@@ -80,14 +82,28 @@ class EventController extends AbstractController
             );
             $em->persist($event);
             $em->flush();
-            return $this->redirectToRoute('event/index.html.twig');
-        } else {
+            return $this->redirectToRoute('home');
+        } elseif ($form->isSubmitted() && !$form->isValid()) {
             $this->addFlash(
                 'danger',
-                'You have a problem with your new event'
+                'Tu as un problème avec ta nouvelle sortie'
             );
         }
-
-        return $this->redirectToRoute('event/create.html.twig');
+        return $this->render('event/create.html.twig', [
+            'formulaire' => $form->createView(),
+        ]);
+    }
+    
+    /**
+     * @Route("/details/{id}", name="event_details")
+     */
+    public function detail(Event $e, EventRepository $repo): Response
+    {
+        $participants = $repo->findAll();
+        
+        return $this->render('event/detail.html.twig', [
+            'event' => $e,
+            'participants' => $participants,
+        ]);
     }
 }
