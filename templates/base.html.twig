@@ -43,16 +43,21 @@
 						<i class="fas fa-user fa-fw"></i>
 					</a>
 					<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-						<li>
-							<a class="dropdown-item" href="#!">Settings</a>
-						</li>
-						<li>
-							<a class="dropdown-item" href="#!">Activity Log</a>
-						</li>
-						<li><hr class="dropdown-divider"/></li>
-						<li>
-							<a class="dropdown-item" href="{{path('app_login')}}">Logout</a>
-						</li>
+						{% if is_granted('ROLE_USER')%}
+							<li>
+								<a class="dropdown-item" href="{{path('app_logout')}}">Se déconnecter</a>
+							</li>
+
+							<li><hr class="dropdown-divider"/></li>
+
+
+						{% else %}
+							<li>
+								<a class="dropdown-item" href="{{path('app_login')}}">Se connecter</a>
+							</li>
+
+
+						{% endif %}
 					</ul>
 				</li>
 			</ul>
@@ -71,22 +76,22 @@
 							</a>
 							<div class="sb-sidenav-menu-heading">Interface</div>
 
-							<a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-								<div class="sb-nav-link-icon">
-									<i class="fas fa-columns"></i>
-								</div>
-								Authentification
-								<div class="sb-sidenav-collapse-arrow">
-									<i class="fas fa-angle-down"></i>
-								</div>
-							</a>
-							<div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-								<nav class="sb-sidenav-menu-nested nav">
-									<a class="nav-link" href="{{path('app_login')}}">Login</a>
-									<a class="nav-link" href="layout-sidenav-light.html">Register</a>
-									<a class="nav-link" href="layout-sidenav-light.html">Forgot password</a>
-								</nav>
-							</div>
+							{# <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+															<div class="sb-nav-link-icon">
+																<i class="fas fa-columns"></i>
+															</div>
+															Authentification
+															<div class="sb-sidenav-collapse-arrow">
+																<i class="fas fa-angle-down"></i>
+															</div>
+														</a>
+														<div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+															<nav class="sb-sidenav-menu-nested nav">
+																<a class="nav-link" href="{{path('app_login')}}">Login</a>
+																<a class="nav-link" href="layout-sidenav-light.html">Register</a>
+																<a class="nav-link" href="layout-sidenav-light.html">Forgot password</a>
+															</nav>
+														</div> #}
 							<a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
 								<div class="sb-nav-link-icon">
 									<i class="fas fa-columns"></i>
@@ -108,12 +113,22 @@
 					<div class="sb-sidenav-footer">
 						<div class="sb-sidenav-footer">
 							<div class="small">Logged in as:</div>
-							{{app.user.pseudo}}
+							{#{{app.user.pseudo}}#}
 						</div>
 					</div>
 				</nav>
 			</div>
-			<div id="layoutSidenav_content"> {% block body %}{% endblock %}
+			<div id="layoutSidenav_content">
+
+				{% for label, messages in app.flashes %}
+					{% for message in messages %}
+						<div class="alert alert-{{ label }}" role="alert">
+							{{ message }}
+						</div>
+					{% endfor %}
+				{% endfor %}
+
+				{% block body %}{% endblock %}
 
 				<footer class="py-4 bg-light mt-auto">
 					<div class="container-fluid px-4">

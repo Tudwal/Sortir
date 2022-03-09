@@ -75,6 +75,6 @@ class EventController extends AbstractController
             );
         }
 
-        return $this->redirectToRoute('event/index.html.twig');
+        return $this->redirectToRoute('event/create.html.twig');
     }
 }
