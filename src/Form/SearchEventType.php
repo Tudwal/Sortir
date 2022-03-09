@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Campus;
+use App\Repository\CampusRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -16,11 +17,14 @@ class SearchEventType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $user = $this->security->getUser();
+
         $builder
             ->add('campus', EntityType::class, [
                 'label' => 'Campus : ',
                 'class' => Campus::class,
                 'choice_label' =>  'name',
+                'choice_value' => 'name',
                 'required' => false
             ])
             ->add('search', SearchType::class, [
