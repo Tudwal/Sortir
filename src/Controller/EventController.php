@@ -14,6 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class EventController extends AbstractController
 {
@@ -58,11 +59,22 @@ class EventController extends AbstractController
     /**
      * @Route("/event-create", name="event_create")
      */
-    public function eventCreate(EntityManagerInterface $em, Request $req): Response
+    public function eventCreate(EntityManagerInterface $em, Request $req, UserInterface $user): Response
     {
         $event = new Event();
-        $event->setOrganizer($this->getUser()); //getParticipant() n'est pas connu !!
-        //$event->setCampus($this->getUser()->getCampus());
+        $event->setOrganizer($this->getUser());
+        //dd($this->getUser());
+
+        $participant = $this->getUser();
+
+        /**
+         * @var Participant $participant
+         */
+
+
+        $event->setCampus($this->getUser()->getCampus());
+
+
 
 
         $form = $this->createForm(EventType::class, $event);
