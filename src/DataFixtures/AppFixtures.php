@@ -162,6 +162,7 @@ class AppFixtures extends Fixture
 
         $now = new DateTime('now', new DateTimeZone('Europe/Paris'));
         $past = (new DateTime('now', new DateTimeZone('Europe/Paris')))->modify('-18 days');
+        $past2 = (new DateTime('now', new DateTimeZone('Europe/Paris')))->modify('-5 days');
         $today = new DateTime('now', new DateTimeZone('Europe/Paris'));
         $end = $today->add(new DateInterval('P15D'));
 
@@ -169,7 +170,7 @@ class AppFixtures extends Fixture
         $piscine->setName('Sortie piscine')
             ->setStartDateTime($past)
             ->setDuration(90)
-            ->setEndRegisterDate($end)
+            ->setEndRegisterDate($past2)
             ->setNbParticipantMax(10)
             ->setDetails('Nager la brasse coulée en toute liberté et sans complexe')
             ->setState($faker->randomElement($this->manager->getRepository(State::class)->findAll()))

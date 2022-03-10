@@ -83,7 +83,7 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     private $eventRegistrations;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      */
     private $imgName;
 
@@ -95,7 +95,7 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     public function setImgName($imgName)
     {
         $this->imgName = $imgName;
-        
+
         return $this;
     }
 
