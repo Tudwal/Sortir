@@ -35,9 +35,9 @@ class EventController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
+            $search = $form->get('search')->getData();
             $user = $this->getUser();
-            //dd($data->search);
-            $eventList = $repoEvent->searchByFilter($data, $user);
+            $eventList = $repoEvent->searchByFilter($data, $search, $user);
         }
 
         return $this->render('event/index.html.twig', [
