@@ -36,7 +36,7 @@ class EventController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
             $user = $this->getUser();
-            dd($data->search);
+            //dd($data->search);
             $eventList = $repoEvent->searchByFilter($data, $user);
         }
 
