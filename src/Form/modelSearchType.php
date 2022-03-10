@@ -14,7 +14,6 @@ class ModelSearchType
 
     /**
      * 
-     * @var string
      */
     public $search;
 

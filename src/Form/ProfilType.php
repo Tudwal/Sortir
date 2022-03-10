@@ -47,7 +47,7 @@ class ProfilType extends AbstractType
                 'constraints' => [
                     new File([
                         'mimeTypes' => [
-                            'application/jpeg', 'application/jpg', 'application/png'
+                            'image/jpeg', 'image/jpg', 'image/png'
 
                         ],
                         'mimeTypesMessage' => 'Upload une bonne image',
