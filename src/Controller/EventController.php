@@ -14,47 +14,33 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class EventController extends AbstractController
 {
     /**
      * @Route("/", name="home")
      */
-    public function eventList(EventRepository $repoE, CampusRepository $repoC, Request $request): Response
+    public function eventList(EventRepository $repoEvent, CampusRepository $repoCampus, Request $request): Response
     {
-        $events = $repoE->findAll();
-        $campus = $repoC->findAll();
+
+        $eventList = $repoEvent->findAll();
+        $campus = $repoCampus->findAll();
 
         $createSearchType = new ModelSearchType();
         $form = $this->createForm(EventSearchType::class, $createSearchType);
         $form->handleRequest($request);
 
+
         if ($form->isSubmitted() && $form->isValid()) {
-            return $this->redirectToRoute('home');
+            $data = $form->getData();
+            $user = $this->getUser();
+            $eventList = $repoEvent->searchByFilter($data, $user);
         }
 
         return $this->render('event/index.html.twig', [
-            'events' => $events,
+            'events' => $eventList,
             'campusList' => $campus,
-            'formulaire' => $form->createView(),
-        ]);
-    }
-
-    /**
-     * @Route("/search", name="search")
-     */
-    public function search(Request $request): Response
-    {
-
-        $createSearchType = new ModelSearchType();
-        $form = $this->createForm(EventSearchType::class, $createSearchType);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            return $this->redirectToRoute('home');
-        }
-
-        return $this->render('event/search.html.twig', [
             'formulaire' => $form->createView(),
         ]);
     }
@@ -74,11 +60,22 @@ class EventController extends AbstractController
     /**
      * @Route("/event-create", name="event_create")
      */
-    public function eventCreate(EntityManagerInterface $em, Request $req): Response
+    public function eventCreate(EntityManagerInterface $em, Request $req, UserInterface $user): Response
     {
         $event = new Event();
-        $event->setOrganizer($this->getUser()); //getParticipant() n'est pas connu !!
-        //$event->setCampus($this->getUser()->getCampus());
+        $event->setOrganizer($this->getUser());
+        //dd($this->getUser());
+
+        $participant = $this->getUser();
+
+        /**
+         * @var Participant $participant
+         */
+
+
+        $event->setCampus($this->getUser()->getCampus());
+
+
 
 
         $form = $this->createForm(EventType::class, $event);
@@ -109,7 +106,7 @@ class EventController extends AbstractController
             'formulaire' => $form->createView(),
         ]);
     }
-    
+
     /**
      * @Route("/details/{id}", name="event_details")
      */

@@ -16,16 +16,19 @@ class SearchEventType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $user = $this->security->getUser();
+
         $builder
             ->add('campus', EntityType::class, [
                 'label' => 'Campus : ',
                 'class' => Campus::class,
                 'choice_label' =>  'name',
+                'choice_value' => 'name',
                 'required' => false
             ])
             ->add('search', SearchType::class, [
                 'attr' => array(
-                    'placeholder' => ' Recherche par nom'
+                    'placeholder' => 'Search an event by name'
                 ),
                 'required' => false,
             ])
