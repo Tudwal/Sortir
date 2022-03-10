@@ -59,22 +59,17 @@ class EventController extends AbstractController
     /**
      * @Route("/event-create", name="event_create")
      */
-    public function eventCreate(EntityManagerInterface $em, Request $req, UserInterface $user): Response
+    public function eventCreate(EntityManagerInterface $em, Request $req): Response
     {
         $event = new Event();
-        $event->setOrganizer($this->getUser());
-        //dd($this->getUser());
 
         $participant = $this->getUser();
-
         /**
          * @var Participant $participant
          */
 
 
         $event->setCampus($this->getUser()->getCampus());
-
-
 
 
         $form = $this->createForm(EventType::class, $event);
@@ -84,9 +79,10 @@ class EventController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $state = new State;
-            $state->setLabel('Created');
-
+            $state->setLabel('Créée');
             $event->setState($state);
+
+            $event->setOrganizer($this->getUser());
 
             $this->addFlash(
                 'success',
@@ -105,14 +101,14 @@ class EventController extends AbstractController
             'formulaire' => $form->createView(),
         ]);
     }
-    
+
     /**
      * @Route("/details/{id}", name="event_details")
      */
     public function detail(Event $e, EventRepository $repo): Response
     {
         $participants = $repo->findAll();
-        
+
         return $this->render('event/detail.html.twig', [
             'event' => $e,
             'participants' => $participants,
