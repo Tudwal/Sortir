@@ -176,7 +176,8 @@ class AppFixtures extends Fixture
             ->setState($faker->randomElement($this->manager->getRepository(State::class)->findAll()))
             ->setLocation($faker->randomElement($this->manager->getRepository(Location::class)->findAll()))
             ->setCampus($faker->randomElement($this->manager->getRepository(Campus::class)->findAll()))
-            ->setOrganizer($faker->randomElement($this->manager->getRepository(Participant::class)->findAll()));
+            ->setOrganizer($faker->randomElement($this->manager->getRepository(Participant::class)->findAll()))
+            ->addParticipant($faker->randomElement($this->manager->getRepository(Participant::class)->findAll(), 5));
 
         $this->manager->persist($piscine);
 
@@ -185,12 +186,13 @@ class AppFixtures extends Fixture
             ->setStartDateTime($now)
             ->setDuration(90)
             ->setEndRegisterDate($end)
-            ->setNbParticipantMax(10)
+            ->setNbParticipantMax(15)
             ->setDetails('Patiner en toute liberté et sans complexe')
             ->setState($faker->randomElement($this->manager->getRepository(State::class)->findAll()))
             ->setLocation($faker->randomElement($this->manager->getRepository(Location::class)->findAll()))
             ->setCampus($faker->randomElement($this->manager->getRepository(Campus::class)->findAll()))
-            ->setOrganizer($faker->randomElement($this->manager->getRepository(Participant::class)->findAll()));
+            ->setOrganizer($faker->randomElement($this->manager->getRepository(Participant::class)->findAll()))
+            ->addParticipant($faker->randomElement($this->manager->getRepository(Participant::class)->findAll(), 3));
 
         $this->manager->persist($patinoire);
 
@@ -199,12 +201,13 @@ class AppFixtures extends Fixture
             ->setStartDateTime($now)
             ->setDuration(90)
             ->setEndRegisterDate($end)
-            ->setNbParticipantMax(10)
+            ->setNbParticipantMax(5)
             ->setDetails('Aller au cinéma en toute liberté et sans complexe')
             ->setState($faker->randomElement($this->manager->getRepository(State::class)->findAll()))
             ->setLocation($faker->randomElement($this->manager->getRepository(Location::class)->findAll()))
             ->setCampus($faker->randomElement($this->manager->getRepository(Campus::class)->findAll()))
-            ->setOrganizer($faker->randomElement($this->manager->getRepository(Participant::class)->findAll()));
+            ->setOrganizer($faker->randomElement($this->manager->getRepository(Participant::class)->findAll()))
+            ->addParticipant($faker->randomElement($this->manager->getRepository(Participant::class)->findAll(), 2));
 
         $this->manager->persist($cinema);
 
@@ -213,12 +216,13 @@ class AppFixtures extends Fixture
             ->setStartDateTime($now)
             ->setDuration(90)
             ->setEndRegisterDate($end)
-            ->setNbParticipantMax(10)
+            ->setNbParticipantMax(20)
             ->setDetails('Chanter en toute liberté et sans complexe')
             ->setState($faker->randomElement($this->manager->getRepository(State::class)->findAll()))
             ->setLocation($faker->randomElement($this->manager->getRepository(Location::class)->findAll()))
             ->setCampus($faker->randomElement($this->manager->getRepository(Campus::class)->findAll()))
-            ->setOrganizer($faker->randomElement($this->manager->getRepository(Participant::class)->findAll()));
+            ->setOrganizer($faker->randomElement($this->manager->getRepository(Participant::class)->findAll()))
+            ->addParticipant($faker->randomElement($this->manager->getRepository(Participant::class)->findAll(), 6));
 
         $this->manager->persist($karaoke);
 
@@ -227,12 +231,13 @@ class AppFixtures extends Fixture
             ->setStartDateTime($now)
             ->setDuration(90)
             ->setEndRegisterDate($end)
-            ->setNbParticipantMax(10)
+            ->setNbParticipantMax(5)
             ->setDetails('Manger en toute liberté et sans complexe')
             ->setState($faker->randomElement($this->manager->getRepository(State::class)->findAll()))
             ->setLocation($faker->randomElement($this->manager->getRepository(Location::class)->findAll()))
             ->setCampus($faker->randomElement($this->manager->getRepository(Campus::class)->findAll()))
-            ->setOrganizer($faker->randomElement($this->manager->getRepository(Participant::class)->findAll()));
+            ->setOrganizer($faker->randomElement($this->manager->getRepository(Participant::class)->findAll()))
+            ->addParticipant($faker->randomElement($this->manager->getRepository(Participant::class)->findAll(), 2));
 
         $this->manager->persist($restaurant);
 
@@ -246,7 +251,8 @@ class AppFixtures extends Fixture
             ->setState($faker->randomElement($this->manager->getRepository(State::class)->findAll()))
             ->setLocation($faker->randomElement($this->manager->getRepository(Location::class)->findAll()))
             ->setCampus($faker->randomElement($this->manager->getRepository(Campus::class)->findAll()))
-            ->setOrganizer($faker->randomElement($this->manager->getRepository(Participant::class)->findAll()));
+            ->setOrganizer($faker->randomElement($this->manager->getRepository(Participant::class)->findAll()))
+            ->addParticipant($faker->randomElement($this->manager->getRepository(Participant::class)->findAll(), 4));
 
         $this->manager->persist($bowling);
 

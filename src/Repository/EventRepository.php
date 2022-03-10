@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Event;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -47,16 +48,33 @@ class EventRepository extends ServiceEntityRepository
 
     public function searchByFilter($data, $user)
     {
-        $idUser = $user->getId();
+        $idUser = $user->getId() ? $user->getId() : null;
         $idCampus = $data->campus ? $data->campus->getId() : null;
         $startDate = $data->startDate;
         $endDate = $data->endDate;
         $organizer = $data->eventOrganizer;
         $pastEvent = $data->pastEvent;
+        $eventRegistered = $data->eventRegister;
+        $eventNotRegister = $data->eventNotRegister;
 
         $qb = $this->createQueryBuilder('e');
 
         $qb->select('e');
+
+        // Filter on the events of wich I am registered
+        if ($eventRegistered) {
+            $qb->leftjoin("e.participants", "p1")
+                ->andWhere("p1.id = :id")
+                ->setParameter("id", $idUser);
+        }
+
+
+        // Filter on the events of wich I am not registered
+        if ($eventNotRegister) {
+            $qb->leftjoin("e.participants", "p2")
+                ->andWhere("p2.id != :id")
+                ->setParameter("id", $idUser);
+        }
 
         // Filter on the campus
         if ($idCampus !== null) {
@@ -76,6 +94,7 @@ class EventRepository extends ServiceEntityRepository
                 ->setParameter("endDate", $endDate);
         }
 
+
         // Filter on the events of which I am the organizer
         if ($organizer) {
             $qb->andwhere('e.organizer = :pseudo')
@@ -86,7 +105,7 @@ class EventRepository extends ServiceEntityRepository
         // Filter on past events
         if ($pastEvent) {
             $qb->andWhere("e.startDateTime < :now")
-                ->setParameter("now", new \DateTime('now'));
+                ->setParameter("now", new \DateTimeImmutable(), Types::DATE_IMMUTABLE);
         }
 
         return $qb->getQuery()->getResult();
@@ -120,4 +139,7 @@ class EventRepository extends ServiceEntityRepository
         ;
     }
     */
+
+     
+    
 }

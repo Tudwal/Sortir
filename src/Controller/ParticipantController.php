@@ -41,7 +41,7 @@ class ParticipantController extends AbstractController
 
         $form = $this->createForm(ProfilType::class, $this->getUser());
         $form->handleRequest($req);
-
+  
         $cleanPassword = $form->get('password')->getData();
 
         if ($form->isSubmitted() && $form->isValid()) {
