@@ -7,10 +7,13 @@ use App\Form\ProfilType;
 use App\Repository\ParticipantRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class ParticipantController extends AbstractController
 {
@@ -28,7 +31,7 @@ class ParticipantController extends AbstractController
     /**
      * @Route("/update", name="app_update_participant")
      */
-    public function update(ParticipantRepository $repo,  Request $req, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher): Response
+    public function update(ParticipantRepository $repo,  Request $req, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher, SluggerInterface $slugger): Response
     {
         /**
          * @var Participant $p 
@@ -43,8 +46,26 @@ class ParticipantController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+            /**@var UploadedFile $imgFile */
+            $imgFile = $form->get('image')->getData();
+
+            if ($imgFile) {
+                $originalFileName = pathinfo($imgFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFileName = $slugger->slug($originalFileName);
+                $newFileName = $safeFileName . '-' . uniqid() . '.' . $imgFile->guessExtension();
+
+                try {
+                    $imgFile->move(
+                        $this->getParameter('image_directory'),
+                        $newFileName
+                    );
+                } catch (FileException $exeption) {
+                }
+                $p->setImgName($newFileName);
+                $em->persist($p);
+            }
+
             if ($cleanPassword) {
-                dd('je suis dans le elseif');
                 //haché le mot de passe et set le password + persit
                 $hashedPassword = $passwordHasher->hashPassword(
                     $p,

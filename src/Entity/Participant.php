@@ -82,6 +82,23 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $eventRegistrations;
 
+    /**
+     * @ORM\Column(type="string")
+     */
+    private $imgName;
+
+    public function getImgName()
+    {
+        return $this->imgName;
+    }
+
+    public function setImgName($imgName)
+    {
+        $this->imgName = $imgName;
+        
+        return $this;
+    }
+
     public function __construct()
     {
         $this->events = new ArrayCollection();
