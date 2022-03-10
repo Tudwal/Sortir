@@ -26,6 +26,7 @@ class EventType extends AbstractType
                 'label' => 'Date et heure de la sortie'
             ])
 
+
             //->add('endRegisterDate')
             ->add('endRegisterDate', TypeDateType::class, [
                 'label' => 'Date limite d\'insciption ',
@@ -34,11 +35,25 @@ class EventType extends AbstractType
                 'required' => false,
             ])
 
-            ->add('duration', null, ['label' => 'Durée (en minutes): '])
+            ->add('duration', null, [
+                'label' => 'Durée (en minutes): ',
+                'attr' => [
+                    'min' => 0,
+                    'max' => 1440
+                ],
+
+            ])
 
 
 
-            ->add('nbParticipantMax', null, ['label' => 'Nombre de places: '])
+            ->add('nbParticipantMax', null, [
+                'label' => 'Nombre de places: ',
+                'attr' => [
+                    'min' => 1,
+                    'max' => 1440
+                ],
+
+            ])
 
 
             ->add('details', TextareaType::class, ['label' => 'Description et infos: '])
@@ -47,6 +62,9 @@ class EventType extends AbstractType
             ->add('campus')
             //->add('organizer')
             //->add('participants')
+            
+
+
         ;
     }
 
