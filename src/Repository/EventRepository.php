@@ -45,6 +45,26 @@ class EventRepository extends ServiceEntityRepository
         }
     }
 
+    public function searchByFilter($data, $user)
+    {
+        $qb = $this->createQueryBuilder('e');
+
+        // $qb->select('e')->andWhere('e.name = :firstname')
+        //     ->setParameter(":firstname", $user)
+        //      ->getQuery()
+        //      ->getResult();
+
+        $qb->select('e');
+
+        if ($data->eventOrganizer == $user->getPseudo()) {
+            $pseudo = $user->getPseudo();
+            $qb->where("MATCH_AGAINST(e.organizer) AGAINST (:pseudo boolean)>0")
+                ->setParameter('pseudo', $pseudo);
+        };
+
+        // écrire le querry avec if par filtre
+        return $qb->getQuery()->getResult();
+    }
 
     // /**
     //  * @return Event[] Returns an array of Event objects

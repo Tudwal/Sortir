@@ -8,19 +8,24 @@ class ModelSearchType
 {
 
     /**
-     * @Assert\Choice({"Chartres de Bretagne", "Saint-Herblain", "La Roche sur Yon"})
      * @var string
      */
     public $campus;
 
     /**
-     * @Assert\Date
-     * @var string A "Y-m-d" formatted value
+     * 
+     * @var string
+     */
+    public $search;
+
+    /**
+     * @Assert\Type("\DateTimeInterface")
+     * @var \DateTimeImmutable
      */
     public $startDate;
 
     /**
-     * @Assert\DateTime()
+     * @Assert\Type("\DateTimeInterface")
      * @var \DateTimeImmutable
      */
     public $endDate;

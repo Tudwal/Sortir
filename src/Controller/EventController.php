@@ -9,6 +9,7 @@ use App\Form\EventType;
 use App\Form\ModelSearchType;
 use App\Repository\CampusRepository;
 use App\Repository\EventRepository;
+use App\Repository\StateRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,24 +22,25 @@ class EventController extends AbstractController
     /**
      * @Route("/", name="home")
      */
-    public function eventList(EventRepository $repoE, CampusRepository $repoC, Request $request): Response
+    public function eventList(EventRepository $repoEvent, CampusRepository $repoCampus, Request $request): Response
     {
-        $events = $repoE->findAll();
-        $campus = $repoC->findAll();
+
+        $eventList = $repoEvent->findAll();
+        $campus = $repoCampus->findAll();
 
         $createSearchType = new ModelSearchType();
         $form = $this->createForm(EventSearchType::class, $createSearchType);
         $form->handleRequest($request);
-        // dump($form->isSubmitted());
-        // dd($form->isValid());
+
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $form->getData();
-            dd($form);
+            $data = $form->getData();
+            $user = $this->getUser();
+            $eventList = $repoEvent->searchByFilter($data, $user);
         }
 
         return $this->render('event/index.html.twig', [
-            'events' => $events,
+            'events' => $eventList,
             'campusList' => $campus,
             'formulaire' => $form->createView(),
         ]);
@@ -59,8 +61,9 @@ class EventController extends AbstractController
     /**
      * @Route("/event-create", name="event_create")
      */
-    public function eventCreate(EntityManagerInterface $em, Request $req): Response
+    public function eventCreate(EntityManagerInterface $em, Request $req, StateRepository $stateRepo): Response
     {
+        //dd('je suis dans la fonction event-create');
         $event = new Event();
 
         $participant = $this->getUser();
@@ -78,18 +81,23 @@ class EventController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $state = new State;
-            $state->setLabel('Créée');
-            $event->setState($state);
+
+            $event->setState($stateRepo->findOneBy(array('label' => 'Créée')));
 
             $event->setOrganizer($this->getUser());
+
+            $event->addParticipant($this->getUser());
+
+
+            $em->persist($event);
+            $em->flush();
 
             $this->addFlash(
                 'success',
                 'Your new event is creates :' . $event->getName()
             );
-            $em->persist($event);
-            $em->flush();
+
+
             return $this->redirectToRoute('home');
         } elseif ($form->isSubmitted() && !$form->isValid()) {
             $this->addFlash(
@@ -99,6 +107,7 @@ class EventController extends AbstractController
         }
         return $this->render('event/create.html.twig', [
             'formulaire' => $form->createView(),
+
         ]);
     }
 

@@ -161,12 +161,13 @@ class AppFixtures extends Fixture
         $faker = Factory::create('fr_FR');
 
         $now = new DateTime('now', new DateTimeZone('Europe/Paris'));
+        $past = (new DateTime('now', new DateTimeZone('Europe/Paris')))->modify('-18 days');
         $today = new DateTime('now', new DateTimeZone('Europe/Paris'));
         $end = $today->add(new DateInterval('P15D'));
 
         $piscine = new Event();
         $piscine->setName('Sortie piscine')
-            ->setStartDateTime($now)
+            ->setStartDateTime($past)
             ->setDuration(90)
             ->setEndRegisterDate($end)
             ->setNbParticipantMax(10)

@@ -3,7 +3,6 @@
 namespace App\Form;
 
 use App\Entity\Campus;
-use App\Repository\CampusRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -29,7 +28,7 @@ class SearchEventType extends AbstractType
             ])
             ->add('search', SearchType::class, [
                 'attr' => array(
-                    'placeholder' => ' Recherche par nom'
+                    'placeholder' => 'Search an event by name'
                 ),
                 'required' => false,
             ])
