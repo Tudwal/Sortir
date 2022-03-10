@@ -21,24 +21,25 @@ class EventController extends AbstractController
     /**
      * @Route("/", name="home")
      */
-    public function eventList(EventRepository $repoE, CampusRepository $repoC, Request $request): Response
+    public function eventList(EventRepository $repoEvent, CampusRepository $repoCampus, Request $request): Response
     {
-        $events = $repoE->findAll();
-        $campus = $repoC->findAll();
+
+        $eventList = $repoEvent->findAll();
+        $campus = $repoCampus->findAll();
 
         $createSearchType = new ModelSearchType();
         $form = $this->createForm(EventSearchType::class, $createSearchType);
         $form->handleRequest($request);
-        // dump($form->isSubmitted());
-        // dd($form->isValid());
+
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $form->getData();
-            dd($form);
+            $data = $form->getData();
+            $user = $this->getUser();
+            $eventList = $repoEvent->searchByFilter($data, $user);
         }
 
         return $this->render('event/index.html.twig', [
-            'events' => $events,
+            'events' => $eventList,
             'campusList' => $campus,
             'formulaire' => $form->createView(),
         ]);

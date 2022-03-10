@@ -20,7 +20,7 @@ class ModelSearchType
 
     /**
      * @Assert\Type("\DateTimeInterface")
-     * @var string A "Y-m-d" formatted value
+     * @var \DateTimeImmutable
      */
     public $startDate;
 
