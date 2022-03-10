@@ -47,22 +47,48 @@ class EventRepository extends ServiceEntityRepository
 
     public function searchByFilter($data, $user)
     {
-        $qb = $this->createQueryBuilder('e');
+        $idUser = $user->getId();
+        $idCampus = $data->campus ? $data->campus->getId() : null;
+        $startDate = $data->startDate;
+        $endDate = $data->endDate;
+        $organizer = $data->eventOrganizer;
+        $pastEvent = $data->pastEvent;
 
-        // $qb->select('e')->andWhere('e.name = :firstname')
-        //     ->setParameter(":firstname", $user)
-        //      ->getQuery()
-        //      ->getResult();
+        $qb = $this->createQueryBuilder('e');
 
         $qb->select('e');
 
-        if ($data->eventOrganizer == $user->getPseudo()) {
-            $pseudo = $user->getPseudo();
-            $qb->where("MATCH_AGAINST(e.organizer) AGAINST (:pseudo boolean)>0")
-                ->setParameter('pseudo', $pseudo);
+        // Filter on the campus
+        if ($idCampus !== null) {
+            $qb->andWhere('e.campus = :campus')
+                ->setParameter('campus', $idCampus);
+        }
+
+        // Filter on the start date of the event 
+        if ($startDate !== null) {
+            $qb->andWhere("e.startDateTime >= :startDate")
+                ->setParameter('startDate', $startDate);
+        }
+
+        // Filter on the end date of registrations
+        if ($endDate !== null) {
+            $qb->andWhere("e.endRegisterDate >= :endDate")
+                ->setParameter("endDate", $endDate);
+        }
+
+        // Filter on the events of which I am the organizer
+        if ($organizer) {
+            $qb->andwhere('e.organizer = :pseudo')
+                ->setParameter('pseudo', $idUser);
         };
 
-        // écrire le querry avec if par filtre
+
+        // Filter on past events
+        if ($pastEvent) {
+            $qb->andWhere("e.startDateTime < :now")
+                ->setParameter("now", new \DateTime('now'));
+        }
+
         return $qb->getQuery()->getResult();
     }
 

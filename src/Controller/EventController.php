@@ -36,6 +36,8 @@ class EventController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
             $user = $this->getUser();
+            // dump($data);
+            // dd($data->pastEvent);
             $eventList = $repoEvent->searchByFilter($data, $user);
         }
 
@@ -114,13 +116,13 @@ class EventController extends AbstractController
     /**
      * @Route("/details/{id}", name="event_details")
      */
-    public function detail(Event $e, EventRepository $repo): Response
+    public function detail(Event $e, EventRepository $repo, $id): Response
     {
-        $participants = $repo->findAll();
-
+        $events = $repo->find($id);
+        
         return $this->render('event/detail.html.twig', [
             'event' => $e,
-            'participants' => $participants,
+            'events' => $events,
         ]);
     }
 }

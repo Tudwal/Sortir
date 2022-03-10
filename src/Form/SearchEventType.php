@@ -33,13 +33,13 @@ class SearchEventType extends AbstractType
                 'required' => false,
             ])
             ->add('startDate', DateType::class, [
-                'label' => 'Entre ',
+                'label' => 'Event start date ',
                 'html5' => true,
                 'widget' => 'single_text',
                 'required' => false,
             ])
             ->add('endDate', DateType::class, [
-                'label' => 'et ',
+                'label' => 'End of register date ',
                 'html5' => true,
                 'widget' => 'single_text',
                 'required' => false,
