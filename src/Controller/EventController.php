@@ -113,10 +113,27 @@ class EventController extends AbstractController
     public function detail(Event $e, EventRepository $repo, $id): Response
     {
         $events = $repo->find($id);
-        
+
         return $this->render('event/detail.html.twig', [
             'event' => $e,
             'events' => $events,
         ]);
     }
+
+    /**
+     * @Route("/register/{id}", name="event_register")
+     */
+    public function register($id, EventRepository $eventRepository, Event $event): Response
+    {
+       $nbParticipant = $eventRepository->findNbParticipant($id);
+       dd($nbParticipant);
+       $nbMaxParticipant = $event->getNbParticipantMax();
+
+       if($nbParticipant< $nbMaxParticipant)
+       {
+           
+       }
+    //     $nbParticipant = $this->getUser()->get
+    // 
+}
 }
