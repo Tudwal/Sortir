@@ -32,13 +32,13 @@
     </tr>
 </thead>
 <tbody>
-    {# {% for p in participants %}
+    {% for p in events.participants %}
     <tr>
-        <td>{{p.participants.pseudo}}</td>
-         <td>{{p.firstName}}</td> 
+        <td>{{p.pseudo}}</td>
+         <td>{{p.firstName}} {{p.lastName}}</td> 
     </tr>
     {% endfor %} 
-    #}
+   
 </tbody>
 </table>
 {% endblock %}
