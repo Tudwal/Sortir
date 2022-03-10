@@ -105,14 +105,14 @@ class EventController extends AbstractController
             'formulaire' => $form->createView(),
         ]);
     }
-    
+
     /**
      * @Route("/details/{id}", name="event_details")
      */
     public function detail(Event $e, EventRepository $repo): Response
     {
         $participants = $repo->findAll();
-        
+
         return $this->render('event/detail.html.twig', [
             'event' => $e,
             'participants' => $participants,
