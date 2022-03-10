@@ -46,7 +46,7 @@ class EventRepository extends ServiceEntityRepository
         }
     }
 
-    public function searchByFilter($data, $user)
+    public function searchByFilter($data, $search, $user)
     {
         $idUser = $user->getId() ? $user->getId() : null;
         $idCampus = $data->campus ? $data->campus->getId() : null;
@@ -63,17 +63,26 @@ class EventRepository extends ServiceEntityRepository
 
         // Filter on the events of wich I am registered
         if ($eventRegistered) {
-            $qb->leftjoin("e.participants", "p1")
-                ->andWhere("p1.id = :id")
-                ->setParameter("id", $idUser);
+            $qb->andWhere(":user MEMBER OF e.participants")
+                ->setParameter("user", $user);
         }
-
 
         // Filter on the events of wich I am not registered
         if ($eventNotRegister) {
-            $qb->leftjoin("e.participants", "p2")
-                ->andWhere("p2.id != :id")
-                ->setParameter("id", $idUser);
+            $qb->andWhere(":user NOT MEMBER OF e.participants")
+                ->setParameter("user", $user);
+        }
+
+        // Filter on the events of which I am the organizer
+        if ($organizer) {
+            $qb->andwhere('e.organizer = :pseudo')
+                ->setParameter('pseudo', $idUser);
+        };
+
+        // Filter on past events
+        if ($pastEvent) {
+            $qb->andWhere("e.startDateTime < :now")
+                ->setParameter("now", new \DateTimeImmutable(), Types::DATE_IMMUTABLE);
         }
 
         // Filter on the campus
@@ -94,19 +103,9 @@ class EventRepository extends ServiceEntityRepository
                 ->setParameter("endDate", $endDate);
         }
 
-
-        // Filter on the events of which I am the organizer
-        if ($organizer) {
-            $qb->andwhere('e.organizer = :pseudo')
-                ->setParameter('pseudo', $idUser);
-        };
+        // Filter by searching an event name
 
 
-        // Filter on past events
-        if ($pastEvent) {
-            $qb->andWhere("e.startDateTime < :now")
-                ->setParameter("now", new \DateTimeImmutable(), Types::DATE_IMMUTABLE);
-        }
 
         return $qb->getQuery()->getResult();
     }
@@ -139,7 +138,4 @@ class EventRepository extends ServiceEntityRepository
         ;
     }
     */
-
-     
-    
 }
