@@ -29,7 +29,7 @@ class SearchEventType extends AbstractType
             ])
             ->add('search', SearchType::class, [
                 'attr' => array(
-                    'placeholder' => ' Recherche par nom'
+                    'placeholder' => 'Search an event by name'
                 ),
                 'required' => false,
             ])
