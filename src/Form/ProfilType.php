@@ -6,7 +6,6 @@ use App\Entity\Participant;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -46,8 +45,9 @@ class ProfilType extends AbstractType
                 'required' => false,
                 'constraints' => [
                     new File([
+                        'maxSize' => '111111111111111k',
                         'mimeTypes' => [
-                            'image/jpeg', 'image/jpg', 'image/png'
+                            'image/jpeg', 'image/jpg', 'image/png',
 
                         ],
                         'mimeTypesMessage' => 'Upload une bonne image',

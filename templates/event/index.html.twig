@@ -109,7 +109,7 @@
 							<td>{{event.name}}</td>
 							<td>{{event.startDateTime | date('d-m-Y H:i:s') }}</td>
 							<td>{{event.endRegisterDate | date('d-m-Y')}}</td>
-							<td>{{event.nbParticipantMax}}</td>
+							<td>{{ event.participants | length }}/{{event.nbParticipantMax}}</td>
 							<td>{{event.state.label}}</td>
 							<td></td>
 							<td>{{event.organizer.pseudo}}</td>
@@ -117,6 +117,11 @@
 								<a href="{{ path('event_details',{id:event.id })}}" class="btn btn-warning">
 									<i class="fa-solid fa-eye">View</i>
 								</a>
+								{% if event.organizer.pseudo != app.user.pseudo %}
+								<a href="{{ path('event_register',{id:event.id })}}" class="btn btn-warning">
+									<i class="fa-solid fa-plus">S'inscrire</i>
+								</a>
+								{% endif %}
 							</td>
 						</tr>
 					{% endfor %}
