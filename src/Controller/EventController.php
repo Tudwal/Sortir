@@ -87,7 +87,7 @@ class EventController extends AbstractController
             $em->flush();
             $this->addFlash(
                 'success',
-                'Your new event is creates :' . $event->getName()
+                'Féliciation, votre ' . $event->getName() . ' est créée!'
             );
 
             return $this->redirectToRoute('home');
@@ -183,5 +183,34 @@ class EventController extends AbstractController
         }
         //     $nbParticipant = $this->getUser()->get
         // 
+    }
+
+    /**
+     * @Route("/event-update/{id}", name="event_update")
+     */
+    public function eventUpdate(Event $event, EntityManagerInterface $em, Request $req, StateRepository $stateRepo, CityRepository $cityRepo): Response
+    {
+        $cityList = $cityRepo->findAll();
+        $form = $this->createForm(EventType::class, $event);
+        $form->handleRequest($req);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->flush();
+            $this->addFlash(
+                'success',
+                'Féliciation, votre ' . $event->getName() . ' est modifiée!'
+            );
+
+            return $this->redirectToRoute('home');
+        } elseif ($form->isSubmitted() && !$form->isValid()) {
+            $this->addFlash(
+                'danger',
+                'Tu as un problème avec la modification de ta sortie'
+            );
+        }
+        return $this->render('event/create.html.twig', [
+            'formulaire' => $form->createView(),
+            'cityList' => $cityList,
+        ]);
     }
 }
