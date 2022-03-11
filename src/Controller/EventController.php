@@ -58,6 +58,10 @@ class EventController extends AbstractController
     {
         $em->remove($e);
         $em->flush();
+        $this->addFlash(
+            'success',
+            'Votre ' . $e->getName() . ' est supprimée!'
+        );
 
         return $this->redirectToRoute('home');
     }

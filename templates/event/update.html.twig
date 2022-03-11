@@ -141,7 +141,9 @@
 				<button class="btn btn-success" type="submit">Publier la sortie
 					<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary"></span>
 				</button>
-				<button class="btn btn-danger" type="submit">Supprimer la sortie
+				<button>
+					<a href="{{ path('event_delete',{'id':app.request.get('id')})}}" class="btn btn-danger">Supprimer la sortie
+					</a>
 					<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary"></span>
 				</button>
 				<a href="{{ path('home')}}" class="btn btn-warning">
@@ -154,30 +156,30 @@
 		</div>
 	</div>
 	{# <div class="col-3 my-3">
-																																																																																			
-																																																																																					<div class="position-relative">
-																																																																																						<div class="position-absolute top-50 start-50 translate-middle-x">
-																																																																																			
-																																																																																							{{ form_start (formulaire)}}
-																																										
-																																										
-																																																	{{ form_widget (formulaire)}}
-																																										
-																																																	<div class="my-4">
-																																																		<button class="btn btn-primary" type="submit">Enregistrer
-																																																			<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary"></span>
-																																										
-																																										
-																																																		</button>
-																																																		<a href="{{ path('home')}}" class="btn btn-warning">
-																																																			Annuler
-																																																			<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary"></span>
-																																																		</a>
-																																																	</div>
-																																										
-																																																	{{ form_end (formulaire)}}
-																																																</div>
-																																															</div>
-																																														</div>
-																																														#}
+																																																																																												
+																																																																																														<div class="position-relative">
+																																																																																															<div class="position-absolute top-50 start-50 translate-middle-x">
+																																																																																												
+																																																																																																{{ form_start (formulaire)}}
+																																																			
+																																																			
+																																																										{{ form_widget (formulaire)}}
+																																																			
+																																																										<div class="my-4">
+																																																											<button class="btn btn-primary" type="submit">Enregistrer
+																																																												<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary"></span>
+																																																			
+																																																			
+																																																											</button>
+																																																											<a href="{{ path('home')}}" class="btn btn-warning">
+																																																												Annuler
+																																																												<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary"></span>
+																																																											</a>
+																																																										</div>
+																																																			
+																																																										{{ form_end (formulaire)}}
+																																																									</div>
+																																																								</div>
+																																																							</div>
+																																																							#}
 {% endblock %}
