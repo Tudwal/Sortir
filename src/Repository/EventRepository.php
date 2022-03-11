@@ -62,6 +62,7 @@ class EventRepository extends ServiceEntityRepository
         $qb->select('e');
 
         // Filter on the events of wich I am registered
+
         if ($eventRegistered) {
             $qb->andWhere(":user MEMBER OF e.participants")
                 ->setParameter("user", $user);
@@ -104,7 +105,10 @@ class EventRepository extends ServiceEntityRepository
         }
 
         // Filter by searching an event name
-
+        if ($search != null) {
+            $qb->andWhere('e.name LIKE :search')
+                ->setParameter('search', '%' . $search . '%');
+        }
 
 
         return $qb->getQuery()->getResult();

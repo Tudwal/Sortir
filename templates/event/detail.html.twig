@@ -1,44 +1,73 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Détail de l'event{% endblock %}
+{% block title %}Détail de l'event
+{% endblock %}
 
 {% block body %}
-<div class="container my-4">
-    <div class="row">
-        <div class="col">
-            <p>Nom de la sortie : {{ event.name }}</p>
-            <p>Date et heure de la sortie : {{ event.startDateTime | date('d/m/Y H:m')}}</p>
-            <p>Date limite d'inscription : {{ event.endRegisterDate | date('d/m/Y')}}</p>
-            <p>Nombre de places : {{ event.nbParticipantMax}}</p>
-            <p>Durée : {{ event.duration}} minutes</p>
-            <p>Description et infos : {{ event.details}}</p>
-        </div>
-        <div class="col">
-            <p>Campus : {{ event.Campus.name}}</p>
-            <p>Lieu : {{ event.Location.name}}</p>
-            <p>Rue : {{ event.Location.street}}</p>
-            <p>Code Postal : {{ event.Location.City.postalCode}}</p>
-            <p>Latitude : {{ event.Location.latitude}}</p>
-            <p>Longitude : {{ event.Location.longitude}}</p>
-        </div>
-    </div>
-</div>
-<h3>Liste des participants Inscrits</h3>
-<table class="table table-striped">
-<thead>
-    <tr>
-        <th>Pseudo</th>
-        <th>Nom</th>
-    </tr>
-</thead>
-<tbody>
-    {% for p in events.participants %}
-    <tr>
-        <td>{{p.pseudo}}</td>
-         <td>{{p.firstName}} {{p.lastName}}</td> 
-    </tr>
-    {% endfor %} 
-   
-</tbody>
-</table>
-{% endblock %}
+	<div class="container my-4">
+		<div class="row">
+			<div class="col">
+				<p>
+					<strong>Nom de la sortie :</strong>
+					{{ event.name }}
+				</p>
+				<p>
+					<strong>Date et heure de la sortie :</strong>
+					{{ event.startDateTime | date('d/m/Y H:m')}}</p>
+				<p>
+					<strong>Date limite d'inscription :</strong>
+					{{ event.endRegisterDate | date('d/m/Y')}}</p>
+				<p>
+					<strong>Nombre de places :</strong>
+					{{ event.nbParticipantMax}}</p>
+				<p>
+					<strong>Durée :</strong>
+					{{ event.duration}}
+					minutes</p>
+				<p>
+					<strong>Description et infos :</strong>
+					{{ event.details}}</p>
+			</div>
+			<div class="col">
+				<p>
+					<strong>Campus :</strong>
+					{{ event.Campus.name}}</p>
+				<p>
+					<strong>Lieu :</strong>
+					{{ event.Location.name}}</p>
+				<p>
+					<strong>Rue :</strong>
+					{{ event.Location.street}}</p>
+				<p>
+					<strong>Code Postal :</strong>
+					{{ event.Location.City.postalCode}}</p>
+				<p>
+					<strong>Latitude :</strong>
+					{{ event.Location.latitude}}</p>
+				<p>
+					<strong>Longitude :</strong>
+					{{ event.Location.longitude}}</p>
+			</div>
+		</p>
+	</div>
+
+	<h3 class="mt-3">Liste des participants Inscrits</h3>
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>Pseudo</th>
+				<th>Nom</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for p in events.participants %}
+				<tr>
+					<td>{{p.pseudo}}</td>
+					<td>{{p.firstName}}
+						{{p.lastName}}</td>
+				</tr>
+			{% endfor %}
+
+		</tbody>
+	</table>
+</div>{% endblock %}
