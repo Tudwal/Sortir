@@ -12,9 +12,7 @@ class ModelSearchType
      */
     public $campus;
 
-    /**
-     * 
-     */
+
     public $search;
 
     /**
@@ -29,22 +27,15 @@ class ModelSearchType
      */
     public $endDate;
 
-    /**
-     */
+
     public $eventOrganizer;
 
-    /**
-     * 
-     */
+
     public $eventRegister;
 
-    /**
-     * 
-     */
+
     public $eventNotRegister;
 
-    /**
-     * 
-     */
+
     public $pastEvent;
 }

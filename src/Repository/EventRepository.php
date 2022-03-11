@@ -8,6 +8,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * @method Event|null find($id, $lockMode = null, $lockVersion = null)
@@ -17,9 +18,10 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class EventRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, Security $security)
     {
         parent::__construct($registry, Event::class);
+        $this->user = $security->getUser();
     }
 
     /**
@@ -46,9 +48,10 @@ class EventRepository extends ServiceEntityRepository
         }
     }
 
-    public function searchByFilter($data, $search, $user)
+    public function searchByFilter($data, $search)
     {
-        $idUser = $user->getId() ? $user->getId() : null;
+
+        $idUser = $this->user->getId() ? $this->user->getId() : null;
         $idCampus = $data->campus ? $data->campus->getId() : null;
         $startDate = $data->startDate;
         $endDate = $data->endDate;
@@ -64,13 +67,13 @@ class EventRepository extends ServiceEntityRepository
         // Filter on the events of wich I am registered
         if ($eventRegistered) {
             $qb->orWhere(":user MEMBER OF e.participants")
-                ->setParameter("user", $user);
+                ->setParameter("user", $this->user);
         }
 
         // Filter on the events of wich I am not registered
         if ($eventNotRegister) {
             $qb->orWhere(":user NOT MEMBER OF e.participants")
-                ->setParameter("user", $user);
+                ->setParameter("user",  $this->user);
         }
 
         // Filter on the events of which I am the organizer
