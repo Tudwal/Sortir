@@ -115,43 +115,43 @@
 							<td>{{event.organizer.pseudo}}</td>
 							<td>
 								<a href="{{ path('event_details',{id:event.id })}}" class="btn btn-info">
-									<i class="fa-solid fa-eye">View</i>
+									<i class="fa-solid fa-eye"></i>
 								</a>
 								{% if event.state.id == 2  %}
 									{% if app.user not in event.participants %}
 										{% if event.organizer.pseudo != app.user.pseudo %}
-										<a href="{{ path('event_register',{id:event.id })}}" class="btn btn-success">
-											<i class="fa-solid fa-plus">S'inscrire</i>
-										</a>
+											<a href="{{ path('event_register',{id:event.id })}}" class="btn btn-success">
+												S'inscrire
+											</a>
 										{% endif %}
 									{% endif %}
-								{% endif %}	
-								{% if event.state.id == 2  %}	
+								{% endif %}
+								{% if event.state.id == 2  %}
 									{% if app.user in event.participants %}
-									<a href="{{ path('event_register',{id:event.id })}}" class="btn btn-danger">
-											<i class="fa-solid fa-plus">Se désister</i>
+									<a onclick="return confirm('Voulez-vous quitter {{event.name}}?')" href="{{ path('event_unRegister',{id:event.id })}}" class="btn btn-danger">
+											Se désister
 									</a>
 									{% endif %}
-								{% endif %}	
+								{% endif %}
 								{% if event.state.id == 1 %}
 									{% if event.organizer.pseudo == app.user.pseudo %}
-									<a href="{{ path('event_update',{id:event.id })}}" class="btn btn-warning">
-											<i class="fa-solid fa-plus">Modifier</i>
+										<a href="{{ path('event_update',{id:event.id })}}" class="btn btn-warning">
+											modifier
 										</a>
-									{% endif %}	
+									{% endif %}
 								{% endif %}
 								{# Changer le path vers la fonction publier #}
 								{% if event.state.id == 1 %}
 									{% if event.organizer.pseudo == app.user.pseudo %}
-									<a href="{{ path('event_update',{id:event.id })}}" class="btn btn-success">
-											<i class="fa-solid fa-plus">Publier</i>
+										<a href="{{ path('event_update',{id:event.id })}}" class="btn btn-success">
+											Publier
 										</a>
-									{% endif %}	
+									{% endif %}
 								{% endif %}
-								{% if event.state.id == 2 or event.state.id ==3 %}
+								{% if event.state.id == 2 or event.state.id == 3 %}
 									{% if event.organizer.pseudo == app.user.pseudo %}
-									<a href="{{ path('event_delete',{id:event.id })}}" class="btn btn-danger">
-											<i class="fa-solid fa-plus">Annuler</i>
+									<a onclick="return confirm('Voulez-vous supprimer {{event.name}}?')" href="{{ path('event_delete',{id:event.id })}}" class="btn btn-danger">
+											Annuler
 										</a>
 									{% endif %}
 								{% endif %}
