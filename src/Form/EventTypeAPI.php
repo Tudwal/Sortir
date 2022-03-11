@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\City;
 use App\Entity\Event;
+use Doctrine\ORM\Mapping\Entity;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
@@ -12,7 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class EventType extends AbstractType
+class EventTypeAPI extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -64,17 +65,27 @@ class EventType extends AbstractType
             ->add('campus')
 
 
-
+            //Pour la version 1:
             //->add('organizer')
             //->add('participants')
 
-            ->add('cityList', EntityType::class, [
-                'label' => 'Ville : ',
-                'class' => City::class,
-                'choice_label' => 'name',
-                'required' => true,
-                'mapped' => false
-            ]);
+            // ->add('cityList', EntityType::class, [
+            //     'label' => 'Ville : ',
+            //     'class' => City::class,
+            //     'choice_label' => 'name',
+            //     'required' => true,
+            //     'mapped' => false
+            // ]);
+
+            ->add(
+                'city',
+                EntityType::class,
+                [
+                    'mapped' => false,
+                    'class' => City::class,
+                    'choice_label' => 'name',
+                ]
+            );
     }
 
     public function configureOptions(OptionsResolver $resolver): void

@@ -6,9 +6,12 @@ use App\Entity\Event;
 use App\Entity\State;
 use App\Form\EventSearchType;
 use App\Form\EventType;
+use App\Form\EventTypeAPI;
 use App\Form\ModelSearchType;
 use App\Repository\CampusRepository;
+use App\Repository\CityRepository;
 use App\Repository\EventRepository;
+use App\Repository\LocationRepository;
 use App\Repository\StateRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -36,7 +39,7 @@ class EventController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
             $user = $this->getUser();
-            dd($data->search);
+
             $eventList = $repoEvent->searchByFilter($data, $user);
         }
 
@@ -62,42 +65,30 @@ class EventController extends AbstractController
     /**
      * @Route("/event-create", name="event_create")
      */
-    public function eventCreate(EntityManagerInterface $em, Request $req, StateRepository $stateRepo): Response
+    public function eventCreate(EntityManagerInterface $em, Request $req, StateRepository $stateRepo, CityRepository $cityRepo): Response
     {
         //dd('je suis dans la fonction event-create');
         $event = new Event();
-
+        $cityList = $cityRepo->findAll();
         $participant = $this->getUser();
+
         /**
          * @var Participant $participant
          */
-
-
         $event->setCampus($this->getUser()->getCampus());
-
-
         $form = $this->createForm(EventType::class, $event);
         $form->handleRequest($req);
 
-
         if ($form->isSubmitted() && $form->isValid()) {
-
-
             $event->setState($stateRepo->findOneBy(array('label' => 'Créée')));
-
             $event->setOrganizer($this->getUser());
-
             $event->addParticipant($this->getUser());
-
-
             $em->persist($event);
             $em->flush();
-
             $this->addFlash(
                 'success',
                 'Your new event is creates :' . $event->getName()
             );
-
 
             return $this->redirectToRoute('home');
         } elseif ($form->isSubmitted() && !$form->isValid()) {
@@ -108,9 +99,63 @@ class EventController extends AbstractController
         }
         return $this->render('event/create.html.twig', [
             'formulaire' => $form->createView(),
+            'cityList' => $cityList,
+        ]);
+    }
+
+    /**
+     * @Route("/api/", name="api")
+     */
+    public function api(CityRepository $cityRepo): Response
+    {
+        $tab = $cityRepo->findAll();
+
+        return $this->json($tab);
+    }
+
+
+
+    /**
+     * @Route("/event-createAPI", name="event_createAPI")
+     */
+    public function eventCreate2(EntityManagerInterface $em, Request $req, StateRepository $stateRepo): Response
+    {
+        //dd('je suis dans la fonction event-createAPI');
+        $event = new Event();
+        $participant = $this->getUser();
+
+        /**
+         * @var Participant $participant
+         */
+        $event->setCampus($this->getUser()->getCampus());
+        $form = $this->createForm(EventTypeAPI::class, $event);
+        $form->handleRequest($req);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $event->setState($stateRepo->findOneBy(array('label' => 'Créée')));
+            $event->setOrganizer($this->getUser());
+            $event->addParticipant($this->getUser());
+            $em->persist($event);
+            $em->flush();
+
+            $this->addFlash(
+                'success',
+                'Your new event is creates :' . $event->getName()
+            );
+            return $this->redirectToRoute('home');
+        } elseif ($form->isSubmitted() && !$form->isValid()) {
+            $this->addFlash(
+                'danger',
+                'Tu as un problème avec ta nouvelle sortie'
+            );
+        }
+        return $this->render('event/createAPI.html.twig', [
+            'formulaire' => $form->createView(),
 
         ]);
     }
+
+
 
     /**
      * @Route("/details/{id}", name="event_details")
