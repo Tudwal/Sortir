@@ -41,7 +41,7 @@ class EventController extends AbstractController
 
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $data = $form->getData();
+            $data = $form->getData(); // $data = $createSearchType il contient la même chose
             $search = $form->get('search')->getData();
             $user = $this->getUser();
             $eventList = $repoEvent->searchByFilter($data, $search, $user);
@@ -183,13 +183,13 @@ class EventController extends AbstractController
      */
     public function register(EventRepository $eventRepository, Event $event, EntityManagerInterface $em): Response
     {
-        $nbParticipants= count($event->getParticipants());
+        $nbParticipants = count($event->getParticipants());
         //dd($nbParticipants); 
         $nbParticipantsMax = $event->getNbParticipantMax();
         //dd($nbParticipantsMax);
         $user = $this->getUser();
         //dd($user);
-        if($nbParticipants < $nbParticipantsMax){
+        if ($nbParticipants < $nbParticipantsMax) {
             $event->addParticipant($user);
             $em->persist($user);
             $em->flush();
@@ -202,11 +202,11 @@ class EventController extends AbstractController
      */
     public function unRegister(EventRepository $eventRepository, Event $event, EntityManagerInterface $em): Response
     {
-        $nbParticipants= count($event->getParticipants());
-        
+        $nbParticipants = count($event->getParticipants());
+
         $user = $this->getUser();
         //dd($user);
-        if($nbParticipants > 0){
+        if ($nbParticipants > 0) {
             $event->removeParticipant($user);
             $em->persist($user);
             $em->flush();

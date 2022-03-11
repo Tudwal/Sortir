@@ -93,11 +93,9 @@
 						<label for="select" class="col-4 col-form-label">
 							Ville
 						</label>
-						{#<div class="col-6" name="city" id="city">
-																														{{form_widget(formulaire.city)}}
-																														</div> #}
-						<select class="col-6" name="city" id="city"></select>
-
+						<div class="col-6">
+							{{form_widget(formulaire.city)}}
+						</div>
 					</div>
 
 
@@ -148,27 +146,32 @@
 		{{form_end(formulaire)}}
 	</div>
 
-
-	{# Ville :
-								<select
-									name="city" id="city"><!-- <option value="1"> rouge</option> -->
-								</select>
-								<br>
-				Lieu :
-								<select name="location" id="location"></select> #}
+	{# 
+					Ville :
+					<select
+						name="city" id="city">
+					</select>
+					<br>
+					Lieu :
+					<select name="loc" id="loc">
+				
+					</select> #}
 
 
 	<script>
+
 		let cities = {};
-let url = '../api/';
-fetch(url).then(res = res.json()).then(data => {
+let url = 'http://localhost/Sortir/public/home/api/';
+fetch(url).then(res => res.json()).then(data => {
 cities = data
 console.log(data);
+afficherCity();
 afficherLocation(cities[0].id);
+
 });
 
 function afficherCity() { // alimenter select city
-let baliseCity = document.querySelector('#city');
+let baliseCity = document.querySelector('#event_type_api_city');
 for (let c of cities) {
 let option = document.createElement('option'); // <option></option>
 option.innerHTML = c.name; // <option>Rennes</option>
@@ -176,19 +179,26 @@ option.setAttribute('value', c.id); // <option value="1">Rennes</option>
 baliseCity.appendChild(option);
 }
 }
+
 // alimenter select Location
 function afficherLocation(cityId) {
-let baliseLocation = document.querySelector('#location');
+let baliseLocation = document.querySelector('#event_type_api_location');
 // vider la balise select du Location
 baliseLocation.innerHTML = '';
 // rechercher ts les Locations correspondant à la city
 for (let c of cities) {
+console.log('je suis dans le premier IF')
 if (c.id == cityId) {
 for (let l of c.locations) {
+console.log('je suis dans le deuxième IF')
 let option = document.createElement('option'); // <option></option>
-option.innerHTML = l.name; // <option>rouge</option>
-option.setAttribute('value', l.id); // <option value="1">rouge</option>
+option.innerHTML = l.name; // <option>Mairie</option>
+console.log(c.name)
+console.log(l.name)
+option.setAttribute('value', l.id); // <option value="1">Mairie</option>
+console.log(option)
 baliseLocation.appendChild(option);
+console.log(baliseLocation)
 }
 }
 }
@@ -196,8 +206,9 @@ baliseLocation.appendChild(option);
 // condition de depart
 // afficherLocation(data.cities[0].id);
 
-document.querySelector('#city').onchange = function () {
-let id = document.querySelector('#city').value;
+document.querySelector('#event_type_api_city').onchange = function () {
+let id = document.querySelector('#event_type_api_city').value;
+console.log("Je suis tout en bas")
 console.log(id);
 afficherLocation(id);
 }

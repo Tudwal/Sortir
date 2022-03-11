@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\City;
 use App\Entity\Event;
+use App\Entity\Location;
 use Doctrine\ORM\Mapping\Entity;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -61,21 +62,16 @@ class EventTypeAPI extends AbstractType
 
             ->add('details', TextareaType::class, ['label' => 'Description et infos: '])
             //->add('state')
-            ->add('location', null, ['choice_label' => "name"])
+            ->add(
+                'location',
+                EntityType::class,
+                [
+                    'mapped' => true,
+                    'class' => Location::class,
+                    'choice_label' => 'name',
+                ]
+            )
             ->add('campus')
-
-
-            //Pour la version 1:
-            //->add('organizer')
-            //->add('participants')
-
-            // ->add('cityList', EntityType::class, [
-            //     'label' => 'Ville : ',
-            //     'class' => City::class,
-            //     'choice_label' => 'name',
-            //     'required' => true,
-            //     'mapped' => false
-            // ]);
 
             ->add(
                 'city',
