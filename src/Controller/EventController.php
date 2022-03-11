@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints\Length;
 
 class EventController extends AbstractController
 {
@@ -173,16 +174,37 @@ class EventController extends AbstractController
     /**
      * @Route("/register/{id}", name="event_register")
      */
-    public function register($id, EventRepository $eventRepository, Event $event): Response
+    public function register(EventRepository $eventRepository, Event $event, EntityManagerInterface $em): Response
     {
-        $nbParticipant = $eventRepository->findNbParticipant($id);
-        dd($nbParticipant);
-        $nbMaxParticipant = $event->getNbParticipantMax();
-
-        if ($nbParticipant < $nbMaxParticipant) {
+        $nbParticipants= count($event->getParticipants());
+        //dd($nbParticipants); 
+        $nbParticipantsMax = $event->getNbParticipantMax();
+        //dd($nbParticipantsMax);
+        $user = $this->getUser();
+        //dd($user);
+        if($nbParticipants < $nbParticipantsMax){
+            $event->addParticipant($user);
+            $em->persist($user);
+            $em->flush();
         }
-        //     $nbParticipant = $this->getUser()->get
-        // 
+        return $this->redirectToRoute('home');
+    }
+
+    /**
+     * @Route("/unRegister/{id}", name="event_unRegister")
+     */
+    public function unRegister(EventRepository $eventRepository, Event $event, EntityManagerInterface $em): Response
+    {
+        $nbParticipants= count($event->getParticipants());
+        
+        $user = $this->getUser();
+        //dd($user);
+        if($nbParticipants > 0){
+            $event->removeParticipant($user);
+            $em->persist($user);
+            $em->flush();
+        }
+        return $this->redirectToRoute('home');
     }
 
     /**
