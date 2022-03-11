@@ -117,16 +117,29 @@
 								<a href="{{ path('event_details',{id:event.id })}}" class="btn btn-warning">
 									<i class="fa-solid fa-eye">View</i>
 								</a>
-								{# {% for participant in event.participants %} #}
+								{% if event.state.id == 2  %}
 									{% if app.user not in event.participants %}
 										{% if event.organizer.pseudo != app.user.pseudo %}
 										<a href="{{ path('event_register',{id:event.id })}}" class="btn btn-warning">
 											<i class="fa-solid fa-plus">S'inscrire</i>
 										</a>
-										
 										{% endif %}
+									{% endif %}
+								{% endif %}	
+								{% if event.state.id == 2  %}	
+									{% if app.user in event.participants %}
+									<a href="{{ path('event_register',{id:event.id })}}" class="btn btn-warning">
+											<i class="fa-solid fa-plus">Se désister</i>
+									</a>
+									{% endif %}
+								{% endif %}	
+								{% if event.state.id == 1 %}
+									{% if event.organizer.pseudo == app.user.pseudo %}
+									<a href="{{ path('event_update',{id:event.id })}}" class="btn btn-warning">
+											<i class="fa-solid fa-plus">Modifier</i>
+										</a>
 									{% endif %}	
-								{# {% endfor %}	 #}
+								{% endif %}
 							</td>
 						</tr>
 					{% endfor %}
