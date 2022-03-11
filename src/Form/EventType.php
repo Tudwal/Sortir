@@ -61,7 +61,13 @@ class EventType extends AbstractType
             ->add('details', TextareaType::class, ['label' => 'Description et infos: '])
             //->add('state')
             ->add('location', null, ['choice_label' => "name"])
+
             ->add('campus')
+
+            // si on veut empêcher de modifier le Campus du profil
+            // ->add('campus', null, [
+            //     'disabled' => true
+            // ])
 
 
 
