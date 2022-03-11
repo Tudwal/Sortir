@@ -61,7 +61,7 @@
 		</thead>
 		<tbody>
 			{% for p in events.participants %}
-				<tr>
+				<tr onclick="window.location='{{ path('app_view_participant',{id:p.id})}}';">
 					<td>{{p.pseudo}}</td>
 					<td>{{p.firstName}}
 						{{p.lastName}}</td>

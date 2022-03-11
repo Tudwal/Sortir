@@ -5,29 +5,28 @@
 {% block body %}
 <div class="container my-4">
     <div class= 'row'>
-        <div class='col'>
-        {% if app.user.imgName == null %}
-        {% else %}
-            <img class="logo" src="{{ asset('upload/')}}{{app.user.imgName}}" >
-        {% endif %}
+        <div class='col-4'>
+            {% if app.user.imgName == null %}
+            {% else %}
+                <img class="logo" src="{{ asset('upload/')}}{{app.user.imgName}}" >
+            {% endif %}
         </div>
-        <div class='col-6 my-4'>
-        {# <div class="position-relative">
-        <div class="position-absolute top-50 start-50 translate-middle-x"> #}
-        {{ form_start (formulaire)}}
+        <div class='col-8 my-4'>
+            <div class="position-relative">
+                <div class="position-absolute top-50 start-50 translate-middle-x">
+                    {{ form_start (formulaire)}}
 
-        {{ form_widget (formulaire)}}
+                    {{ form_widget (formulaire)}}
 
-        {# {{ form_row (formulaire.image)}} #}
-
-        <div class="my-4">
-        <button class="btn btn-primary" type="submit">Enregistrer
-        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary"></span></button> 
-        <a href="{{ path('app_view_participant',{id:app.user.id})}}" class="btn btn-warning"> Annuler 
-        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary"></span></a>
-        </div>
-        {{ form_end (formulaire)}}
-        <input type="file">
+                    <div class="my-4">
+                        <button class="btn btn-primary" type="submit">Enregistrer
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary"></span></button> 
+                        <a href="{{ path('app_view_participant',{id:app.user.id})}}" class="btn btn-warning"> Annuler 
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary"></span></a>
+                    </div>
+                    {{ form_end (formulaire)}}
+                </div>
+            </div>
         </div>
     </div> 
 </div>

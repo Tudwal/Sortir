@@ -60,12 +60,20 @@ class EventController extends AbstractController
      */
     public function eventDelete(Event $e, EntityManagerInterface $em): Response
     {
-        $em->remove($e);
-        $em->flush();
-        $this->addFlash(
-            'success',
-            'Votre ' . $e->getName() . ' est supprimée!'
-        );
+        $user = $this->getUser();
+        //Test si l'event est ouvert ou cloturé
+        if ($e->getState()->getId() == 2 or $e->getState()->getId() == 3) {
+            //Test si l'user est organisateur
+            if ($e->getOrganizer() == $user) {
+                $em->remove($e);
+                $em->flush();
+                $this->addFlash(
+                    'success',
+                    'Votre ' . $e->getName() . ' est supprimée!'
+                );
+            }
+        }
+
 
         return $this->redirectToRoute('home');
     }
@@ -181,18 +189,27 @@ class EventController extends AbstractController
     /**
      * @Route("/register/{id}", name="event_register")
      */
-    public function register(EventRepository $eventRepository, Event $event, EntityManagerInterface $em): Response
+    public function register(EventRepository $eventRepository, Event $event, EntityManagerInterface $em, $id): Response
     {
-        $nbParticipants= count($event->getParticipants());
-        //dd($nbParticipants); 
+        $nbParticipants = count($event->getParticipants());
         $nbParticipantsMax = $event->getNbParticipantMax();
-        //dd($nbParticipantsMax);
         $user = $this->getUser();
-        //dd($user);
-        if($nbParticipants < $nbParticipantsMax){
-            $event->addParticipant($user);
-            $em->persist($user);
-            $em->flush();
+        // $tabEvent = $eventRepository->findBy(array("participants=>$participants"));
+
+        //dd($tabEvent);
+
+
+        //Test l'user est orga?
+        if ($event->getOrganizer() != $user) {
+            //Test le user est deja dans l'event?
+            if (!$event->getParticipants()->contains($user)) {
+                //Test du nombre de participant dans l'event
+                if ($nbParticipants < $nbParticipantsMax) {
+                    $event->addParticipant($user);
+                    $em->persist($user);
+                    $em->flush();
+                }
+            }
         }
         return $this->redirectToRoute('home');
     }
@@ -202,15 +219,22 @@ class EventController extends AbstractController
      */
     public function unRegister(EventRepository $eventRepository, Event $event, EntityManagerInterface $em): Response
     {
-        $nbParticipants= count($event->getParticipants());
-        
+        $nbParticipants = count($event->getParticipants());
         $user = $this->getUser();
-        //dd($user);
-        if($nbParticipants > 0){
-            $event->removeParticipant($user);
-            $em->persist($user);
-            $em->flush();
+
+        //Test, l'event est il ouvert?
+        if ($event->getState()->getId() == 2) {
+            //Test si l'user est inscrit
+            if ($event->getParticipants()->contains($user)) {
+                //Test si il y'a des participants inscrits
+                if ($nbParticipants > 0) {
+                    $event->removeParticipant($user);
+                    $em->persist($user);
+                    $em->flush();
+                }
+            }
         }
+
         return $this->redirectToRoute('home');
     }
 
@@ -219,24 +243,34 @@ class EventController extends AbstractController
      */
     public function eventUpdate(Event $event, EntityManagerInterface $em, Request $req, StateRepository $stateRepo, CityRepository $cityRepo): Response
     {
+        $user = $this->getUser();
         $cityList = $cityRepo->findAll();
         $form = $this->createForm(EventType::class, $event);
         $form->handleRequest($req);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em->flush();
-            $this->addFlash(
-                'success',
-                'Féliciation, votre ' . $event->getName() . ' est modifiée!'
-            );
+        //Test si l'event n'est pas encore publier
+        if ($event->getState()->getId() == 1) {
+            //Test si l'user est organisateur
+            if ($event->getOrganizer() == $user) {
+                if ($form->isSubmitted() && $form->isValid()) {
+                    $em->flush();
+                    $this->addFlash(
+                        'success',
+                        'Féliciation, votre ' . $event->getName() . ' est modifiée!'
+                    );
 
-            return $this->redirectToRoute('home');
-        } elseif ($form->isSubmitted() && !$form->isValid()) {
-            $this->addFlash(
-                'danger',
-                'Tu as un problème avec la modification de ta sortie'
-            );
+                    return $this->redirectToRoute('home');
+                } elseif ($form->isSubmitted() && !$form->isValid()) {
+                    $this->addFlash(
+                        'danger',
+                        'Tu as un problème avec la modification de ta sortie'
+                    );
+                }
+            }
         }
+
+
+
         return $this->render('event/update.html.twig', [
             'formulaire' => $form->createView(),
             'cityList' => $cityList,
