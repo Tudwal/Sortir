@@ -21,6 +21,9 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints\Length;
 
+/**
+ * @Route("/home")
+ */
 class EventController extends AbstractController
 {
     /**

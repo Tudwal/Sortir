@@ -62,15 +62,14 @@ class EventRepository extends ServiceEntityRepository
         $qb->select('e');
 
         // Filter on the events of wich I am registered
-
         if ($eventRegistered) {
-            $qb->andWhere(":user MEMBER OF e.participants")
+            $qb->orWhere(":user MEMBER OF e.participants")
                 ->setParameter("user", $user);
         }
 
         // Filter on the events of wich I am not registered
         if ($eventNotRegister) {
-            $qb->andWhere(":user NOT MEMBER OF e.participants")
+            $qb->orWhere(":user NOT MEMBER OF e.participants")
                 ->setParameter("user", $user);
         }
 
