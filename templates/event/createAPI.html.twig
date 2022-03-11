@@ -94,8 +94,8 @@
 							Ville
 						</label>
 						{#<div class="col-6" name="city" id="city">
-																		{{form_widget(formulaire.city)}}
-																		</div> #}
+																														{{form_widget(formulaire.city)}}
+																														</div> #}
 						<select class="col-6" name="city" id="city"></select>
 
 					</div>
@@ -133,61 +133,73 @@
 				</div>
 			</div>
 		</fieldset>
+		<div class="my-4">
+			<button class="btn btn-primary" type="submit">Créer la sortie
+				<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary"></span>
+			</button>
+			<button class="btn btn-success" type="submit">Publier la sortie
+				<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary"></span>
+			</button>
+			<a href="{{ path('home')}}" class="btn btn-warning">
+				Annuler
+				<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary"></span>
+			</a>
+		</div>
 		{{form_end(formulaire)}}
 	</div>
 
 
 	{# Ville :
-						<select
-							name="city" id="city"><!-- <option value="1"> rouge</option> -->
-						</select>
-						<br>
-		Lieu :
-						<select name="location" id="location"></select> #}
+								<select
+									name="city" id="city"><!-- <option value="1"> rouge</option> -->
+								</select>
+								<br>
+				Lieu :
+								<select name="location" id="location"></select> #}
 
 
-	{# <script>
-			let cities = {};
-	let url = '../api/';
-	fetch(url).then(res = res.json()).then(data => {
-	cities = data
-	console.log(data);
-	afficherLocation(cities[0].id);
-	});
+	<script>
+		let cities = {};
+let url = '../api/';
+fetch(url).then(res = res.json()).then(data => {
+cities = data
+console.log(data);
+afficherLocation(cities[0].id);
+});
 
-	function afficherCity() { // alimenter select city
-	let baliseCity = document.querySelector('#city');
-	for (let c of cities) {
-	let option = document.createElement('option'); // <option></option>
-	option.innerHTML = c.name; // <option>Rennes</option>
-	option.setAttribute('value', c.id); // <option value="1">Rennes</option>
-	baliseCity.appendChild(option);
-	}
-	}
-	// alimenter select Location
-	function afficherLocation(cityId) {
-	let baliseLocation = document.querySelector('#location');
-	// vider la balise select du Location
-	baliseLocation.innerHTML = '';
-	// rechercher ts les Locations correspondant à la city
-	for (let c of cities) {
-	if (c.id == cityId) {
-	for (let l of c.locations) {
-	let option = document.createElement('option'); // <option></option>
-	option.innerHTML = l.name; // <option>rouge</option>
-	option.setAttribute('value', l.id); // <option value="1">rouge</option>
-	baliseLocation.appendChild(option);
-	}
-	}
-	}
-	}
-	// condition de depart
-	// afficherLocation(data.cities[0].id);
+function afficherCity() { // alimenter select city
+let baliseCity = document.querySelector('#city');
+for (let c of cities) {
+let option = document.createElement('option'); // <option></option>
+option.innerHTML = c.name; // <option>Rennes</option>
+option.setAttribute('value', c.id); // <option value="1">Rennes</option>
+baliseCity.appendChild(option);
+}
+}
+// alimenter select Location
+function afficherLocation(cityId) {
+let baliseLocation = document.querySelector('#location');
+// vider la balise select du Location
+baliseLocation.innerHTML = '';
+// rechercher ts les Locations correspondant à la city
+for (let c of cities) {
+if (c.id == cityId) {
+for (let l of c.locations) {
+let option = document.createElement('option'); // <option></option>
+option.innerHTML = l.name; // <option>rouge</option>
+option.setAttribute('value', l.id); // <option value="1">rouge</option>
+baliseLocation.appendChild(option);
+}
+}
+}
+}
+// condition de depart
+// afficherLocation(data.cities[0].id);
 
-	document.querySelector('#city').onchange = function () {
-	let id = document.querySelector('#city').value;
-	console.log(id);
-	afficherLocation(id);
-	}
-		</script> #}
+document.querySelector('#city').onchange = function () {
+let id = document.querySelector('#city').value;
+console.log(id);
+afficherLocation(id);
+}
+	</script>
 {% endblock %}

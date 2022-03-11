@@ -61,6 +61,10 @@ class EventController extends AbstractController
     {
         $em->remove($e);
         $em->flush();
+        $this->addFlash(
+            'success',
+            'Votre ' . $e->getName() . ' est supprimée!'
+        );
 
         return $this->redirectToRoute('home');
     }
@@ -211,7 +215,7 @@ class EventController extends AbstractController
                 'Tu as un problème avec la modification de ta sortie'
             );
         }
-        return $this->render('event/create.html.twig', [
+        return $this->render('event/update.html.twig', [
             'formulaire' => $form->createView(),
             'cityList' => $cityList,
         ]);
