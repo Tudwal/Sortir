@@ -208,7 +208,7 @@ class EventController extends AbstractController
                 'Tu as un problème avec la modification de ta sortie'
             );
         }
-        return $this->render('event/create.html.twig', [
+        return $this->render('event/update.html.twig', [
             'formulaire' => $form->createView(),
             'cityList' => $cityList,
         ]);
