@@ -2,10 +2,10 @@
 
 namespace App\Entity;
 
-use App\Repository\StateRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Ignore;
 
 /**
  * @ORM\Entity(repositoryClass=StateRepository::class)
@@ -26,6 +26,7 @@ class State
 
     /**
      * @ORM\OneToMany(targetEntity=Event::class, mappedBy="state")
+     * @Ignore()
      */
     private $events;
 

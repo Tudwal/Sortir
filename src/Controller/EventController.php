@@ -13,6 +13,7 @@ use App\Repository\CityRepository;
 use App\Repository\EventRepository;
 use App\Repository\LocationRepository;
 use App\Repository\StateRepository;
+use App\Service\ChangeStateService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,8 +30,9 @@ class EventController extends AbstractController
     /**
      * @Route("/", name="home")
      */
-    public function eventList(EventRepository $repoEvent, CampusRepository $repoCampus, Request $request): Response
+    public function eventList(ChangeStateService $changeStateService, EventRepository $repoEvent, CampusRepository $repoCampus, Request $request): Response
     {
+        $changeStateService->change();
 
         $eventList = $repoEvent->findAll();
         $campus = $repoCampus->findAll();
@@ -191,19 +193,8 @@ class EventController extends AbstractController
     public function register(EventRepository $eventRepository, Event $event, EntityManagerInterface $em, $id): Response
     {
         $nbParticipants = count($event->getParticipants());
-<<<<<<< HEAD
-        //dd($nbParticipants); 
-=======
->>>>>>> 12be956111f9f6d077a8b116a8693eaf4316dcfd
         $nbParticipantsMax = $event->getNbParticipantMax();
         $user = $this->getUser();
-<<<<<<< HEAD
-        //dd($user);
-        if ($nbParticipants < $nbParticipantsMax) {
-            $event->addParticipant($user);
-            $em->persist($user);
-            $em->flush();
-=======
         // $tabEvent = $eventRepository->findBy(array("participants=>$participants"));
 
         //dd($tabEvent);
@@ -220,7 +211,6 @@ class EventController extends AbstractController
                     $em->flush();
                 }
             }
->>>>>>> 12be956111f9f6d077a8b116a8693eaf4316dcfd
         }
         return $this->redirectToRoute('home');
     }
@@ -231,15 +221,6 @@ class EventController extends AbstractController
     public function unRegister(EventRepository $eventRepository, Event $event, EntityManagerInterface $em): Response
     {
         $nbParticipants = count($event->getParticipants());
-<<<<<<< HEAD
-
-        $user = $this->getUser();
-        //dd($user);
-        if ($nbParticipants > 0) {
-            $event->removeParticipant($user);
-            $em->persist($user);
-            $em->flush();
-=======
         $user = $this->getUser();
 
         //Test, l'event est il ouvert?
@@ -253,7 +234,6 @@ class EventController extends AbstractController
                     $em->flush();
                 }
             }
->>>>>>> 12be956111f9f6d077a8b116a8693eaf4316dcfd
         }
 
         return $this->redirectToRoute('home');
