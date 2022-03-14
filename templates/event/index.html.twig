@@ -152,7 +152,7 @@
 								{% if event.state.id == 2 or event.state.id == 3 %}
 									{% if event.organizer.pseudo == app.user.pseudo %}
 										<a onclick="return confirm('Voulez-vous supprimer {{event.name}}?')" href="{{ path('event_delete',{id:event.id })}}" class="btn btn-danger">
-											<i class="fa-solid fa-plus">Annuler</i>
+											Annuler
 										</a>
 									{% endif %}
 								{% endif %}

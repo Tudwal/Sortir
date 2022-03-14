@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Ignore;
 
 /**
- * @ORM\Entity(repositoryClass=StateRepository::class)
+ * @ORM\Entity(repositoryClass="App\Repository\StateRepository")
  */
 class State
 {
@@ -18,6 +18,11 @@ class State
      * @ORM\Column(type="integer")
      */
     private $id;
+
+    /**
+     * @ORM\Column(type="string", length=4)
+     */
+    private $code;
 
     /**
      * @ORM\Column(type="string", length=30)
@@ -48,6 +53,19 @@ class State
     public function setLabel(string $label): self
     {
         $this->label = $label;
+
+        return $this;
+    }
+
+
+    public function getCode(): ?string
+    {
+        return $this->code;
+    }
+
+    public function setCode(string $code): self
+    {
+        $this->code = $code;
 
         return $this;
     }

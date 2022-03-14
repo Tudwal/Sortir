@@ -36,6 +36,7 @@ class EventController extends AbstractController
         /*
         piscine: état initial = créé. Doit passer en clôturée
         patinoire : état initial = créé. Doit passer en en-cours.
+        cinéma: état initial = créé. Doit passer en historisé.
         */
 
         $eventList = $repoEvent->findAll();
