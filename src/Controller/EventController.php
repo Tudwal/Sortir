@@ -30,17 +30,22 @@ class EventController extends AbstractController
     /**
      * @Route("/", name="home")
      */
-    public function eventList(ChangeStateService $changeStateService, EventRepository $repoEvent, CampusRepository $repoCampus, Request $request): Response
+    public function eventList(StateRepository $repoState, ChangeStateService $changeStateService, EventRepository $repoEvent, CampusRepository $repoCampus, Request $request): Response
     {
         // $changeStateService->change();
         /*
         piscine: état initial = créé. Doit passer en clôturée
         patinoire : état initial = créé. Doit passer en en-cours.
+        cinéma: état initial = créé. Doit passer en historisé.
         */
+        // recup les id state 1, 2 et 3
 
         $eventList = $repoEvent->findAll();
         $campus = $repoCampus->findAll();
-
+        $stateCrea = $repoState->findBy(array('code' => 'CREE'));
+        $stateOpen = $repoState->findBy(array('code' => 'OPEN'));
+        $stateClos = $repoState->findBy(array('code' => 'CLOS'));
+        // dd($stateCrea);
         $createSearchType = new ModelSearchType();
         $form = $this->createForm(EventSearchType::class, $createSearchType);
         $form->handleRequest($request);
@@ -53,6 +58,9 @@ class EventController extends AbstractController
         }
 
         return $this->render('event/index.html.twig', [
+            'stateCrea' => $stateCrea,
+            'stateOpen' => $stateOpen,
+            'stateClos' => $stateClos,
             'events' => $eventList,
             'campusList' => $campus,
             'formulaire' => $form->createView(),
@@ -67,7 +75,7 @@ class EventController extends AbstractController
     {
         $user = $this->getUser();
         //Test si l'event est ouvert ou cloturé
-        if ($e->getState()->getId() == 2 or $e->getState()->getId() == 3) {
+        if ($e->getState()->getCode() == 'OPEN' or $e->getState()->getCode() == 'CLOS') {
             //Test si l'user est organisateur
             if ($e->getOrganizer() == $user) {
                 $em->remove($e);
@@ -192,9 +200,43 @@ class EventController extends AbstractController
     }
 
     /**
+     * @Route("/publish/{id}", name="event_publish")
+     */
+    public function publish(StateRepository $stateRepo ,Event $e,EntityManagerInterface $em , EventRepository $repo, $id): Response
+    {
+        $e->setState($stateRepo->findOneBy(array('code' => 'OPEN')));
+                        $em->persist($e);
+                        $em->flush();
+                        
+                        return $this->redirectToRoute('home');
+    }
+
+    /**
+     * @Route("/cancel/{id}", name="event_cancel")
+     */
+    public function cancel(StateRepository $stateRepo ,Event $e,EntityManagerInterface $em , EventRepository $repo, $id, Request $req): Response
+    {
+        $events = $repo->find($id);
+                       
+        if($req->get('motif_cancel'))
+        {
+        $e->setDetails($req->get('motif_cancel'));
+        $e->setState($stateRepo->findOneBy(array('code' => 'ANNU')));
+        $em->persist($e);
+        $em->flush();
+        
+        return $this->redirectToRoute('home');
+        }        
+        return $this->render('event/cancel.html.twig',[
+            'event'=>$e,
+            'events'=>$events,
+        ]);
+    }
+
+    /**
      * @Route("/register/{id}", name="event_register")
      */
-    public function register(EventRepository $eventRepository, Event $event, EntityManagerInterface $em, $id): Response
+    public function register(StateRepository $stateRepo, EventRepository $eventRepository, Event $event, EntityManagerInterface $em, $id): Response
     {
         $nbParticipants = count($event->getParticipants());
         $nbParticipantsMax = $event->getNbParticipantMax();
@@ -203,38 +245,55 @@ class EventController extends AbstractController
 
         //dd($tabEvent);
 
-
-        //Test l'user est orga?
-        if ($event->getOrganizer() != $user) {
-            //Test le user est deja dans l'event?
-            if (!$event->getParticipants()->contains($user)) {
-                //Test du nombre de participant dans l'event
-                if ($nbParticipants < $nbParticipantsMax) {
-                    $event->addParticipant($user);
-                    $em->persist($user);
-                    $em->flush();
+        //Test si l'event est ouvert
+        if ($event->getState()->getCode() == 'OPEN') {
+            //Test l'user est orga?
+            if ($event->getOrganizer() != $user) {
+                //Test le user est deja dans l'event?
+                if (!$event->getParticipants()->contains($user)) {
+                    //Test du nombre de participant dans l'event
+                    if ($nbParticipants < $nbParticipantsMax) {
+                        $event->addParticipant($user);
+                        $em->persist($user);
+                        $em->flush();
+                    }
+                    $newNbParticipants = count($event->getParticipants());
+                    //dd($newNbParticipants);
+                    if ($newNbParticipants == $nbParticipantsMax) {
+                        $event->setState($stateRepo->findOneBy(array('code' => 'CLOS')));
+                        $em->persist($event);
+                        $em->flush();
+                    }
                 }
             }
         }
+
         return $this->redirectToRoute('home');
     }
 
     /**
      * @Route("/unRegister/{id}", name="event_unRegister")
      */
-    public function unRegister(EventRepository $eventRepository, Event $event, EntityManagerInterface $em): Response
+    public function unRegister(StateRepository $stateRepo, EventRepository $eventRepository, Event $event, EntityManagerInterface $em): Response
     {
         $nbParticipants = count($event->getParticipants());
+        $nbParticipantsMax = $event->getNbParticipantMax();
         $user = $this->getUser();
 
         //Test, l'event est il ouvert?
-        if ($event->getState()->getId() == 2) {
+        if ($event->getState()->getCode() == 'OPEN' || $event->getState()->getCode() == 'CLOS') {
             //Test si l'user est inscrit
             if ($event->getParticipants()->contains($user)) {
                 //Test si il y'a des participants inscrits
                 if ($nbParticipants > 0) {
                     $event->removeParticipant($user);
                     $em->persist($user);
+                    $em->flush();
+                }
+                $newNbParticipants = count($event->getParticipants());
+                if ($newNbParticipants < $nbParticipantsMax) {
+                    $event->setState($stateRepo->findOneBy(array('code' => 'OPEN')));
+                    $em->persist($event);
                     $em->flush();
                 }
             }
@@ -254,7 +313,7 @@ class EventController extends AbstractController
         $form->handleRequest($req);
 
         //Test si l'event n'est pas encore publier
-        if ($event->getState()->getId() == 1) {
+        if ($event->getState()->getCode() == 'CREE') {
             //Test si l'user est organisateur
             if ($event->getOrganizer() == $user) {
                 if ($form->isSubmitted() && $form->isValid()) {
@@ -281,6 +340,7 @@ class EventController extends AbstractController
             'cityList' => $cityList,
         ]);
     }
+<<<<<<< HEAD
     /**
      * @Route("/event-updateAPI/{id}", name="event_updateAPI")
      */
@@ -320,3 +380,6 @@ class EventController extends AbstractController
         ]);
     }
 }
+=======
+}
+>>>>>>> 913d0f92b1ad10154cd190ca26d46e64efdb8c76

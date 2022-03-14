@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Annuler la sortie
+{% endblock %}
+
+{% block body %}
+    <p>Nom de la sortie : {{event.name}}</p>
+    <p>Date de la sortie : {{event.startDateTime | date('d/m/Y')}}</p>
+    <p>Campus : {{event.Campus.name}}</p>
+    <p>Lieu : {{event.Location.name}}</p>
+
+    <form method="POST" action="{{ path('event_cancel',{id:event.id })}}">
+    <div>
+        <label for="motif">Motif :</label>
+        <input type="text" id="motif" name="motif_cancel">
+    </div>
+    <div>
+        <input type="submit" value="Continuer">
+    </div>
+    </form>
+{% endblock %}
