@@ -126,14 +126,13 @@
 										{% endif %}
 									{% endif %}
 								{% endif %}
-								{% if event.state in stateOpen  %}
+								{% if event.state in stateOpen  or event.state in stateClos %}
 									{% if app.user in event.participants %}
 										<a onclick="return confirm('Voulez-vous quitter {{event.name}}?')" href="{{ path('event_unRegister',{id:event.id })}}" class="btn btn-danger">
 											Se désister
 										</a>
 									{% endif %}
 								{% endif %}
-								{# passer par une instance de state et pas l'id 1#}
 								{% if event.state in stateCrea  %}
 									{% if event.organizer.pseudo == app.user.pseudo %}
 										<a href="{{ path('event_update',{id:event.id })}}" class="btn btn-warning">
@@ -141,17 +140,16 @@
 										</a>
 									{% endif %}
 								{% endif %}
-								{# Changer le path vers la fonction publier #}
 								{% if event.state in stateCrea %}
 									{% if event.organizer.pseudo == app.user.pseudo %}
-										<a href="{{ path('event_update',{id:event.id })}}" class="btn btn-success">
+										<a href="{{ path('event_publish',{id:event.id })}}" class="btn btn-success">
 											Publier
 										</a>
 									{% endif %}
 								{% endif %}
 								{% if event.state in stateOpen or event.state in stateClos %}
 									{% if event.organizer.pseudo == app.user.pseudo %}
-										<a onclick="return confirm('Voulez-vous supprimer {{event.name}}?')" href="{{ path('event_delete',{id:event.id })}}" class="btn btn-danger">
+										<a onclick="return confirm('Voulez-vous supprimer {{event.name}}?')" href="{{ path('event_cancel',{id:event.id })}}" class="btn btn-danger">
 											Annuler
 										</a>
 									{% endif %}

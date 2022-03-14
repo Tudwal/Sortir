@@ -200,9 +200,43 @@ class EventController extends AbstractController
     }
 
     /**
+     * @Route("/publish/{id}", name="event_publish")
+     */
+    public function publish(StateRepository $stateRepo ,Event $e,EntityManagerInterface $em , EventRepository $repo, $id): Response
+    {
+        $e->setState($stateRepo->findOneBy(array('code' => 'OPEN')));
+                        $em->persist($e);
+                        $em->flush();
+                        
+                        return $this->redirectToRoute('home');
+    }
+
+    /**
+     * @Route("/cancel/{id}", name="event_cancel")
+     */
+    public function cancel(StateRepository $stateRepo ,Event $e,EntityManagerInterface $em , EventRepository $repo, $id, Request $req): Response
+    {
+        $events = $repo->find($id);
+                       
+        if($req->get('motif_cancel'))
+        {
+        $e->setDetails($req->get('motif_cancel'));
+        $e->setState($stateRepo->findOneBy(array('code' => 'ANNU')));
+        $em->persist($e);
+        $em->flush();
+        
+        return $this->redirectToRoute('home');
+        }        
+        return $this->render('event/cancel.html.twig',[
+            'event'=>$e,
+            'events'=>$events,
+        ]);
+    }
+
+    /**
      * @Route("/register/{id}", name="event_register")
      */
-    public function register(EventRepository $eventRepository, Event $event, EntityManagerInterface $em, $id): Response
+    public function register(StateRepository $stateRepo, EventRepository $eventRepository, Event $event, EntityManagerInterface $em, $id): Response
     {
         $nbParticipants = count($event->getParticipants());
         $nbParticipantsMax = $event->getNbParticipantMax();
@@ -223,6 +257,13 @@ class EventController extends AbstractController
                         $em->persist($user);
                         $em->flush();
                     }
+                    $newNbParticipants = count($event->getParticipants());
+                    //dd($newNbParticipants);
+                    if ($newNbParticipants == $nbParticipantsMax) {
+                        $event->setState($stateRepo->findOneBy(array('code' => 'CLOS')));
+                        $em->persist($event);
+                        $em->flush();
+                    }
                 }
             }
         }
@@ -233,19 +274,26 @@ class EventController extends AbstractController
     /**
      * @Route("/unRegister/{id}", name="event_unRegister")
      */
-    public function unRegister(EventRepository $eventRepository, Event $event, EntityManagerInterface $em): Response
+    public function unRegister(StateRepository $stateRepo, EventRepository $eventRepository, Event $event, EntityManagerInterface $em): Response
     {
         $nbParticipants = count($event->getParticipants());
+        $nbParticipantsMax = $event->getNbParticipantMax();
         $user = $this->getUser();
 
         //Test, l'event est il ouvert?
-        if ($event->getState()->getCode() == 'OPEN') {
+        if ($event->getState()->getCode() == 'OPEN' || $event->getState()->getCode() == 'CLOS') {
             //Test si l'user est inscrit
             if ($event->getParticipants()->contains($user)) {
                 //Test si il y'a des participants inscrits
                 if ($nbParticipants > 0) {
                     $event->removeParticipant($user);
                     $em->persist($user);
+                    $em->flush();
+                }
+                $newNbParticipants = count($event->getParticipants());
+                if ($newNbParticipants < $nbParticipantsMax) {
+                    $event->setState($stateRepo->findOneBy(array('code' => 'OPEN')));
+                    $em->persist($event);
                     $em->flush();
                 }
             }
