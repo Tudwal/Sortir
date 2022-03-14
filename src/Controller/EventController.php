@@ -129,7 +129,7 @@ class EventController extends AbstractController
     {
         $tab = $cityRepo->findAll();
 
-        return $this->json($tab,200,[],['groups'=>"villes"]);
+        return $this->json($tab, 200, [], ['groups' => "villes"]);
     }
 
 
@@ -192,34 +192,33 @@ class EventController extends AbstractController
     /**
      * @Route("/publish/{id}", name="event_publish")
      */
-    public function publish(StateRepository $stateRepo ,Event $e,EntityManagerInterface $em , EventRepository $repo, $id): Response
+    public function publish(StateRepository $stateRepo, Event $e, EntityManagerInterface $em, EventRepository $repo, $id): Response
     {
         $e->setState($stateRepo->findOneBy(array('code' => 'OPEN')));
-                        $em->persist($e);
-                        $em->flush();
-                        
-                        return $this->redirectToRoute('home');
+        $em->persist($e);
+        $em->flush();
+
+        return $this->redirectToRoute('home');
     }
 
     /**
      * @Route("/cancel/{id}", name="event_cancel")
      */
-    public function cancel(StateRepository $stateRepo ,Event $e,EntityManagerInterface $em , EventRepository $repo, $id, Request $req): Response
+    public function cancel(StateRepository $stateRepo, Event $e, EntityManagerInterface $em, EventRepository $repo, $id, Request $req): Response
     {
         $events = $repo->find($id);
-                       
-        if($req->get('motif_cancel'))
-        {
-        $e->setDetails($req->get('motif_cancel'));
-        $e->setState($stateRepo->findOneBy(array('code' => 'ANNU')));
-        $em->persist($e);
-        $em->flush();
-        
-        return $this->redirectToRoute('home');
-        }        
-        return $this->render('event/cancel.html.twig',[
-            'event'=>$e,
-            'events'=>$events,
+
+        if ($req->get('motif_cancel')) {
+            $e->setDetails($req->get('motif_cancel'));
+            $e->setState($stateRepo->findOneBy(array('code' => 'ANNU')));
+            $em->persist($e);
+            $em->flush();
+
+            return $this->redirectToRoute('home');
+        }
+        return $this->render('event/cancel.html.twig', [
+            'event' => $e,
+            'events' => $events,
         ]);
     }
 
@@ -330,8 +329,6 @@ class EventController extends AbstractController
             'cityList' => $cityList,
         ]);
     }
-<<<<<<< HEAD
-=======
     /**
      * @Route("/event-updateAPI/{id}", name="event_updateAPI")
      */
@@ -370,5 +367,4 @@ class EventController extends AbstractController
 
         ]);
     }
->>>>>>> a54f82f92bb973f1622f3d6808c9c1e8c8c1914e
 }
