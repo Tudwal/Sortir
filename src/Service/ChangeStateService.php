@@ -7,17 +7,19 @@ use App\Repository\StateRepository;
 use DateInterval;
 use DateTime;
 use DateTimeZone;
-use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\EntityManagerInterface;
 
 class ChangeStateService
 {
     private $eventRepository;
     private $stateRepository;
+    private $entityManagerInterface;
 
-    public function __construct(EventRepository $eventRepoository, StateRepository $stateRepository)
+    public function __construct(EventRepository $eventRepoository, StateRepository $stateRepository, EntityManagerInterface $entityManagerInterface)
     {
         $this->eventRepository = $eventRepoository;
         $this->stateRepository = $stateRepository;
+        $this->entityManagerInterface = $entityManagerInterface;
     }
 
     public function change()
@@ -30,14 +32,13 @@ class ChangeStateService
 
         foreach ($eventList as $event) {
 
-
             // Récupération des dates utiles pour les if
             $startEvent = $event->getStartDateTime();
             $endRegistration = $event->getEndRegisterDate();
             $duration = $event->getDuration();
             $endEvent = clone $startEvent;
             $endEvent->add(new DateInterval('PT' . $duration . 'M'));
-            $historyEvent = clone $endEvent;
+            $historyEvent = clone $startEvent;
             $historyEvent->add(new DateInterval('P1M'));
 
             // MODIFICATION ETAT CLOTURE
@@ -54,15 +55,17 @@ class ChangeStateService
 
             // MODIFICATION ETAT TERMINEE
             if ($today > $endEvent && $today < $historyEvent) {
-                $event->setState($this->stateRepository->findOneBy(['code' => 'PAST']));
+                $event->setState($this->stateRepository->findOneBy(['code' => 'FINI']));
             }
 
             // MODIFICATION ETAT HISTORISEE si date >= date fin + 1 mois -> état = historisée
-            // if ($today >= $historyEvent) {
-            //     // dd('je suis dans le if 3');
-            //     $historisee = $this->stateRepository->findOneBy(array('code' => 'PAST'));
-            //     $event->setState($historisee);
-            // }
+            if ($today >= $historyEvent) {
+                $historisee = $this->stateRepository->findOneBy(array('code' => 'HIST'));
+                $event->setState($historisee);
+            }
+
+            $this->entityManagerInterface->persist($event);
+            $this->entityManagerInterface->flush();
         }
     }
 }

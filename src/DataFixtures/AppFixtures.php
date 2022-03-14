@@ -113,14 +113,19 @@ class AppFixtures extends Fixture
         $this->manager->persist($enCours);
 
         $passee = new State();
-        $passee->setLabel('Passée');
-        $passee->setCode('PAST');
+        $passee->setLabel('Terminée');
+        $passee->setCode('FINI');
         $this->manager->persist($passee);
 
         $annulee = new State();
         $annulee->setLabel('Annulée');
         $annulee->setCode('ANNU');
         $this->manager->persist($annulee);
+
+        $historisee = new State();
+        $historisee->setLabel('Historisée');
+        $historisee->setCode('HIST');
+        $this->manager->persist($historisee);
 
         $this->manager->flush();
     }
@@ -174,21 +179,12 @@ class AppFixtures extends Fixture
 
         $piscine = new Event();
         $piscine->setName('Sortie piscine')
-<<<<<<< HEAD
             ->setStartDateTime((new DateTime('now', new DateTimeZone('Europe/Paris')))->modify('+ 2 days'))
             ->setDuration(90)
             ->setEndRegisterDate((new DateTime('now', new DateTimeZone('Europe/Paris')))->modify('- 10 days'))
             ->setNbParticipantMax(10)
             ->setDetails('Nager la brasse coulée en toute liberté et sans complexe')
             ->setState($this->manager->getRepository(State::class)->findOneBy(array('code' => 'OPEN'))) /// état ouverte
-=======
-            ->setStartDateTime($past)
-            ->setDuration(90)
-            ->setEndRegisterDate($past2)
-            ->setNbParticipantMax(10)
-            ->setDetails('Nager la brasse coulée en toute liberté et sans complexe')
-            ->setState($this->manager->getRepository(State::class)->findOneBy(array('label' => 'Créée'))) /// état créée
->>>>>>> 4878fea5b71a0c4af9db472782c7a41628c13a37
             ->setLocation($faker->randomElement($this->manager->getRepository(Location::class)->findAll()))
             ->setCampus($faker->randomElement($this->manager->getRepository(Campus::class)->findAll()))
             ->setOrganizer($faker->randomElement($this->manager->getRepository(Participant::class)->findAll()))
@@ -200,17 +196,10 @@ class AppFixtures extends Fixture
         $patinoire->setName('Sortie patinoire')
             ->setStartDateTime($now)
             ->setDuration(90)
-<<<<<<< HEAD
             ->setEndRegisterDate((new DateTime('now', new DateTimeZone('Europe/Paris')))->modify('- 2 days'))
             ->setNbParticipantMax(15)
             ->setDetails('Patiner en toute liberté et sans complexe')
             ->setState($this->manager->getRepository(State::class)->findOneBy(array('code' => 'CLOS'))) // état clôturée
-=======
-            ->setEndRegisterDate($end)
-            ->setNbParticipantMax(15)
-            ->setDetails('Patiner en toute liberté et sans complexe')
-            ->setState($this->manager->getRepository(State::class)->findOneBy(array('label' => 'Créée'))) // état créée
->>>>>>> 4878fea5b71a0c4af9db472782c7a41628c13a37
             ->setLocation($faker->randomElement($this->manager->getRepository(Location::class)->findAll()))
             ->setCampus($faker->randomElement($this->manager->getRepository(Campus::class)->findAll()))
             ->setOrganizer($faker->randomElement($this->manager->getRepository(Participant::class)->findAll()))
@@ -220,21 +209,12 @@ class AppFixtures extends Fixture
 
         $cinema = new Event();
         $cinema->setName('Sortie cinéma')
-<<<<<<< HEAD
             ->setStartDateTime((new DateTime('now', new DateTimeZone('Europe/Paris')))->modify('-2 days'))
             ->setDuration(90)
             ->setEndRegisterDate((new DateTime('now', new DateTimeZone('Europe/Paris')))->modify('-15 days'))
             ->setNbParticipantMax(5)
             ->setDetails('Aller au cinéma en toute liberté et sans complexe')
             ->setState($this->manager->getRepository(State::class)->findOneBy(array('code' => 'ENCO'))) // état en-cours
-=======
-            ->setStartDateTime((new DateTime('now', new DateTimeZone('Europe/Paris')))->modify('-80 days'))
-            ->setDuration(90)
-            ->setEndRegisterDate((new DateTime('now', new DateTimeZone('Europe/Paris')))->modify('-60 days'))
-            ->setNbParticipantMax(5)
-            ->setDetails('Aller au cinéma en toute liberté et sans complexe')
-            ->setState($this->manager->getRepository(State::class)->findOneBy(array('label' => 'Créée'))) // état créée
->>>>>>> 4878fea5b71a0c4af9db472782c7a41628c13a37
             ->setLocation($faker->randomElement($this->manager->getRepository(Location::class)->findAll()))
             ->setCampus($faker->randomElement($this->manager->getRepository(Campus::class)->findAll()))
             ->setOrganizer($faker->randomElement($this->manager->getRepository(Participant::class)->findAll()))

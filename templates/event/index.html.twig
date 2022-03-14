@@ -105,59 +105,67 @@
 				</thead>
 				<tbody>
 					{% for event in events | sort((d1,d2) => d2.startDateTime <=> d1.startDateTime) %}
-						<tr>
-							<td>{{event.name}}</td>
-							<td>{{event.startDateTime | date('d-m-Y H:i:s') }}</td>
-							<td>{{event.endRegisterDate | date('d-m-Y')}}</td>
-							<td>{{ event.participants | length }}/{{event.nbParticipantMax}}</td>
-							<td>{{event.state.label}}</td>
-							<td></td>
-							<td>{{event.organizer.pseudo}}</td>
-							<td>
-								<a href="{{ path('event_details',{id:event.id })}}" class="btn btn-info">
-									<i class="fa-solid fa-eye"></i>
-								</a>
-								{% if event.state in stateOpen  %}
-									{% if app.user not in event.participants %}
-										{% if event.organizer.pseudo != app.user.pseudo %}
-											<a href="{{ path('event_register',{id:event.id })}}" class="btn btn-success">
-												S'inscrire
+						{% if 
+							(event.organizer.pseudo != app.user.pseudo and event.state not in stateCrea) 
+							or (event.organizer.pseudo == app.user.pseudo and event.state in stateCrea) %}
+							<tr>
+								<td>{{event.name}}</td>
+								<td>{{event.startDateTime | date('d-m-Y H:i:s') }}</td>
+								<td>{{event.endRegisterDate | date('d-m-Y')}}</td>
+								<td>{{ event.participants | length }}/{{event.nbParticipantMax}}</td>
+								<td>{{event.state.label}}</td>
+								<td>
+									{% if app.user in event.participants %}
+										X
+									{% endif %}
+								</td>
+								<td>{{event.organizer.pseudo}}</td>
+								<td>
+									<a href="{{ path('event_details',{id:event.id })}}" class="btn btn-info">
+										<i class="fa-solid fa-eye"></i>
+									</a>
+									{% if event.state in stateOpen  %}
+										{% if app.user not in event.participants %}
+											{% if event.organizer.pseudo != app.user.pseudo %}
+												<a href="{{ path('event_register',{id:event.id })}}" class="btn btn-success">
+													S'inscrire
+												</a>
+											{% endif %}
+										{% endif %}
+									{% endif %}
+									{% if event.state in stateOpen  %}
+										{% if app.user in event.participants %}
+											<a onclick="return confirm('Voulez-vous quitter {{event.name}}?')" href="{{ path('event_unRegister',{id:event.id })}}" class="btn btn-danger">
+												Se désister
 											</a>
 										{% endif %}
 									{% endif %}
-								{% endif %}
-								{% if event.state in stateOpen  %}
-									{% if app.user in event.participants %}
-										<a onclick="return confirm('Voulez-vous quitter {{event.name}}?')" href="{{ path('event_unRegister',{id:event.id })}}" class="btn btn-danger">
-											Se désister
-										</a>
+									{# passer par une instance de state et pas l'id 1#}
+									{% if event.state in stateCrea  %}
+										{% if event.organizer.pseudo == app.user.pseudo %}
+											<a href="{{ path('event_update',{id:event.id })}}" class="btn btn-warning">
+												modifier
+											</a>
+										{% endif %}
 									{% endif %}
-								{% endif %}
-								{# passer par une instance de state et pas l'id 1#}
-								{% if event.state in stateCrea  %}
-									{% if event.organizer.pseudo == app.user.pseudo %}
-										<a href="{{ path('event_update',{id:event.id })}}" class="btn btn-warning">
-											modifier
-										</a>
+									{# Changer le path vers la fonction publier #}
+									{% if event.state in stateCrea %}
+										{% if event.organizer.pseudo == app.user.pseudo %}
+											<a href="{{ path('event_update',{id:event.id })}}" class="btn btn-success">
+												Publier
+											</a>
+										{% endif %}
 									{% endif %}
-								{% endif %}
-								{# Changer le path vers la fonction publier #}
-								{% if event.state in stateCrea %}
-									{% if event.organizer.pseudo == app.user.pseudo %}
-										<a href="{{ path('event_update',{id:event.id })}}" class="btn btn-success">
-											Publier
-										</a>
+									{% if event.state in stateOpen or event.state in stateClos %}
+										{% if event.organizer.pseudo == app.user.pseudo %}
+											<a onclick="return confirm('Voulez-vous supprimer {{event.name}}?')" href="{{ path('event_delete',{id:event.id })}}" class="btn btn-danger">
+												Annuler
+											</a>
+										{% endif %}
 									{% endif %}
-								{% endif %}
-								{% if event.state in stateOpen or event.state in stateClos %}
-									{% if event.organizer.pseudo == app.user.pseudo %}
-										<a onclick="return confirm('Voulez-vous supprimer {{event.name}}?')" href="{{ path('event_delete',{id:event.id })}}" class="btn btn-danger">
-											Annuler
-										</a>
-									{% endif %}
-								{% endif %}
-							</td>
-						</tr>
+								</td>
+							</tr>
+						{% endif %}
 					{% endfor %}
 				</tbody>
 			</table>

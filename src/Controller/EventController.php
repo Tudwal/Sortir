@@ -29,19 +29,13 @@ class EventController extends AbstractController
     public function eventList(StateRepository $repoState, ChangeStateService $changeStateService, EventRepository $repoEvent, CampusRepository $repoCampus, Request $request): Response
     {
         $changeStateService->change();
-        /*
-        piscine: état initial = ouverte. Doit passer en clôturée.
-        patinoire : état initial = clôturée. Doit passer en en-cours.
-        cinéma: état initial = en-cours. Doit passer en passée.
-        */
-        // recup les id state 1, 2 et 3
 
+        // recup les id state 1, 2 et 3
         $eventList = $repoEvent->findAll();
         $campus = $repoCampus->findAll();
         $stateCrea = $repoState->findBy(array('code' => 'CREE'));
         $stateOpen = $repoState->findBy(array('code' => 'OPEN'));
         $stateClos = $repoState->findBy(array('code' => 'CLOS'));
-        // dd($stateCrea);
         $createSearchType = new ModelSearchType();
         $form = $this->createForm(EventSearchType::class, $createSearchType);
         $form->handleRequest($request);
