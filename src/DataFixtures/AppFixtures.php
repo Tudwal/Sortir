@@ -113,14 +113,19 @@ class AppFixtures extends Fixture
         $this->manager->persist($enCours);
 
         $passee = new State();
-        $passee->setLabel('Passée');
-        $passee->setCode('PAST');
+        $passee->setLabel('Terminée');
+        $passee->setCode('FINI');
         $this->manager->persist($passee);
 
         $annulee = new State();
         $annulee->setLabel('Annulée');
         $annulee->setCode('ANNU');
         $this->manager->persist($annulee);
+
+        $historisee = new State();
+        $historisee->setLabel('Historisée');
+        $historisee->setCode('HIST');
+        $this->manager->persist($historisee);
 
         $this->manager->flush();
     }
@@ -174,12 +179,12 @@ class AppFixtures extends Fixture
 
         $piscine = new Event();
         $piscine->setName('Sortie piscine')
-            ->setStartDateTime($past)
+            ->setStartDateTime((new DateTime('now', new DateTimeZone('Europe/Paris')))->modify('+ 2 days'))
             ->setDuration(90)
-            ->setEndRegisterDate($past2)
+            ->setEndRegisterDate((new DateTime('now', new DateTimeZone('Europe/Paris')))->modify('- 10 days'))
             ->setNbParticipantMax(10)
             ->setDetails('Nager la brasse coulée en toute liberté et sans complexe')
-            ->setState($this->manager->getRepository(State::class)->findOneBy(array('label' => 'Créée'))) /// état créée
+            ->setState($this->manager->getRepository(State::class)->findOneBy(array('code' => 'OPEN'))) /// état ouverte
             ->setLocation($faker->randomElement($this->manager->getRepository(Location::class)->findAll()))
             ->setCampus($faker->randomElement($this->manager->getRepository(Campus::class)->findAll()))
             ->setOrganizer($faker->randomElement($this->manager->getRepository(Participant::class)->findAll()))
@@ -191,10 +196,10 @@ class AppFixtures extends Fixture
         $patinoire->setName('Sortie patinoire')
             ->setStartDateTime($now)
             ->setDuration(90)
-            ->setEndRegisterDate($end)
+            ->setEndRegisterDate((new DateTime('now', new DateTimeZone('Europe/Paris')))->modify('- 2 days'))
             ->setNbParticipantMax(15)
             ->setDetails('Patiner en toute liberté et sans complexe')
-            ->setState($this->manager->getRepository(State::class)->findOneBy(array('label' => 'Créée'))) // état créée
+            ->setState($this->manager->getRepository(State::class)->findOneBy(array('code' => 'CLOS'))) // état clôturée
             ->setLocation($faker->randomElement($this->manager->getRepository(Location::class)->findAll()))
             ->setCampus($faker->randomElement($this->manager->getRepository(Campus::class)->findAll()))
             ->setOrganizer($faker->randomElement($this->manager->getRepository(Participant::class)->findAll()))
@@ -204,12 +209,12 @@ class AppFixtures extends Fixture
 
         $cinema = new Event();
         $cinema->setName('Sortie cinéma')
-            ->setStartDateTime((new DateTime('now', new DateTimeZone('Europe/Paris')))->modify('-80 days'))
+            ->setStartDateTime((new DateTime('now', new DateTimeZone('Europe/Paris')))->modify('-2 days'))
             ->setDuration(90)
-            ->setEndRegisterDate((new DateTime('now', new DateTimeZone('Europe/Paris')))->modify('-60 days'))
+            ->setEndRegisterDate((new DateTime('now', new DateTimeZone('Europe/Paris')))->modify('-15 days'))
             ->setNbParticipantMax(5)
             ->setDetails('Aller au cinéma en toute liberté et sans complexe')
-            ->setState($this->manager->getRepository(State::class)->findOneBy(array('label' => 'Créée'))) // état créée
+            ->setState($this->manager->getRepository(State::class)->findOneBy(array('code' => 'ENCO'))) // état en-cours
             ->setLocation($faker->randomElement($this->manager->getRepository(Location::class)->findAll()))
             ->setCampus($faker->randomElement($this->manager->getRepository(Campus::class)->findAll()))
             ->setOrganizer($faker->randomElement($this->manager->getRepository(Participant::class)->findAll()))

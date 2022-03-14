@@ -31,6 +31,8 @@ class EventTypeAPI extends AbstractType
             ])
 
 
+
+
             //->add('endRegisterDate')
             ->add('endRegisterDate', TypeDateType::class, [
                 'label' => 'Date limite d\'insciption ',

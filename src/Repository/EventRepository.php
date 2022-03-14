@@ -112,7 +112,6 @@ class EventRepository extends ServiceEntityRepository
                 ->setParameter('search', '%' . $search . '%');
         }
 
-
         return $qb->getQuery()->getResult();
     }
 

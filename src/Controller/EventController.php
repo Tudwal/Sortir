@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Event;
-use App\Entity\State;
 use App\Form\EventSearchType;
 use App\Form\EventType;
 use App\Form\EventTypeAPI;
@@ -11,7 +10,6 @@ use App\Form\ModelSearchType;
 use App\Repository\CampusRepository;
 use App\Repository\CityRepository;
 use App\Repository\EventRepository;
-use App\Repository\LocationRepository;
 use App\Repository\StateRepository;
 use App\Service\ChangeStateService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -19,8 +17,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Validator\Constraints\Length;
 
 /**
  * @Route("/home")
@@ -32,20 +28,14 @@ class EventController extends AbstractController
      */
     public function eventList(StateRepository $repoState, ChangeStateService $changeStateService, EventRepository $repoEvent, CampusRepository $repoCampus, Request $request): Response
     {
-        // $changeStateService->change();
-        /*
-        piscine: état initial = créé. Doit passer en clôturée
-        patinoire : état initial = créé. Doit passer en en-cours.
-        cinéma: état initial = créé. Doit passer en historisé.
-        */
-        // recup les id state 1, 2 et 3
+        $changeStateService->change();
 
+        // recup les id state 1, 2 et 3
         $eventList = $repoEvent->findAll();
         $campus = $repoCampus->findAll();
         $stateCrea = $repoState->findBy(array('code' => 'CREE'));
         $stateOpen = $repoState->findBy(array('code' => 'OPEN'));
         $stateClos = $repoState->findBy(array('code' => 'CLOS'));
-        // dd($stateCrea);
         $createSearchType = new ModelSearchType();
         $form = $this->createForm(EventSearchType::class, $createSearchType);
         $form->handleRequest($request);
@@ -91,46 +81,46 @@ class EventController extends AbstractController
         return $this->redirectToRoute('home');
     }
 
-    /**
-     * @Route("/event-create", name="event_create")
-     */
-    public function eventCreate(EntityManagerInterface $em, Request $req, StateRepository $stateRepo, CityRepository $cityRepo): Response
-    {
-        //dd('je suis dans la fonction event-create');
-        $event = new Event();
-        $cityList = $cityRepo->findAll();
-        $participant = $this->getUser();
+    // /**
+    //  * @Route("/event-create", name="event_create")
+    //  */
+    // public function eventCreate(EntityManagerInterface $em, Request $req, StateRepository $stateRepo, CityRepository $cityRepo): Response
+    // {
+    //     //dd('je suis dans la fonction event-create');
+    //     $event = new Event();
+    //     $cityList = $cityRepo->findAll();
+    //     $participant = $this->getUser();
 
-        /**
-         * @var Participant $participant
-         */
-        $event->setCampus($this->getUser()->getCampus());
-        $form = $this->createForm(EventType::class, $event);
-        $form->handleRequest($req);
+    //     /**
+    //      * @var Participant $participant
+    //      */
+    //     $event->setCampus($this->getUser()->getCampus());
+    //     $form = $this->createForm(EventType::class, $event);
+    //     $form->handleRequest($req);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $event->setState($stateRepo->findOneBy(array('label' => 'Créée')));
-            $event->setOrganizer($this->getUser());
-            $event->addParticipant($this->getUser());
-            $em->persist($event);
-            $em->flush();
-            $this->addFlash(
-                'success',
-                'Féliciation, votre ' . $event->getName() . ' est créée!'
-            );
+    //     if ($form->isSubmitted() && $form->isValid()) {
+    //         $event->setState($stateRepo->findOneBy(array('label' => 'Créée')));
+    //         $event->setOrganizer($this->getUser());
+    //         $event->addParticipant($this->getUser());
+    //         $em->persist($event);
+    //         $em->flush();
+    //         $this->addFlash(
+    //             'success',
+    //             'Féliciation, votre ' . $event->getName() . ' est créée!'
+    //         );
 
-            return $this->redirectToRoute('home');
-        } elseif ($form->isSubmitted() && !$form->isValid()) {
-            $this->addFlash(
-                'danger',
-                'Tu as un problème avec ta nouvelle sortie'
-            );
-        }
-        return $this->render('event/create.html.twig', [
-            'formulaire' => $form->createView(),
-            'cityList' => $cityList,
-        ]);
-    }
+    //         return $this->redirectToRoute('home');
+    //     } elseif ($form->isSubmitted() && !$form->isValid()) {
+    //         $this->addFlash(
+    //             'danger',
+    //             'Tu as un problème avec ta nouvelle sortie'
+    //         );
+    //     }
+    //     return $this->render('event/create.html.twig', [
+    //         'formulaire' => $form->createView(),
+    //         'cityList' => $cityList,
+    //     ]);
+    // }
 
     /**
      * @Route("/api/", name="api")
@@ -139,15 +129,15 @@ class EventController extends AbstractController
     {
         $tab = $cityRepo->findAll();
 
-        return $this->json($tab);
+        return $this->json($tab,200,[],['groups'=>"villes"]);
     }
 
 
 
     /**
-     * @Route("/event-createAPI", name="event_createAPI")
+     * @Route("/event-create", name="event_create")
      */
-    public function eventCreate2(EntityManagerInterface $em, Request $req, StateRepository $stateRepo): Response
+    public function eventCreate(EntityManagerInterface $em, Request $req, StateRepository $stateRepo): Response
     {
         //dd('je suis dans la fonction event-createAPI');
         $event = new Event();
@@ -339,4 +329,45 @@ class EventController extends AbstractController
             'cityList' => $cityList,
         ]);
     }
+<<<<<<< HEAD
+=======
+    /**
+     * @Route("/event-updateAPI/{id}", name="event_updateAPI")
+     */
+    public function eventUpdateAPI(Event $event, EntityManagerInterface $em, Request $req, StateRepository $stateRepo, CityRepository $cityRepo): Response
+    {
+        $user = $this->getUser();
+        $cityList = $cityRepo->findAll();
+        $form = $this->createForm(EventType::class, $event);
+        $form->handleRequest($req);
+
+        //Test si l'event n'est pas encore publier
+        if ($event->getState()->getId() == 1) {
+            //Test si l'user est organisateur
+            if ($event->getOrganizer() == $user) {
+                if ($form->isSubmitted() && $form->isValid()) {
+                    $em->flush();
+                    $this->addFlash(
+                        'success',
+                        'Féliciation, votre ' . $event->getName() . ' est modifiée!'
+                    );
+
+                    return $this->redirectToRoute('home');
+                } elseif ($form->isSubmitted() && !$form->isValid()) {
+                    $this->addFlash(
+                        'danger',
+                        'Tu as un problème avec la modification de ta sortie'
+                    );
+                }
+            }
+        }
+
+
+
+        return $this->render('event/updateAPI.html.twig', [
+            'formulaire' => $form->createView(),
+
+        ]);
+    }
+>>>>>>> a54f82f92bb973f1622f3d6808c9c1e8c8c1914e
 }

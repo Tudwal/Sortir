@@ -167,11 +167,12 @@ afficherLocation(cities[0].id);
 function afficherCity() { // alimenter select city
 let baliseCity = document.querySelector('#event_type_api_city');
 for (let c of cities) {
-option = document.createElement('option'); // <option></option>
+let option = document.createElement('option'); // <option></option>
 option.innerHTML = c.name; // <option>Rennes</option>
 option.setAttribute('value', c.id); // <option value="1">Rennes</option>
 baliseCity.appendChild(option);
 
+let baliseCity = document.querySelector('#event_type_api_city');
 
 }
 }
