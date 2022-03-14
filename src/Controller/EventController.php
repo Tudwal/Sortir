@@ -81,46 +81,46 @@ class EventController extends AbstractController
         return $this->redirectToRoute('home');
     }
 
-    /**
-     * @Route("/event-create", name="event_create")
-     */
-    public function eventCreate(EntityManagerInterface $em, Request $req, StateRepository $stateRepo, CityRepository $cityRepo): Response
-    {
-        //dd('je suis dans la fonction event-create');
-        $event = new Event();
-        $cityList = $cityRepo->findAll();
-        $participant = $this->getUser();
+    // /**
+    //  * @Route("/event-create", name="event_create")
+    //  */
+    // public function eventCreate(EntityManagerInterface $em, Request $req, StateRepository $stateRepo, CityRepository $cityRepo): Response
+    // {
+    //     //dd('je suis dans la fonction event-create');
+    //     $event = new Event();
+    //     $cityList = $cityRepo->findAll();
+    //     $participant = $this->getUser();
 
-        /**
-         * @var Participant $participant
-         */
-        $event->setCampus($this->getUser()->getCampus());
-        $form = $this->createForm(EventType::class, $event);
-        $form->handleRequest($req);
+    //     /**
+    //      * @var Participant $participant
+    //      */
+    //     $event->setCampus($this->getUser()->getCampus());
+    //     $form = $this->createForm(EventType::class, $event);
+    //     $form->handleRequest($req);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $event->setState($stateRepo->findOneBy(array('label' => 'Créée')));
-            $event->setOrganizer($this->getUser());
-            $event->addParticipant($this->getUser());
-            $em->persist($event);
-            $em->flush();
-            $this->addFlash(
-                'success',
-                'Féliciation, votre ' . $event->getName() . ' est créée!'
-            );
+    //     if ($form->isSubmitted() && $form->isValid()) {
+    //         $event->setState($stateRepo->findOneBy(array('label' => 'Créée')));
+    //         $event->setOrganizer($this->getUser());
+    //         $event->addParticipant($this->getUser());
+    //         $em->persist($event);
+    //         $em->flush();
+    //         $this->addFlash(
+    //             'success',
+    //             'Féliciation, votre ' . $event->getName() . ' est créée!'
+    //         );
 
-            return $this->redirectToRoute('home');
-        } elseif ($form->isSubmitted() && !$form->isValid()) {
-            $this->addFlash(
-                'danger',
-                'Tu as un problème avec ta nouvelle sortie'
-            );
-        }
-        return $this->render('event/create.html.twig', [
-            'formulaire' => $form->createView(),
-            'cityList' => $cityList,
-        ]);
-    }
+    //         return $this->redirectToRoute('home');
+    //     } elseif ($form->isSubmitted() && !$form->isValid()) {
+    //         $this->addFlash(
+    //             'danger',
+    //             'Tu as un problème avec ta nouvelle sortie'
+    //         );
+    //     }
+    //     return $this->render('event/create.html.twig', [
+    //         'formulaire' => $form->createView(),
+    //         'cityList' => $cityList,
+    //     ]);
+    // }
 
     /**
      * @Route("/api/", name="api")
@@ -129,15 +129,15 @@ class EventController extends AbstractController
     {
         $tab = $cityRepo->findAll();
 
-        return $this->json($tab);
+        return $this->json($tab,200,[],['groups'=>"villes"]);
     }
 
 
 
     /**
-     * @Route("/event-createAPI", name="event_createAPI")
+     * @Route("/event-create", name="event_create")
      */
-    public function eventCreate2(EntityManagerInterface $em, Request $req, StateRepository $stateRepo): Response
+    public function eventCreate(EntityManagerInterface $em, Request $req, StateRepository $stateRepo): Response
     {
         //dd('je suis dans la fonction event-createAPI');
         $event = new Event();
@@ -190,9 +190,43 @@ class EventController extends AbstractController
     }
 
     /**
+     * @Route("/publish/{id}", name="event_publish")
+     */
+    public function publish(StateRepository $stateRepo ,Event $e,EntityManagerInterface $em , EventRepository $repo, $id): Response
+    {
+        $e->setState($stateRepo->findOneBy(array('code' => 'OPEN')));
+                        $em->persist($e);
+                        $em->flush();
+                        
+                        return $this->redirectToRoute('home');
+    }
+
+    /**
+     * @Route("/cancel/{id}", name="event_cancel")
+     */
+    public function cancel(StateRepository $stateRepo ,Event $e,EntityManagerInterface $em , EventRepository $repo, $id, Request $req): Response
+    {
+        $events = $repo->find($id);
+                       
+        if($req->get('motif_cancel'))
+        {
+        $e->setDetails($req->get('motif_cancel'));
+        $e->setState($stateRepo->findOneBy(array('code' => 'ANNU')));
+        $em->persist($e);
+        $em->flush();
+        
+        return $this->redirectToRoute('home');
+        }        
+        return $this->render('event/cancel.html.twig',[
+            'event'=>$e,
+            'events'=>$events,
+        ]);
+    }
+
+    /**
      * @Route("/register/{id}", name="event_register")
      */
-    public function register(EventRepository $eventRepository, Event $event, EntityManagerInterface $em, $id): Response
+    public function register(StateRepository $stateRepo, EventRepository $eventRepository, Event $event, EntityManagerInterface $em, $id): Response
     {
         $nbParticipants = count($event->getParticipants());
         $nbParticipantsMax = $event->getNbParticipantMax();
@@ -213,6 +247,13 @@ class EventController extends AbstractController
                         $em->persist($user);
                         $em->flush();
                     }
+                    $newNbParticipants = count($event->getParticipants());
+                    //dd($newNbParticipants);
+                    if ($newNbParticipants == $nbParticipantsMax) {
+                        $event->setState($stateRepo->findOneBy(array('code' => 'CLOS')));
+                        $em->persist($event);
+                        $em->flush();
+                    }
                 }
             }
         }
@@ -223,19 +264,26 @@ class EventController extends AbstractController
     /**
      * @Route("/unRegister/{id}", name="event_unRegister")
      */
-    public function unRegister(EventRepository $eventRepository, Event $event, EntityManagerInterface $em): Response
+    public function unRegister(StateRepository $stateRepo, EventRepository $eventRepository, Event $event, EntityManagerInterface $em): Response
     {
         $nbParticipants = count($event->getParticipants());
+        $nbParticipantsMax = $event->getNbParticipantMax();
         $user = $this->getUser();
 
         //Test, l'event est il ouvert?
-        if ($event->getState()->getCode() == 'OPEN') {
+        if ($event->getState()->getCode() == 'OPEN' || $event->getState()->getCode() == 'CLOS') {
             //Test si l'user est inscrit
             if ($event->getParticipants()->contains($user)) {
                 //Test si il y'a des participants inscrits
                 if ($nbParticipants > 0) {
                     $event->removeParticipant($user);
                     $em->persist($user);
+                    $em->flush();
+                }
+                $newNbParticipants = count($event->getParticipants());
+                if ($newNbParticipants < $nbParticipantsMax) {
+                    $event->setState($stateRepo->findOneBy(array('code' => 'OPEN')));
+                    $em->persist($event);
                     $em->flush();
                 }
             }
@@ -282,4 +330,45 @@ class EventController extends AbstractController
             'cityList' => $cityList,
         ]);
     }
+<<<<<<< HEAD
+=======
+    /**
+     * @Route("/event-updateAPI/{id}", name="event_updateAPI")
+     */
+    public function eventUpdateAPI(Event $event, EntityManagerInterface $em, Request $req, StateRepository $stateRepo, CityRepository $cityRepo): Response
+    {
+        $user = $this->getUser();
+        $cityList = $cityRepo->findAll();
+        $form = $this->createForm(EventType::class, $event);
+        $form->handleRequest($req);
+
+        //Test si l'event n'est pas encore publier
+        if ($event->getState()->getId() == 1) {
+            //Test si l'user est organisateur
+            if ($event->getOrganizer() == $user) {
+                if ($form->isSubmitted() && $form->isValid()) {
+                    $em->flush();
+                    $this->addFlash(
+                        'success',
+                        'Féliciation, votre ' . $event->getName() . ' est modifiée!'
+                    );
+
+                    return $this->redirectToRoute('home');
+                } elseif ($form->isSubmitted() && !$form->isValid()) {
+                    $this->addFlash(
+                        'danger',
+                        'Tu as un problème avec la modification de ta sortie'
+                    );
+                }
+            }
+        }
+
+
+
+        return $this->render('event/updateAPI.html.twig', [
+            'formulaire' => $form->createView(),
+
+        ]);
+    }
+>>>>>>> a54f82f92bb973f1622f3d6808c9c1e8c8c1914e
 }
