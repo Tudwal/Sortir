@@ -30,17 +30,18 @@ class EventController extends AbstractController
     /**
      * @Route("/", name="home")
      */
-    public function eventList(ChangeStateService $changeStateService, EventRepository $repoEvent, CampusRepository $repoCampus, Request $request): Response
+    public function eventList(StateRepository $repoState ,ChangeStateService $changeStateService, EventRepository $repoEvent, CampusRepository $repoCampus, Request $request): Response
     {
         // $changeStateService->change();
         /*
         piscine: état initial = créé. Doit passer en clôturée
         patinoire : état initial = créé. Doit passer en en-cours.
         */
-
+        // recup les id state 1, 2 et 3
+        
         $eventList = $repoEvent->findAll();
         $campus = $repoCampus->findAll();
-
+        $state = $repoState->findAll();
         $createSearchType = new ModelSearchType();
         $form = $this->createForm(EventSearchType::class, $createSearchType);
         $form->handleRequest($request);
@@ -53,6 +54,7 @@ class EventController extends AbstractController
         }
 
         return $this->render('event/index.html.twig', [
+            'states'=> $state,
             'events' => $eventList,
             'campusList' => $campus,
             'formulaire' => $form->createView(),

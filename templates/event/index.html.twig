@@ -133,8 +133,8 @@
 										</a>
 									{% endif %}
 								{% endif %}
-								{# passer par une instance de state et pas l'id#}
-								{% if event.state.id == 1 %}
+								{# passer par une instance de state et pas l'id 1#}
+								{% if event.state in states  %}
 									{% if event.organizer.pseudo == app.user.pseudo %}
 										<a href="{{ path('event_update',{id:event.id })}}" class="btn btn-warning">
 											modifier
