@@ -6,6 +6,7 @@ use App\Repository\CityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=CityRepository::class)
@@ -16,21 +17,25 @@ class City
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups("villes")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=50)
+     * @Groups("villes")
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=5)
+     * @Groups("villes")
      */
     private $postalCode;
 
     /**
      * @ORM\OneToMany(targetEntity=Location::class, mappedBy="city")
+     * @Groups("villes")
      */
     private $locations;
 
