@@ -30,7 +30,7 @@ class EventController extends AbstractController
     /**
      * @Route("/", name="home")
      */
-    public function eventList(StateRepository $repoState ,ChangeStateService $changeStateService, EventRepository $repoEvent, CampusRepository $repoCampus, Request $request): Response
+    public function eventList(StateRepository $repoState, ChangeStateService $changeStateService, EventRepository $repoEvent, CampusRepository $repoCampus, Request $request): Response
     {
         // $changeStateService->change();
         /*
@@ -39,10 +39,13 @@ class EventController extends AbstractController
         cinéma: état initial = créé. Doit passer en historisé.
         */
         // recup les id state 1, 2 et 3
-        
+
         $eventList = $repoEvent->findAll();
         $campus = $repoCampus->findAll();
-        $state = $repoState->findAll();
+        $stateCrea = $repoState->findBy(array('code' => 'CREE'));
+        $stateOpen = $repoState->findBy(array('code' => 'OPEN'));
+        $stateClos = $repoState->findBy(array('code' => 'CLOS'));
+        // dd($stateCrea);
         $createSearchType = new ModelSearchType();
         $form = $this->createForm(EventSearchType::class, $createSearchType);
         $form->handleRequest($request);
@@ -55,7 +58,9 @@ class EventController extends AbstractController
         }
 
         return $this->render('event/index.html.twig', [
-            'states'=> $state,
+            'stateCrea' => $stateCrea,
+            'stateOpen' => $stateOpen,
+            'stateClos' => $stateClos,
             'events' => $eventList,
             'campusList' => $campus,
             'formulaire' => $form->createView(),
@@ -70,7 +75,7 @@ class EventController extends AbstractController
     {
         $user = $this->getUser();
         //Test si l'event est ouvert ou cloturé
-        if ($e->getState()->getId() == 2 or $e->getState()->getId() == 3) {
+        if ($e->getState()->getCode() == 'OPEN' or $e->getState()->getCode() == 'CLOS') {
             //Test si l'user est organisateur
             if ($e->getOrganizer() == $user) {
                 $em->remove($e);
@@ -206,19 +211,22 @@ class EventController extends AbstractController
 
         //dd($tabEvent);
 
-
-        //Test l'user est orga?
-        if ($event->getOrganizer() != $user) {
-            //Test le user est deja dans l'event?
-            if (!$event->getParticipants()->contains($user)) {
-                //Test du nombre de participant dans l'event
-                if ($nbParticipants < $nbParticipantsMax) {
-                    $event->addParticipant($user);
-                    $em->persist($user);
-                    $em->flush();
+        //Test si l'event est ouvert
+        if ($event->getState()->getCode() == 'OPEN') {
+            //Test l'user est orga?
+            if ($event->getOrganizer() != $user) {
+                //Test le user est deja dans l'event?
+                if (!$event->getParticipants()->contains($user)) {
+                    //Test du nombre de participant dans l'event
+                    if ($nbParticipants < $nbParticipantsMax) {
+                        $event->addParticipant($user);
+                        $em->persist($user);
+                        $em->flush();
+                    }
                 }
             }
         }
+
         return $this->redirectToRoute('home');
     }
 
@@ -231,7 +239,7 @@ class EventController extends AbstractController
         $user = $this->getUser();
 
         //Test, l'event est il ouvert?
-        if ($event->getState()->getId() == 2) {
+        if ($event->getState()->getCode() == 'OPEN') {
             //Test si l'user est inscrit
             if ($event->getParticipants()->contains($user)) {
                 //Test si il y'a des participants inscrits
@@ -257,7 +265,7 @@ class EventController extends AbstractController
         $form->handleRequest($req);
 
         //Test si l'event n'est pas encore publier
-        if ($event->getState()->getId() == 1) {
+        if ($event->getState()->getCode() == 'CREE') {
             //Test si l'user est organisateur
             if ($event->getOrganizer() == $user) {
                 if ($form->isSubmitted() && $form->isValid()) {
