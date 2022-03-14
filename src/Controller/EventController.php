@@ -32,7 +32,11 @@ class EventController extends AbstractController
      */
     public function eventList(ChangeStateService $changeStateService, EventRepository $repoEvent, CampusRepository $repoCampus, Request $request): Response
     {
-        $changeStateService->change();
+        // $changeStateService->change();
+        /*
+        piscine: état initial = créé. Doit passer en clôturée
+        patinoire : état initial = créé. Doit passer en en-cours.
+        */
 
         $eventList = $repoEvent->findAll();
         $campus = $repoCampus->findAll();

@@ -29,12 +29,15 @@ class ChangeStateService
         $eventList = $this->eventRepository->findAll();
 
         foreach ($eventList as $event) {
+            dump($event);
 
             // Récupération des dates utiles pour les if
             $startEvent = $event->getStartDateTime();
             $duration = $event->getDuration();
             $endEvent = clone $startEvent;
             $endEvent->add(new DateInterval('PT' . $duration . 'M'));
+            $historyEvent = clone $endEvent;
+            $historyEvent->add(new DateInterval('P1M'));
 
 
             // Si date du jour > date de clôture des inscriptions -> etat = clôturé
@@ -43,10 +46,8 @@ class ChangeStateService
                 $event->setState($cloturee);
             }
 
-            $historyEvent = $endEvent->add(new DateInterval('P1M'));
-
-            // si date >= date de début -> etat = en-cours
-            if ($today >= $event->getStartDateTime() && $today < $historyEvent) {
+            // si date du jour >= date de début et <= date de fin -> etat = en-cours
+            if ($today >= $event->getStartDateTime() && $today <= $endEvent) {
                 //dd($this->stateRepository->findOneBy(array('label' => 'En-cours')));
                 $enCours = $this->stateRepository->findOneBy(array('label' => 'En-cours'));
                 $event->setState($enCours);
@@ -57,7 +58,7 @@ class ChangeStateService
             //     $event->setState($this->stateRepository->findOneBy(["label => Terminée"]));
             // }
 
-            // si date = date fin + 1 mois -> état = historisée
+            // si date >= date fin + 1 mois -> état = historisée
             if ($today >= $historyEvent) {
                 $historisee = $this->stateRepository->findOneBy(array('label' => 'Historisée'));
                 $event->setState($historisee);
