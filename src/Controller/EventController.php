@@ -81,46 +81,6 @@ class EventController extends AbstractController
         return $this->redirectToRoute('home');
     }
 
-    // /**
-    //  * @Route("/event-create", name="event_create")
-    //  */
-    // public function eventCreate(EntityManagerInterface $em, Request $req, StateRepository $stateRepo, CityRepository $cityRepo): Response
-    // {
-    //     //dd('je suis dans la fonction event-create');
-    //     $event = new Event();
-    //     $cityList = $cityRepo->findAll();
-    //     $participant = $this->getUser();
-
-    //     /**
-    //      * @var Participant $participant
-    //      */
-    //     $event->setCampus($this->getUser()->getCampus());
-    //     $form = $this->createForm(EventType::class, $event);
-    //     $form->handleRequest($req);
-
-    //     if ($form->isSubmitted() && $form->isValid()) {
-    //         $event->setState($stateRepo->findOneBy(array('label' => 'Créée')));
-    //         $event->setOrganizer($this->getUser());
-    //         $event->addParticipant($this->getUser());
-    //         $em->persist($event);
-    //         $em->flush();
-    //         $this->addFlash(
-    //             'success',
-    //             'Féliciation, votre ' . $event->getName() . ' est créée!'
-    //         );
-
-    //         return $this->redirectToRoute('home');
-    //     } elseif ($form->isSubmitted() && !$form->isValid()) {
-    //         $this->addFlash(
-    //             'danger',
-    //             'Tu as un problème avec ta nouvelle sortie'
-    //         );
-    //     }
-    //     return $this->render('event/create.html.twig', [
-    //         'formulaire' => $form->createView(),
-    //         'cityList' => $cityList,
-    //     ]);
-    // }
 
     /**
      * @Route("/api/", name="api")
@@ -207,6 +167,7 @@ class EventController extends AbstractController
     public function cancel(StateRepository $stateRepo, Event $e, EntityManagerInterface $em, EventRepository $repo, $id, Request $req): Response
     {
         $events = $repo->find($id);
+<<<<<<< HEAD
 
         if ($req->get('motif_cancel')) {
             $e->setDetails($req->get('motif_cancel'));
@@ -219,6 +180,25 @@ class EventController extends AbstractController
         return $this->render('event/cancel.html.twig', [
             'event' => $e,
             'events' => $events,
+=======
+                       
+        if($req->get('motif_cancel'))
+        {
+       
+        $eventDetails = $e->getDetails();
+        $annulation = $req->get('motif_cancel');
+        $newDetails = $eventDetails . nl2br('MOTIF D\'ANNULATION: ') . $annulation;
+        $e->setDetails($newDetails);
+        $e->setState($stateRepo->findOneBy(array('code' => 'ANNU')));
+        $em->persist($e);
+        $em->flush();
+        
+        return $this->redirectToRoute('home');
+        }        
+        return $this->render('event/cancel.html.twig',[
+            'event'=>$e,
+            'events'=>$events,
+>>>>>>> e06e193f4dd8842b9e5a17e5de2dca7194d90c60
         ]);
     }
 
@@ -359,9 +339,6 @@ class EventController extends AbstractController
                 }
             }
         }
-
-
-
         return $this->render('event/updateAPI.html.twig', [
             'formulaire' => $form->createView(),
 

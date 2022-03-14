@@ -24,19 +24,20 @@ class EventSearchType extends AbstractType
             ])
             ->add('search', SearchType::class, [
                 'mapped' => false,
+                'label' => 'Recherche',
                 'attr' => array(
-                    'placeholder' => ' Search by event name '
+                    'placeholder' => ' Rechercher une sortie'
                 ),
                 'required' => false,
             ])
             ->add('startDate', DateType::class, [
-                'label' => 'Event start date ',
+                'label' => 'Date de début ',
                 'html5' => true,
                 'widget' => 'single_text',
                 'required' => false,
             ])
             ->add('endDate', DateType::class, [
-                'label' => 'End of register date ',
+                'label' => 'Date de fin d\'inscription ',
                 'html5' => true,
                 'widget' => 'single_text',
                 'required' => false,

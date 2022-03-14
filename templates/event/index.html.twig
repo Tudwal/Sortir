@@ -90,24 +90,25 @@
 		{{form_end(formulaire)}}
 
 		<div class="table-responsive mt-5">
-			<table class="table table-hover">
+			<table class="table table-hover table-striped">
 				<thead>
 					<tr>
-						<th scope="col">Event</th>
-						<th scope="col">Date</th>
-						<th scope="col">End of register</th>
-						<th scope="col">Participant/number of place</th>
-						<th scope="col">State</th>
-						<th scope="col">Register</th>
-						<th scope="col">Organizer</th>
+						<th scope="col">Sortie</th>
+						<th scope="col">Date de sortie</th>
+						<th scope="col">Fin des inscriptions</th>
+						<th scope="col">Inscrits/Places</th>
+						<th scope="col">Etat</th>
+						<th scope="col">Inscription</th>
+						<th scope="col">Organisateur</th>
 						<th scope="col">Action</th>
 					</tr>
 				</thead>
 				<tbody>
 					{% for event in events | sort((d1,d2) => d2.startDateTime <=> d1.startDateTime) %}
 						{% if 
-							(event.organizer.pseudo != app.user.pseudo and event.state not in stateCrea) 
-							or (event.organizer.pseudo == app.user.pseudo and event.state in stateCrea) %}
+							(event.state not in stateCrea or (event.organizer.pseudo == app.user.pseudo and event.state in stateCrea)) 
+						%}
+
 							<tr>
 								<td>{{event.name}}</td>
 								<td>{{event.startDateTime | date('d-m-Y H:i:s') }}</td>
@@ -133,7 +134,10 @@
 											{% endif %}
 										{% endif %}
 									{% endif %}
+<<<<<<< HEAD
 								{% endif %}
+=======
+>>>>>>> e06e193f4dd8842b9e5a17e5de2dca7194d90c60
 								{% if event.state in stateOpen  or event.state in stateClos %}
 									{% if app.user in event.participants %}
 										<a onclick="return confirm('Voulez-vous quitter {{event.name}}?')" href="{{ path('event_unRegister',{id:event.id })}}" class="btn btn-danger">
@@ -161,6 +165,7 @@
 											Annuler
 										</a>
 									{% endif %}
+								{% endif %}
 								</td>
 							</tr>
 						{% endif %}
