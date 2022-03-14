@@ -340,7 +340,6 @@ class EventController extends AbstractController
             'cityList' => $cityList,
         ]);
     }
-<<<<<<< HEAD
     /**
      * @Route("/event-updateAPI/{id}", name="event_updateAPI")
      */
@@ -380,6 +379,3 @@ class EventController extends AbstractController
         ]);
     }
 }
-=======
-}
->>>>>>> 913d0f92b1ad10154cd190ca26d46e64efdb8c76
