@@ -172,50 +172,50 @@ class AppFixtures extends Fixture
         $today = new DateTime('now', new DateTimeZone('Europe/Paris'));
         $end = $today->add(new DateInterval('P15D'));
 
-        // $piscine = new Event();
-        // $piscine->setName('Sortie piscine')
-        //     ->setStartDateTime($past)
-        //     ->setDuration(90)
-        //     ->setEndRegisterDate($past2)
-        //     ->setNbParticipantMax(10)
-        //     ->setDetails('Nager la brasse coulée en toute liberté et sans complexe')
-        //     ->setState($this->manager->getRepository(State::class)->findOneBy(array('label' => 'Créée'))) /// état créée
-        //     ->setLocation($faker->randomElement($this->manager->getRepository(Location::class)->findAll()))
-        //     ->setCampus($faker->randomElement($this->manager->getRepository(Campus::class)->findAll()))
-        //     ->setOrganizer($faker->randomElement($this->manager->getRepository(Participant::class)->findAll()))
-        //     ->addParticipant($faker->randomElement($this->manager->getRepository(Participant::class)->findAll(), 5));
+        $piscine = new Event();
+        $piscine->setName('Sortie piscine')
+            ->setStartDateTime((new DateTime('now', new DateTimeZone('Europe/Paris')))->modify('+ 2 days'))
+            ->setDuration(90)
+            ->setEndRegisterDate((new DateTime('now', new DateTimeZone('Europe/Paris')))->modify('- 10 days'))
+            ->setNbParticipantMax(10)
+            ->setDetails('Nager la brasse coulée en toute liberté et sans complexe')
+            ->setState($this->manager->getRepository(State::class)->findOneBy(array('code' => 'OPEN'))) /// état ouverte
+            ->setLocation($faker->randomElement($this->manager->getRepository(Location::class)->findAll()))
+            ->setCampus($faker->randomElement($this->manager->getRepository(Campus::class)->findAll()))
+            ->setOrganizer($faker->randomElement($this->manager->getRepository(Participant::class)->findAll()))
+            ->addParticipant($faker->randomElement($this->manager->getRepository(Participant::class)->findAll(), 5));
 
-        // $this->manager->persist($piscine);
+        $this->manager->persist($piscine);
 
-        // $patinoire = new Event();
-        // $patinoire->setName('Sortie patinoire')
-        //     ->setStartDateTime($now)
-        //     ->setDuration(90)
-        //     ->setEndRegisterDate($end)
-        //     ->setNbParticipantMax(15)
-        //     ->setDetails('Patiner en toute liberté et sans complexe')
-        //     ->setState($this->manager->getRepository(State::class)->findOneBy(array('label' => 'Créée'))) // état créée
-        //     ->setLocation($faker->randomElement($this->manager->getRepository(Location::class)->findAll()))
-        //     ->setCampus($faker->randomElement($this->manager->getRepository(Campus::class)->findAll()))
-        //     ->setOrganizer($faker->randomElement($this->manager->getRepository(Participant::class)->findAll()))
-        //     ->addParticipant($faker->randomElement($this->manager->getRepository(Participant::class)->findAll(), 3));
+        $patinoire = new Event();
+        $patinoire->setName('Sortie patinoire')
+            ->setStartDateTime($now)
+            ->setDuration(90)
+            ->setEndRegisterDate((new DateTime('now', new DateTimeZone('Europe/Paris')))->modify('- 2 days'))
+            ->setNbParticipantMax(15)
+            ->setDetails('Patiner en toute liberté et sans complexe')
+            ->setState($this->manager->getRepository(State::class)->findOneBy(array('code' => 'CLOS'))) // état clôturée
+            ->setLocation($faker->randomElement($this->manager->getRepository(Location::class)->findAll()))
+            ->setCampus($faker->randomElement($this->manager->getRepository(Campus::class)->findAll()))
+            ->setOrganizer($faker->randomElement($this->manager->getRepository(Participant::class)->findAll()))
+            ->addParticipant($faker->randomElement($this->manager->getRepository(Participant::class)->findAll(), 3));
 
-        // $this->manager->persist($patinoire);
+        $this->manager->persist($patinoire);
 
-        // $cinema = new Event();
-        // $cinema->setName('Sortie cinéma')
-        //     ->setStartDateTime((new DateTime('now', new DateTimeZone('Europe/Paris')))->modify('-80 days'))
-        //     ->setDuration(90)
-        //     ->setEndRegisterDate((new DateTime('now', new DateTimeZone('Europe/Paris')))->modify('-60 days'))
-        //     ->setNbParticipantMax(5)
-        //     ->setDetails('Aller au cinéma en toute liberté et sans complexe')
-        //     ->setState($this->manager->getRepository(State::class)->findOneBy(array('label' => 'Créée'))) // état créée
-        //     ->setLocation($faker->randomElement($this->manager->getRepository(Location::class)->findAll()))
-        //     ->setCampus($faker->randomElement($this->manager->getRepository(Campus::class)->findAll()))
-        //     ->setOrganizer($faker->randomElement($this->manager->getRepository(Participant::class)->findAll()))
-        //     ->addParticipant($faker->randomElement($this->manager->getRepository(Participant::class)->findAll(), 2));
+        $cinema = new Event();
+        $cinema->setName('Sortie cinéma')
+            ->setStartDateTime((new DateTime('now', new DateTimeZone('Europe/Paris')))->modify('-2 days'))
+            ->setDuration(90)
+            ->setEndRegisterDate((new DateTime('now', new DateTimeZone('Europe/Paris')))->modify('-15 days'))
+            ->setNbParticipantMax(5)
+            ->setDetails('Aller au cinéma en toute liberté et sans complexe')
+            ->setState($this->manager->getRepository(State::class)->findOneBy(array('code' => 'ENCO'))) // état en-cours
+            ->setLocation($faker->randomElement($this->manager->getRepository(Location::class)->findAll()))
+            ->setCampus($faker->randomElement($this->manager->getRepository(Campus::class)->findAll()))
+            ->setOrganizer($faker->randomElement($this->manager->getRepository(Participant::class)->findAll()))
+            ->addParticipant($faker->randomElement($this->manager->getRepository(Participant::class)->findAll(), 2));
 
-        // $this->manager->persist($cinema);
+        $this->manager->persist($cinema);
 
         $karaoke = new Event();
         $karaoke->setName('Sortie karaoké')

@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Event;
-use App\Entity\State;
 use App\Form\EventSearchType;
 use App\Form\EventType;
 use App\Form\EventTypeAPI;
@@ -11,7 +10,6 @@ use App\Form\ModelSearchType;
 use App\Repository\CampusRepository;
 use App\Repository\CityRepository;
 use App\Repository\EventRepository;
-use App\Repository\LocationRepository;
 use App\Repository\StateRepository;
 use App\Service\ChangeStateService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -19,8 +17,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Validator\Constraints\Length;
 
 /**
  * @Route("/home")
@@ -32,11 +28,11 @@ class EventController extends AbstractController
      */
     public function eventList(ChangeStateService $changeStateService, EventRepository $repoEvent, CampusRepository $repoCampus, Request $request): Response
     {
-        // $changeStateService->change();
+        $changeStateService->change();
         /*
-        piscine: état initial = créé. Doit passer en clôturée
-        patinoire : état initial = créé. Doit passer en en-cours.
-        cinéma: état initial = créé. Doit passer en historisé.
+        piscine: état initial = ouverte. Doit passer en clôturée.
+        patinoire : état initial = clôturée. Doit passer en en-cours.
+        cinéma: état initial = en-cours. Doit passer en passée.
         */
 
         $eventList = $repoEvent->findAll();

@@ -29,40 +29,40 @@ class ChangeStateService
         $eventList = $this->eventRepository->findAll();
 
         foreach ($eventList as $event) {
-            dump($event);
+
 
             // Récupération des dates utiles pour les if
             $startEvent = $event->getStartDateTime();
+            $endRegistration = $event->getEndRegisterDate();
             $duration = $event->getDuration();
             $endEvent = clone $startEvent;
             $endEvent->add(new DateInterval('PT' . $duration . 'M'));
             $historyEvent = clone $endEvent;
             $historyEvent->add(new DateInterval('P1M'));
 
-
-            // Si date du jour > date de clôture des inscriptions -> etat = clôturé
-            if ($today > $event->getEndRegisterDate()) {
-                $cloturee = $this->stateRepository->findOneBy(array('label' => 'Clôturée'));
+            // MODIFICATION ETAT CLOTURE
+            if ($today > $endRegistration && $event->getState()->getCode() == 'OPEN') {
+                $cloturee = $this->stateRepository->findOneBy(array('code' => 'CLOS'));
                 $event->setState($cloturee);
             }
 
-            // si date du jour >= date de début et <= date de fin -> etat = en-cours
-            if ($today >= $event->getStartDateTime() && $today <= $endEvent) {
-                //dd($this->stateRepository->findOneBy(array('label' => 'En-cours')));
-                $enCours = $this->stateRepository->findOneBy(array('label' => 'En-cours'));
+            // MODIFICATION ETAT EN-COURS
+            if ($today >= $endRegistration && $today <= $endEvent) {
+                $enCours = $this->stateRepository->findOneBy(array('code' => 'ENCO'));
                 $event->setState($enCours);
             }
 
-            // si date > date de fin -> état = terminée
-            // if ($today > $endEvent) {
-            //     $event->setState($this->stateRepository->findOneBy(["label => Terminée"]));
-            // }
-
-            // si date >= date fin + 1 mois -> état = historisée
-            if ($today >= $historyEvent) {
-                $historisee = $this->stateRepository->findOneBy(array('label' => 'Historisée'));
-                $event->setState($historisee);
+            // MODIFICATION ETAT TERMINEE
+            if ($today > $endEvent && $today < $historyEvent) {
+                $event->setState($this->stateRepository->findOneBy(['code' => 'PAST']));
             }
+
+            // MODIFICATION ETAT HISTORISEE si date >= date fin + 1 mois -> état = historisée
+            // if ($today >= $historyEvent) {
+            //     // dd('je suis dans le if 3');
+            //     $historisee = $this->stateRepository->findOneBy(array('code' => 'PAST'));
+            //     $event->setState($historisee);
+            // }
         }
     }
 }
