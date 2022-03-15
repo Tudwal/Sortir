@@ -9,7 +9,7 @@
 
 			{{form_start(formulaire)}}
 
-			<div class="col-2">
+			<div class="col-12">
 				{{form_errors(formulaire.name)}}
 				{{form_errors(formulaire.startDateTime)}}
 				{{form_errors(formulaire.endRegisterDate)}}
@@ -41,6 +41,7 @@
 							<div class="col-6">
 								{{form_widget(formulaire.startDateTime)}}
 							</div>
+
 						</div>
 						<div class="form-group row">
 							<label for="select" class="col-4 col-form-label">
@@ -155,9 +156,8 @@
 	<script>
 
 		let cities = {};
-let url = 'http://localhost/Sortir/public/home/api/';
-// localhost de Jérôme
-// let url = 'http://localhost/projet%20Sortir/Sortir/public/home/api/'; // localhost de Claire
+
+let url = './api/';
 fetch(url).then(res => res.json()).then(data => {
 cities = data
 afficherLocation(cities[0].id);
