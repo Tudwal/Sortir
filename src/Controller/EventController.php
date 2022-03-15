@@ -167,10 +167,13 @@ class EventController extends AbstractController
     public function cancel(StateRepository $stateRepo, Event $e, EntityManagerInterface $em, EventRepository $repo, $id, Request $req): Response
     {
         $events = $repo->find($id);
-<<<<<<< HEAD
 
         if ($req->get('motif_cancel')) {
-            $e->setDetails($req->get('motif_cancel'));
+
+            $eventDetails = $e->getDetails();
+            $annulation = $req->get('motif_cancel');
+            $newDetails = $eventDetails . nl2br('MOTIF D\'ANNULATION: ') . $annulation;
+            $e->setDetails($newDetails);
             $e->setState($stateRepo->findOneBy(array('code' => 'ANNU')));
             $em->persist($e);
             $em->flush();
@@ -180,25 +183,6 @@ class EventController extends AbstractController
         return $this->render('event/cancel.html.twig', [
             'event' => $e,
             'events' => $events,
-=======
-                       
-        if($req->get('motif_cancel'))
-        {
-       
-        $eventDetails = $e->getDetails();
-        $annulation = $req->get('motif_cancel');
-        $newDetails = $eventDetails . nl2br('MOTIF D\'ANNULATION: ') . $annulation;
-        $e->setDetails($newDetails);
-        $e->setState($stateRepo->findOneBy(array('code' => 'ANNU')));
-        $em->persist($e);
-        $em->flush();
-        
-        return $this->redirectToRoute('home');
-        }        
-        return $this->render('event/cancel.html.twig',[
-            'event'=>$e,
-            'events'=>$events,
->>>>>>> e06e193f4dd8842b9e5a17e5de2dca7194d90c60
         ]);
     }
 
@@ -315,12 +299,11 @@ class EventController extends AbstractController
     public function eventUpdateAPI(Event $event, EntityManagerInterface $em, Request $req, StateRepository $stateRepo, CityRepository $cityRepo): Response
     {
         $user = $this->getUser();
-        $cityList = $cityRepo->findAll();
-        $form = $this->createForm(EventType::class, $event);
+        $form = $this->createForm(EventTypeAPI::class, $event);
         $form->handleRequest($req);
 
         //Test si l'event n'est pas encore publier
-        if ($event->getState()->getId() == 1) {
+        if ($event->getState()->getCode() == 'CREE') {
             //Test si l'user est organisateur
             if ($event->getOrganizer() == $user) {
                 if ($form->isSubmitted() && $form->isValid()) {
