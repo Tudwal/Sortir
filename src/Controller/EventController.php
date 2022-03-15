@@ -166,6 +166,7 @@ class EventController extends AbstractController
      */
     public function cancel(StateRepository $stateRepo, Event $e, EntityManagerInterface $em, EventRepository $repo, $id, Request $req): Response
     {
+<<<<<<< HEAD
         $events = $repo->find($id);
 
         if ($req->get('motif_cancel')) {
@@ -173,16 +174,34 @@ class EventController extends AbstractController
             $eventDetails = $e->getDetails();
             $annulation = $req->get('motif_cancel');
             $newDetails = $eventDetails . nl2br('MOTIF D\'ANNULATION: ') . $annulation;
+=======
+       // $events = $repo->find($id);
+                       
+        if($req->get('motif_cancel'))
+        {
+       
+            $eventDetails = $e->getDetails();
+            $annulation = $req->get('motif_cancel');
+            $newDetails =  $eventDetails . ' MOTIF D\'ANNULATION: ' . $annulation;
+>>>>>>> 1b3aef648eb6c6f1539dbbe1093aef3a6626f81e
             $e->setDetails($newDetails);
             $e->setState($stateRepo->findOneBy(array('code' => 'ANNU')));
             $em->persist($e);
             $em->flush();
+<<<<<<< HEAD
 
             return $this->redirectToRoute('home');
         }
         return $this->render('event/cancel.html.twig', [
             'event' => $e,
             'events' => $events,
+=======
+        
+        return $this->redirectToRoute('home');
+        }        
+        return $this->render('event/cancel.html.twig',[
+            'event'=>$e,
+>>>>>>> 1b3aef648eb6c6f1539dbbe1093aef3a6626f81e
         ]);
     }
 

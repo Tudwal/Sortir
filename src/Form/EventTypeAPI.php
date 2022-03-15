@@ -5,7 +5,6 @@ namespace App\Form;
 use App\Entity\City;
 use App\Entity\Event;
 use App\Entity\Location;
-use Doctrine\ORM\Mapping\Entity;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
@@ -23,10 +22,8 @@ class EventTypeAPI extends AbstractType
 
             //->add('startDateTime')
             ->add('startDateTime', DateTimeType::class, [
-                'placeholder' => [
-                    'year' => 'Year', 'month' => 'Month', 'day' => 'Day',
-                    'hour' => 'Hour', 'minute' => 'Minute',
-                ],
+                'widget' => 'single_text',
+                'required' => false,
                 'label' => 'Date et heure de la sortie'
             ])
 

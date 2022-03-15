@@ -153,6 +153,7 @@
 	</div>
 
 
+<<<<<<< HEAD
 	<script>
 
 		let cities = {};
@@ -160,6 +161,17 @@
 let url = './api/';
 fetch(url).then(res => res.json()).then(data => {
 cities = data
+=======
+let cities = {};
+<<<<<<< HEAD
+=======
+//let url = 'http://localhost/Sortir/public/home/api/'; // localhost de Jérôme
+>>>>>>> 35917b33199ddf1df29ea104c6e1b3ba03f16d35
+let url = './api/';
+fetch(url)
+.then(res => res.json()).
+then(data => {cities = data
+>>>>>>> 1b3aef648eb6c6f1539dbbe1093aef3a6626f81e
 afficherLocation(cities[0].id);
 
 });
