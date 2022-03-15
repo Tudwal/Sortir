@@ -3,6 +3,8 @@
 namespace App\Form;
 
 use App\Entity\Campus;
+use App\Repository\ParticipantRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -10,16 +12,28 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\SearchType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Security\Core\Security as CoreSecurity;
 
 class EventSearchType extends AbstractType
 {
+
+    private $security;
+
+    public function __construct(CoreSecurity $security)
+    {
+        $this->security = $security;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+       
+
         $builder
             ->add('campus', EntityType::class, [
                 'label' => 'Campus : ',
                 'class' => Campus::class,
                 'choice_label' => 'name',
+                'placeholder' => $this->security->getUser()->getCampus(),
                 'required' => false
             ])
             ->add('search', SearchType::class, [
