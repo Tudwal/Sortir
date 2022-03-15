@@ -9,7 +9,7 @@
 
 			{{form_start(formulaire)}}
 
-			<div class="col-2">
+			<div class="col-12">
 				{{form_errors(formulaire.name)}}
 				{{form_errors(formulaire.startDateTime)}}
 				{{form_errors(formulaire.endRegisterDate)}}
@@ -41,6 +41,7 @@
 							<div class="col-6">
 								{{form_widget(formulaire.startDateTime)}}
 							</div>
+
 						</div>
 						<div class="form-group row">
 							<label for="select" class="col-4 col-form-label">
@@ -151,99 +152,108 @@
 		</div>
 	</div>
 
-	
-<script>
 
+<<<<<<< HEAD
+	<script>
+
+		let cities = {};
+
+let url = './api/';
+fetch(url).then(res => res.json()).then(data => {
+cities = data
+=======
 let cities = {};
+<<<<<<< HEAD
+=======
 //let url = 'http://localhost/Sortir/public/home/api/'; // localhost de Jérôme
+>>>>>>> 35917b33199ddf1df29ea104c6e1b3ba03f16d35
 let url = './api/';
 fetch(url)
 .then(res => res.json()).
 then(data => {cities = data
+>>>>>>> 1b3aef648eb6c6f1539dbbe1093aef3a6626f81e
 afficherLocation(cities[0].id);
 
 });
 
 
-
 // Demander à afficher les bonnes Locations et le code postal à chaque changement de City
 document.querySelector('#event_type_api_city').onchange = function () {
-	let cityId = document.querySelector('#event_type_api_city').value;
-	let locationId = document.querySelector('#event_type_api_location').value;
-	afficherLocation(cityId);
-	afficherCodePostal(cityId);
+let cityId = document.querySelector('#event_type_api_city').value;
+let locationId = document.querySelector('#event_type_api_location').value;
+afficherLocation(cityId);
+afficherCodePostal(cityId);
 }
 
 
 // alimenter select Location
 function afficherLocation(cityId) {
-	let baliseLocation = document.querySelector('#event_type_api_location');
+let baliseLocation = document.querySelector('#event_type_api_location');
 
-	// vider la balise select du Location
-	baliseLocation.innerHTML = '';
+// vider la balise select du Location
+baliseLocation.innerHTML = '';
 
-	// rechercher toutes les Locations correspondant à la city
-	for (let c of cities) {
-		if (c.id == cityId) {
-		for (let l of c.locations) {
-			let option = document.createElement('option'); // <option></option>
-			option.innerHTML = l.name;
-			// <option>Mairie</option>
-			option.setAttribute('value', l.id);
-			// <option value="1">Mairie</option>
-			baliseLocation.appendChild(option);
-			// permet de forcer manuellement la mise à jour de onChange de location
-			baliseLocation.onchange();
-			}
-		}
-	}
+// rechercher toutes les Locations correspondant à la city
+for (let c of cities) {
+if (c.id == cityId) {
+for (let l of c.locations) {
+let option = document.createElement('option'); // <option></option>
+option.innerHTML = l.name;
+// <option>Mairie</option>
+option.setAttribute('value', l.id);
+// <option value="1">Mairie</option>
+baliseLocation.appendChild(option);
+// permet de forcer manuellement la mise à jour de onChange de location
+baliseLocation.onchange();
+}
+}
+}
 }
 
 
 // Afficher le code postal lié à la City sélectionnée
 function afficherCodePostal(cityId) {
-	let cp = document.querySelector('#codePostal');
-	if(cityId !== ""){
-		for (let c of cities) {
-			if (c.id == cityId) {
-				cp.innerHTML = c.postalCode;
-			}
-		}
-	} else {
-		document.querySelector('#codePostal').innerHTML = "";
-		document.querySelector('#streetView').innerHTML = "";
-		document.querySelector('#latitude').innerHTML = "";
-		document.querySelector('#longitude').innerHTML = "";
-	}
+let cp = document.querySelector('#codePostal');
+if (cityId !== "") {
+for (let c of cities) {
+if (c.id == cityId) {
+cp.innerHTML = c.postalCode;
+}
+}
+} else {
+document.querySelector('#codePostal').innerHTML = "";
+document.querySelector('#streetView').innerHTML = "";
+document.querySelector('#latitude').innerHTML = "";
+document.querySelector('#longitude').innerHTML = "";
+}
 }
 
 
 // Demander à afficher la rue, latitude et longitude de la Location choisie au moment du changement
 document.querySelector('#event_type_api_location').onchange = function () {
-	let id = document.querySelector('#event_type_api_location').value;
-	let cityId = document.querySelector('#event_type_api_city').value;
-	afficherInfoLocation(id, cityId);
+let id = document.querySelector('#event_type_api_location').value;
+let cityId = document.querySelector('#event_type_api_city').value;
+afficherInfoLocation(id, cityId);
 }
 
 
 // Afficher les informations de la location sélectionnée
 function afficherInfoLocation(locationId, cityId) {
-	let street = document.querySelector('#streetView');
-	let latitude = document.querySelector('#latitude');
-	let longitude = document.querySelector('#longitude');
+let street = document.querySelector('#streetView');
+let latitude = document.querySelector('#latitude');
+let longitude = document.querySelector('#longitude');
 
-	for (let c of cities) {
-		if (c.id == cityId) {
-			for (let l of c.locations) {
-				if (l.id == locationId) {
-					street.innerHTML = l.street;
-					latitude.innerHTML = l.latitude;
-					longitude.innerHTML = l.longitude;
-				}
-			}
-		}
-	}
+for (let c of cities) {
+if (c.id == cityId) {
+for (let l of c.locations) {
+if (l.id == locationId) {
+street.innerHTML = l.street;
+latitude.innerHTML = l.latitude;
+longitude.innerHTML = l.longitude;
 }
-
-</script>
+}
+}
+}
+}
+	</script>
 {% endblock %}

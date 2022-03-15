@@ -5,7 +5,6 @@ namespace App\Form;
 use App\Entity\City;
 use App\Entity\Event;
 use App\Entity\Location;
-use Doctrine\ORM\Mapping\Entity;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
@@ -23,10 +22,8 @@ class EventTypeAPI extends AbstractType
 
             //->add('startDateTime')
             ->add('startDateTime', DateTimeType::class, [
-                'placeholder' => [
-                    'year' => 'Year', 'month' => 'Month', 'day' => 'Day',
-                    'hour' => 'Hour', 'minute' => 'Minute',
-                ],
+                'widget' => 'single_text',
+                'required' => false,
                 'label' => 'Date et heure de la sortie'
             ])
 
@@ -42,8 +39,8 @@ class EventTypeAPI extends AbstractType
             ->add('duration', null, [
                 'label' => 'Durée (en minutes): ',
                 'attr' => [
-                    'min' => 0,
-                    'max' => 1440
+                    'min' => 5,
+                    'max' => 10080
                 ],
 
             ])
@@ -53,8 +50,8 @@ class EventTypeAPI extends AbstractType
             ->add('nbParticipantMax', null, [
                 'label' => 'Nombre de places: ',
                 'attr' => [
-                    'min' => 1,
-                    'max' => 1440
+                    'min' => 2,
+                    'max' => 999
                 ],
 
             ])
@@ -68,7 +65,7 @@ class EventTypeAPI extends AbstractType
                 [
                     'mapped' => true,
                     'class' => Location::class,
-                    'choice_label' => 'name'
+                    'choice_label' => 'name',
                 ]
             )
             ->add('campus')

@@ -1,5 +1,4 @@
 {% extends 'base.html.twig' %}
-
 {% block title %}Détail de l'event
 {% endblock %}
 
@@ -24,14 +23,18 @@
 					<strong>Durée :</strong>
 					{{ event.duration}}
 					minutes</p>
-				<p>
+				<div>
 					<strong>Description et infos :</strong>
-					{{ event.details}}</p>
+					{{ event.details | nl2br }}</div>
 			</div>
 			<div class="col">
 				<p>
 					<strong>Campus :</strong>
 					{{ event.Campus.name}}</p>
+				<p>
+					<strong>Ville :</strong>
+					{{ event.Location.City.name}}</p>
+				<p></p>
 				<p>
 					<strong>Lieu :</strong>
 					{{ event.Location.name}}</p>

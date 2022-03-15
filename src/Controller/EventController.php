@@ -65,7 +65,7 @@ class EventController extends AbstractController
     {
         $user = $this->getUser();
         //Test si l'event est ouvert ou cloturé
-        if ($e->getState()->getCode() == 'OPEN' or $e->getState()->getCode() == 'CLOS') {
+        if ($e->getState()->getCode() != 'OPEN' or $e->getState()->getCode() != 'CLOS') {
             //Test si l'user est organisateur
             if ($e->getOrganizer() == $user) {
                 $em->remove($e);
@@ -89,7 +89,7 @@ class EventController extends AbstractController
     {
         $tab = $cityRepo->findAll();
 
-        return $this->json($tab,200,[],['groups'=>"villes"]);
+        return $this->json($tab, 200, [], ['groups' => "villes"]);
     }
 
 
@@ -139,10 +139,9 @@ class EventController extends AbstractController
     /**
      * @Route("/details/{id}", name="event_details")
      */
-    public function detail(Event $e, EventRepository $repo, $id): Response
+    public function detail(Event $e, EventRepository $repo,$id): Response
     {
         $events = $repo->find($id);
-
         return $this->render('event/detail.html.twig', [
             'event' => $e,
             'events' => $events,
@@ -152,32 +151,32 @@ class EventController extends AbstractController
     /**
      * @Route("/publish/{id}", name="event_publish")
      */
-    public function publish(StateRepository $stateRepo ,Event $e,EntityManagerInterface $em , EventRepository $repo, $id): Response
+    public function publish(StateRepository $stateRepo, Event $e, EntityManagerInterface $em, EventRepository $repo, $id): Response
     {
         $e->setState($stateRepo->findOneBy(array('code' => 'OPEN')));
-                        $em->persist($e);
-                        $em->flush();
-                        
-                        return $this->redirectToRoute('home');
+        $em->persist($e);
+        $em->flush();
+
+        return $this->redirectToRoute('home');
     }
 
     /**
      * @Route("/cancel/{id}", name="event_cancel")
      */
-    public function cancel(StateRepository $stateRepo ,Event $e,EntityManagerInterface $em , EventRepository $repo, $id, Request $req): Response
+    public function cancel(StateRepository $stateRepo, Event $e, EntityManagerInterface $em, EventRepository $repo, $id, Request $req): Response
     {
        // $events = $repo->find($id);
                        
         if($req->get('motif_cancel'))
         {
        
-        $eventDetails = $e->getDetails();
-        $annulation = $req->get('motif_cancel');
-        $newDetails = $eventDetails . nl2br('MOTIF D\'ANNULATION: ') . $annulation;
-        $e->setDetails($newDetails);
-        $e->setState($stateRepo->findOneBy(array('code' => 'ANNU')));
-        $em->persist($e);
-        $em->flush();
+            $eventDetails = $e->getDetails();
+            $annulation = $req->get('motif_cancel');
+            $newDetails =  $eventDetails . "\nMOTIF D'ANNULATION: " . $annulation;
+            $e->setDetails($newDetails);
+            $e->setState($stateRepo->findOneBy(array('code' => 'ANNU')));
+            $em->persist($e);
+            $em->flush();
         
         return $this->redirectToRoute('home');
         }        
@@ -299,12 +298,11 @@ class EventController extends AbstractController
     public function eventUpdateAPI(Event $event, EntityManagerInterface $em, Request $req, StateRepository $stateRepo, CityRepository $cityRepo): Response
     {
         $user = $this->getUser();
-        $cityList = $cityRepo->findAll();
-        $form = $this->createForm(EventType::class, $event);
+        $form = $this->createForm(EventTypeAPI::class, $event);
         $form->handleRequest($req);
 
         //Test si l'event n'est pas encore publier
-        if ($event->getState()->getId() == 1) {
+        if ($event->getState()->getCode() == 'CREE') {
             //Test si l'user est organisateur
             if ($event->getOrganizer() == $user) {
                 if ($form->isSubmitted() && $form->isValid()) {

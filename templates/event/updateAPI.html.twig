@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Nouvelle sortie
+{% block title %}Modifier une sortie
 {% endblock %}
 
 {% block body %}
@@ -18,7 +18,7 @@
 				{{form_errors(formulaire.details)}}
 			</div>
 			<fieldset>
-				<legend>Créer une sortie</legend>
+				<legend>Modifier une sortie</legend>
 
 				<div class="d-flex">
 
@@ -136,12 +136,18 @@
 				</div>
 			</fieldset>
 			<div class="my-4">
-				<button class="btn btn-primary" type="submit">Créer la sortie
+				<button class="btn btn-primary" type="submit">Enregistrer la sortie
 					<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary"></span>
 				</button>
 				<button class="btn btn-success" type="submit">Publier la sortie
 					<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary"></span>
 				</button>
+
+				<a href="{{ path('event_delete',{'id':app.request.get('id')})}}" class="btn btn-danger">
+					Supprimer la sortie
+					<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary"></span>
+				</a>
+
 				<a href="{{ path('home')}}" class="btn btn-warning">
 					Annuler
 					<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary"></span>
@@ -151,83 +157,20 @@
 		</div>
 	</div>
 
+
 	<script>
 
 		let cities = {};
-let url = 'http://localhost/Sortir/public/home/api/';
+
+
+let url = 'http://localhost/Sortir/public/home/api/'; // localhost de Jérôme
+
 fetch(url).then(res => res.json()).then(data => {
 cities = data
-console.log(data);
-afficherCity();
 afficherLocation(cities[0].id);
-
 
 });
 
-function afficherCity() { // alimenter select city
-let baliseCity = document.querySelector('#event_type_api_city');
-for (let c of cities) {
-let option = document.createElement('option'); // <option></option>
-option.innerHTML = c.name; // <option>Rennes</option>
-option.setAttribute('value', c.id); // <option value="1">Rennes</option>
-baliseCity.appendChild(option);
-
-let baliseCity = document.querySelector('#event_type_api_city');
-
-}
-}
-
-// alimenter select Location
-function afficherLocation(cityId) {
-let baliseLocation = document.querySelector('#event_type_api_location');
-// vider la balise select du Location
-baliseLocation.innerHTML = '';
-// rechercher ts les Locations correspondant à la city
-for (let c of cities) {
-console.log('je suis dans le premier IF')
-if (c.id == cityId) {
-for (let l of c.locations) {
-console.log('je suis dans le deuxième IF')
-let option = document.createElement('option'); // <option></option>
-option.innerHTML = l.name;
-// <option>Mairie</option>
-option.setAttribute('value', l.id);
-// <option value="1">Mairie</option>
-baliseLocation.appendChild(option);
-
-}
-}
-}
-}
-
-function afficherCodePostal(cityId) {
-let cp = document.querySelector('#codePostal');
-for (let c of cities) {
-if (c.id == cityId) {
-cp.innerHTML = c.postalCode;
-}
-}
-}
-
-function afficherInfoLocation(locationId, cityId) {
-console.log('Je rentre dans la fonction afficherInfoLocation')
-let street = document.querySelector('#streetView');
-let latitude = document.querySelector('#latitude');
-let longitude = document.querySelector('#longitude');
-for (let c of cities) {
-if (c.id == cityId) {
-console.log('Je rentre dans le 1er if de la fonction afficherInfolocation')
-for (let l of c.locations) {
-if (l.id == locationId) {
-street.innerHTML = l.street;
-latitude.innerHTML = l.latitude;
-longitude.innerHTML = l.longitude;
-console.log("je suis dans le 2eme if de la fonction afficherInfolocation");
-}
-}
-}
-}
-}
 
 // Demander à afficher les bonnes Locations et le code postal à chaque changement de City
 document.querySelector('#event_type_api_city').onchange = function () {
@@ -235,15 +178,77 @@ let cityId = document.querySelector('#event_type_api_city').value;
 let locationId = document.querySelector('#event_type_api_location').value;
 afficherLocation(cityId);
 afficherCodePostal(cityId);
-
-
 }
 
-// Demander à afficher la rue, latitude et longitude de la Location choisie
+
+// alimenter select Location
+function afficherLocation(cityId) {
+let baliseLocation = document.querySelector('#event_type_api_location');
+
+// vider la balise select du Location
+baliseLocation.innerHTML = '';
+
+// rechercher toutes les Locations correspondant à la city
+for (let c of cities) {
+if (c.id == cityId) {
+for (let l of c.locations) {
+let option = document.createElement('option'); // <option></option>
+option.innerHTML = l.name;
+// <option>Mairie</option>
+option.setAttribute('value', l.id);
+// <option value="1">Mairie</option>
+baliseLocation.appendChild(option);
+// permet de forcer manuellement la mise à jour de onChange de location
+baliseLocation.onchange();
+}
+}
+}
+}
+
+
+// Afficher le code postal lié à la City sélectionnée
+function afficherCodePostal(cityId) {
+let cp = document.querySelector('#codePostal');
+if (cityId !== "") {
+for (let c of cities) {
+if (c.id == cityId) {
+cp.innerHTML = c.postalCode;
+}
+}
+} else {
+document.querySelector('#codePostal').innerHTML = "";
+document.querySelector('#streetView').innerHTML = "";
+document.querySelector('#latitude').innerHTML = "";
+document.querySelector('#longitude').innerHTML = "";
+}
+}
+
+
+// Demander à afficher la rue, latitude et longitude de la Location choisie au moment du changement
 document.querySelector('#event_type_api_location').onchange = function () {
 let id = document.querySelector('#event_type_api_location').value;
 let cityId = document.querySelector('#event_type_api_city').value;
 afficherInfoLocation(id, cityId);
+}
+
+
+// Afficher les informations de la location sélectionnée
+function afficherInfoLocation(locationId, cityId) {
+let street = document.querySelector('#streetView');
+let latitude = document.querySelector('#latitude');
+let longitude = document.querySelector('#longitude');
+
+for (let c of cities) {
+if (c.id == cityId) {
+for (let l of c.locations) {
+if (l.id == locationId) {
+street.innerHTML = l.street;
+latitude.innerHTML = l.latitude;
+longitude.innerHTML = l.longitude;
+}
+}
+}
+}
 }
 	</script>
 {% endblock %}

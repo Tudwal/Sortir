@@ -26,11 +26,11 @@ class EventSearchType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-       
+
 
         $builder
             ->add('campus', EntityType::class, [
-                'label' => 'Campus : ',
+                'label' => 'Campus',
                 'class' => Campus::class,
                 'choice_label' => 'name',
                 'placeholder' => $this->security->getUser()->getCampus(),

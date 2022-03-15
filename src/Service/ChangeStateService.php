@@ -34,21 +34,22 @@ class ChangeStateService
 
             // Récupération des dates utiles pour les if
             $startEvent = $event->getStartDateTime();
-            $endRegistration = $event->getEndRegisterDate();
+            $endRegistration = $event->getEndRegisterDate()->add(new DateInterval('PT23H'));
             $duration = $event->getDuration();
             $endEvent = clone $startEvent;
             $endEvent->add(new DateInterval('PT' . $duration . 'M'));
             $historyEvent = clone $startEvent;
             $historyEvent->add(new DateInterval('P1M'));
 
-            // MODIFICATION ETAT CLOTURE
-            if ($today > $endRegistration && $event->getState()->getCode() == 'OPEN') {
-                $cloturee = $this->stateRepository->findOneBy(array('code' => 'CLOS'));
-                $event->setState($cloturee);
+
+            // MODIFICATION ETAT CLOS
+            if ($today >= $endRegistration && $today <= $endEvent ) {
+                $clos = $this->stateRepository->findOneBy(array('code' => 'CLOS'));
+                $event->setState($clos);
             }
 
             // MODIFICATION ETAT EN-COURS
-            if ($today >= $endRegistration && $today <= $endEvent) {
+            if ($today == $startEvent) {
                 $enCours = $this->stateRepository->findOneBy(array('code' => 'ENCO'));
                 $event->setState($enCours);
             }

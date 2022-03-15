@@ -1,4 +1,5 @@
 {% extends 'base.html.twig' %}
+{% form_theme formulaire 'bootstrap_5_horizontal_layout.html.twig' %}
 
 {% block title %}
 	{{parent()}}
@@ -9,84 +10,43 @@
 	<div class="container-fluid px-4 mt-4">
 
 		{{form_start(formulaire)}}
-		<div class="col-2">
-			{{form_errors(formulaire.campus)}}
-			{{form_errors(formulaire.startDate)}}
-			{{form_errors(formulaire.endDate)}}
-			{{form_errors(formulaire.eventOrganizer)}}
-			{{form_errors(formulaire.eventRegister)}}
-			{{form_errors(formulaire.eventNotRegister)}}
-			{{form_errors(formulaire.pastEvent)}}
-		</div>
-		<fieldset>
-			<legend>Rechercher dans la liste</legend>
-			<div class="d-flex">
-				<div class="col-6">
-					<div class="form-group row">
 
-						<label for="select" class="col-4 col-form-label">
-							{{form_label(formulaire.campus)}}
-						</label>
-						<div class="col-6">
-							{{form_widget(formulaire.campus)}}
-						</div>
-					</div>
+		<div class="row">
+			<div class="col-6">
 
-					<div class="form-group row">
-						<label for="startDate" class="col-4 col-form-label">
-							{{form_label(formulaire.startDate)}}
-						</label>
-						<div class="col-8">
-							{{form_widget(formulaire.startDate)}}
-						</div>
-					</div>
+				{{form_row(formulaire.campus)}}
+				{{form_errors(formulaire.campus)}}
 
-					<div class="form-group row">
-						<label for="startDate" class="col-4 col-form-label">
-							{{form_label(formulaire.endDate)}}
-						</label>
-						<div class="col-8">
-							{{form_widget(formulaire.endDate)}}
-						</div>
-					</div>
 
-					<div class="form-group row">
-						<label class="col-md-4 control-label" for="searchinput">{{form_label(formulaire.search)}}</label>
-						<div class="col-md-4">
-							{{form_widget(formulaire.search)}}
-						</div>
-					</div>
-				</div>
-				<div class="col-6">
-					<div class="form-group row">
-						<div class="col-8">
-							<div class="custom-control custom-checkbox custom-control-inline">
-								{{form_widget(formulaire.eventOrganizer)}}
-								<label for="checkbox_1" class="custom-control-label">{{form_label(formulaire.eventOrganizer)}}</label>
-							</div>
-							<div class="custom-control custom-checkbox custom-control-inline">
-								{{form_widget(formulaire.eventRegister)}}
-								<label for="checkbox_1" class="custom-control-label">{{form_label(formulaire.eventRegister)}}</label>
-							</div>
-							<div class="custom-control custom-checkbox custom-control-inline">
-								{{form_widget(formulaire.eventNotRegister)}}
-								<label for="checkbox_1" class="custom-control-label">{{form_label(formulaire.eventNotRegister)}}</label>
-							</div>
-							<div class="custom-control custom-checkbox custom-control-inline">
-								{{form_widget(formulaire.pastEvent)}}
-								<label for="checkbox_1" class="custom-control-label">{{form_label(formulaire.pastEvent)}}</label>
-							</div>
-						</div>
-					</div>
-					<div class="form-group row">
-						<div class="offset-4 col-8">
-							<button name="submit" type="submit" class="btn btn-primary">Rechercher</button>
-						</div>
-					</div>
+				{{form_row(formulaire.startDate)}}
+				{{form_errors(formulaire.startDate)}}
+
+
+				{{form_row(formulaire.endDate)}}
+				{{form_errors(formulaire.endDate)}}
+
+
+				{{form_row(formulaire.search)}}
+			</div>
+			<div class="col-6">
+
+				{{form_row(formulaire.eventOrganizer)}}
+				{{form_errors(formulaire.eventOrganizer)}}
+
+				{{form_row(formulaire.eventRegister)}}
+				{{form_errors(formulaire.eventRegister)}}
+
+				{{form_row(formulaire.eventNotRegister)}}
+				{{form_errors(formulaire.eventNotRegister)}}
+
+				{{form_row(formulaire.pastEvent)}}
+				{{form_errors(formulaire.pastEvent)}}
+
+				<div class="offset-4 col-8">
+					<button name="submit" type="submit" class="btn btn-primary">Rechercher</button>
 				</div>
 			</div>
-
-		</fieldset>
+		</div>
 		{{form_end(formulaire)}}
 
 		<div class="table-responsive mt-5">
@@ -134,34 +94,34 @@
 											{% endif %}
 										{% endif %}
 									{% endif %}
-								{% if event.state in stateOpen  or event.state in stateClos %}
-									{% if app.user in event.participants %}
-										<a onclick="return confirm('Voulez-vous quitter {{event.name}}?')" href="{{ path('event_unRegister',{id:event.id })}}" class="btn btn-danger">
-											Se désister
-										</a>
+									{% if event.state in stateOpen  or event.state in stateClos %}
+										{% if app.user in event.participants %}
+											<a onclick="return confirm('Voulez-vous quitter {{event.name}}?')" href="{{ path('event_unRegister',{id:event.id })}}" class="btn btn-danger">
+												Se désister
+											</a>
+										{% endif %}
 									{% endif %}
-								{% endif %}
-								{% if event.state in stateCrea  %}
-									{% if event.organizer.pseudo == app.user.pseudo %}
-										<a href="{{ path('event_update',{id:event.id })}}" class="btn btn-warning">
-											modifier
-										</a>
+									{% if event.state in stateCrea  %}
+										{% if event.organizer.pseudo == app.user.pseudo %}
+											<a href="{{ path('event_updateAPI',{id:event.id })}}" class="btn btn-warning">
+												modifier
+											</a>
+										{% endif %}
 									{% endif %}
-								{% endif %}
-								{% if event.state in stateCrea %}
-									{% if event.organizer.pseudo == app.user.pseudo %}
-										<a href="{{ path('event_publish',{id:event.id })}}" class="btn btn-success">
-											Publier
-										</a>
+									{% if event.state in stateCrea %}
+										{% if event.organizer.pseudo == app.user.pseudo %}
+											<a href="{{ path('event_publish',{id:event.id })}}" class="btn btn-success">
+												Publier
+											</a>
+										{% endif %}
 									{% endif %}
-								{% endif %}
-								{% if event.state in stateOpen or event.state in stateClos %}
-									{% if event.organizer.pseudo == app.user.pseudo %}
-										<a onclick="return confirm('Voulez-vous supprimer {{event.name}}?')" href="{{ path('event_cancel',{id:event.id })}}" class="btn btn-danger">
-											Annuler
-										</a>
+									{% if event.state in stateOpen or event.state in stateClos %}
+										{% if event.organizer.pseudo == app.user.pseudo %}
+											<a onclick="return confirm('Voulez-vous annuler {{event.name}}?')" href="{{ path('event_cancel',{id:event.id })}}" class="btn btn-danger">
+												Annuler
+											</a>
+										{% endif %}
 									{% endif %}
-								{% endif %}
 								</td>
 							</tr>
 						{% endif %}
