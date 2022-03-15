@@ -8,15 +8,6 @@
 		<div class="col-12 my-3">
 
 			{{form_start(formulaire)}}
-
-			<div class="col-12">
-				{{form_errors(formulaire.name)}}
-				{{form_errors(formulaire.startDateTime)}}
-				{{form_errors(formulaire.endRegisterDate)}}
-				{{form_errors(formulaire.duration)}}
-				{{form_errors(formulaire.nbParticipantMax)}}
-				{{form_errors(formulaire.details)}}
-			</div>
 			<fieldset>
 				<legend>Créer une sortie</legend>
 
@@ -31,6 +22,9 @@
 							</label>
 							<div class="col-6">
 								{{form_widget(formulaire.name)}}
+								<div class="text-danger" font-size:'10px'>
+									{{form_errors(formulaire.name)}}
+								</div>
 							</div>
 						</div>
 						<div class="form-group row">
@@ -40,6 +34,9 @@
 							</label>
 							<div class="col-6">
 								{{form_widget(formulaire.startDateTime)}}
+								<div class="text-danger" font-size:'10px'>
+									{{form_errors(formulaire.startDateTime)}}
+								</div>
 							</div>
 
 						</div>
@@ -49,6 +46,9 @@
 							</label>
 							<div class="col-6">
 								{{form_widget(formulaire.endRegisterDate)}}
+								<div class="text-danger" font-size:'10px'>
+									{{form_errors(formulaire.endRegisterDate)}}
+								</div>
 							</div>
 						</div>
 						<div class="form-group row">
@@ -57,6 +57,9 @@
 							</label>
 							<div class="col-6">
 								{{form_widget(formulaire.nbParticipantMax)}}
+								<div class="text-danger" font-size:'10px'>
+									{{form_errors(formulaire.nbParticipantMax)}}
+								</div>
 							</div>
 						</div>
 						<div class="form-group row">
@@ -65,6 +68,9 @@
 							</label>
 							<div class="col-6">
 								{{form_widget(formulaire.duration)}}
+								<div class="text-danger" font-size:'10px'>
+									{{form_errors(formulaire.duration)}}
+								</div>
 							</div>
 						</div>
 
@@ -75,6 +81,9 @@
 							</label>
 							<div class="col-6">
 								{{form_widget(formulaire.details)}}
+								<div class="text-danger" font-size:'10px'>
+									{{form_errors(formulaire.details)}}
+								</div>
 							</div>
 						</div>
 
@@ -107,6 +116,9 @@
 							</label>
 							<div class="col-6" name="location" id="location">
 								{{form_widget(formulaire.location)}}
+								<div class="text-danger" font-size:'10px'>
+									{{form_errors(formulaire.location)}}
+								</div>
 							</div>
 						</div>
 						<div class="form-group row">
@@ -153,25 +165,12 @@
 	</div>
 
 
-<<<<<<< HEAD
 	<script>
 
 		let cities = {};
-
 let url = './api/';
 fetch(url).then(res => res.json()).then(data => {
 cities = data
-=======
-let cities = {};
-<<<<<<< HEAD
-=======
-//let url = 'http://localhost/Sortir/public/home/api/'; // localhost de Jérôme
->>>>>>> 35917b33199ddf1df29ea104c6e1b3ba03f16d35
-let url = './api/';
-fetch(url)
-.then(res => res.json()).
-then(data => {cities = data
->>>>>>> 1b3aef648eb6c6f1539dbbe1093aef3a6626f81e
 afficherLocation(cities[0].id);
 
 });

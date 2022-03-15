@@ -142,8 +142,7 @@
 				<button class="btn btn-success" type="submit">Publier la sortie
 					<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary"></span>
 				</button>
-
-				<a href="{{ path('event_delete',{'id':app.request.get('id')})}}" class="btn btn-danger">
+				<a onclick="return confirm('Voulez-vous supprimer cette sortie?')" href="{{ path('event_delete',{'id':app.request.get('id')})}}" class="btn btn-danger">
 					Supprimer la sortie
 					<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary"></span>
 				</a>
@@ -161,10 +160,7 @@
 	<script>
 
 		let cities = {};
-
-
-let url = 'http://localhost/Sortir/public/home/api/'; // localhost de Jérôme
-
+let url = '../api/';
 fetch(url).then(res => res.json()).then(data => {
 cities = data
 afficherLocation(cities[0].id);

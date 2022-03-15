@@ -41,23 +41,34 @@ class Event
      *          value ="today",
      *          message = "La date de début doit être supérieure à la date du jour"            
      * )
+     * @Assert\Type("\DateTimeInterface")
      */
     private $startDateTime;
 
     /**
      * @ORM\Column(type="integer")
      * @Assert\NotBlank
-     * * @Assert\Range(
+     * @Assert\Range(
      *      min = 5,
      *      max = 10080,
-     *      notInRangeMessage = "La durée doit être comprise entre {{ min }} minutes et {{ max }} minutes (= 1 semaine)",
+     *      notInRangeMessage = "La durée doit être comprise entre {{ min }} minutes et {{ max }} minutes (= 1 semaine)"
      * )
      */
     private $duration;
 
+
     /**
      * @ORM\Column(type="date")
      * @Assert\NotBlank
+     * @Assert\GreaterThan(
+     *          value ="today",
+     *          message = "La date d'inscription doit être supérieure à la date du jour" 
+     * )
+     * @Assert\Type("\DateTimeInterface")
+     * @Assert\LessThan(
+     *          propertyPath="startDateTime",
+     *          message = "La date d'inscription doit être inférieure à la date de début de sortie"
+     * )
      */
     private $endRegisterDate;
 
@@ -69,8 +80,6 @@ class Event
      *      max = 999,
      *      notInRangeMessage = "Le nombre de participants doit être compris entre {{ min }} et {{ max }}",
      * )
-     * @Assert\GreaterThan("+5 hours")
-     * 
      */
     private $nbParticipantMax;
 
@@ -95,7 +104,9 @@ class Event
     /**
      * @ORM\ManyToOne(targetEntity=Location::class, inversedBy="events")
      * @ORM\JoinColumn(nullable=false)
-     * @Assert\NotBlank
+     * @Assert\NotBlank(
+     *         message = "Veuillez choisir un lieu"
+     * )
      */
     private $location;
 

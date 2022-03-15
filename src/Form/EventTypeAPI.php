@@ -65,7 +65,7 @@ class EventTypeAPI extends AbstractType
                 [
                     'mapped' => true,
                     'class' => Location::class,
-                    'choice_label' => 'name',
+                    'choice_label' => 'name'
                 ]
             )
             ->add('campus')
@@ -77,7 +77,8 @@ class EventTypeAPI extends AbstractType
                     'mapped' => false,
                     'class' => City::class,
                     'choice_label' => 'name',
-                    'placeholder' => "Choisir une ville"
+                    'placeholder' => "Choisir une ville",
+                    'required' => true
                 ]
             );
     }
