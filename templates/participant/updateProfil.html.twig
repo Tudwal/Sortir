@@ -1,9 +1,10 @@
 {% extends 'base.html.twig' %}
-
+{% form_theme formulaire 'bootstrap_5_horizontal_layout.html.twig'%}
 {% block title %}Mon Profil{% endblock %}
 
 {% block body %}
 <div class="container my-4">
+{# <div class="d-flex"> #}
     <div class= 'row'>
         <div class='col-4'>
             {% if app.user.imgName == null %}
@@ -11,13 +12,71 @@
                 <img class="logo" src="{{ asset('upload/')}}{{app.user.imgName}}" >
             {% endif %}
         </div>
-        <div class='col-8 my-4'>
-            <div class="position-relative">
-                <div class="position-absolute top-50 start-50 translate-middle-x">
-                    {{ form_start (formulaire)}}
-
-                    {{ form_widget (formulaire)}}
-
+        <div class="col-8 col-sm-8">
+            {{ form_start (formulaire)}}
+            {{ form_widget (formulaire)}}
+            {# <div class="col-6 my-4">
+                <div class="form-group row">
+                    <label class="col-4 my-2 col-fom-label">
+                        {{ form_label (formulaire.pseudo) }}
+                    </label>
+                    <div class="col-6 my-2">
+                        {{ form_widget (formulaire.pseudo) }}
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-4 my-2 col-fom-label">
+                        {{ form_label (formulaire.firstName) }}
+                    </label>
+                    <div class="col-6 my-2">
+                        {{ form_widget (formulaire.firstName) }}
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-4 my-2 col-fom-label">
+                        {{ form_label (formulaire.lastName) }}
+                    </label>
+                    <div class="col-6 my-2">
+                        {{ form_widget (formulaire.lastName) }}
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-4 my-2 col-fom-label">
+                        {{ form_label (formulaire.phone) }}
+                    </label>
+                    <div class="col-6 my-2">
+                        {{ form_widget (formulaire.phone) }}
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-4 my-2 col-fom-label">
+                        {{ form_label (formulaire.email) }}
+                    </label>
+                    <div class="col-6 my-2">
+                        {{ form_widget (formulaire.email) }}
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-6 my-2 ">
+                        {{ form_row (formulaire.password) }}
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-4 my-2 col-fom-label">
+                        {{ form_label (formulaire.campus) }}
+                    </label>
+                    <div class="col-6 my-2">
+                        {{ form_widget (formulaire.campus) }}
+                    </div>
+                </div>
+                <div class="form-group row">
+                     <label class="col-4 my-2 col-fom-label">
+                        {{ form_label (formulaire.image) }}
+                    </label>
+                     <div class="col-6 my-2">
+                        {{ form_widget (formulaire.image) }}
+                     </div>
+                </div> #}
                     <div class="my-4">
                         <button class="btn btn-primary" type="submit">Enregistrer
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary"></span></button> 
@@ -25,9 +84,10 @@
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary"></span></a>
                     </div>
                     {{ form_end (formulaire)}}
-                </div>
             </div>
         </div>
-    </div> 
+    {# </div>  #}
 </div>
 {% endblock %}
+
+

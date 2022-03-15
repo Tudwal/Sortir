@@ -166,7 +166,7 @@ class EventController extends AbstractController
      */
     public function cancel(StateRepository $stateRepo ,Event $e,EntityManagerInterface $em , EventRepository $repo, $id, Request $req): Response
     {
-        $events = $repo->find($id);
+       // $events = $repo->find($id);
                        
         if($req->get('motif_cancel'))
         {
@@ -183,7 +183,6 @@ class EventController extends AbstractController
         }        
         return $this->render('event/cancel.html.twig',[
             'event'=>$e,
-            'events'=>$events,
         ]);
     }
 

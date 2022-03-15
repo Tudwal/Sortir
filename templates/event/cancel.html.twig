@@ -5,11 +5,9 @@
 {% endblock %}
 
 {% block body %}
-    <p>Nom de la sortie : {{event.name}}</p>
-    <p>Date de la sortie : {{event.startDateTime | date('d/m/Y')}}</p>
-    <p>Campus : {{event.Campus.name}}</p>
-    <p>Lieu : {{event.Location.name}}</p>
+<div class="row">
 
+<<<<<<< HEAD
     <form method="POST" action="{{ path('event_cancel',{id:event.id })}}">
         <div>
             <label for="motif">Motif :</label>
@@ -19,4 +17,28 @@
             <input type="submit" value="Continuer">
         </div>
     </form>
+=======
+
+    <div class="my-5">
+    <h3>Annuler une sortie</h3>
+    </div>
+        <p><strong>Nom de la sortie : </strong>{{event.name}}</p>
+        <p><strong>Date de la sortie : </strong>{{event.startDateTime | date('d/m/Y')}}</p>
+        <p><strong>Campus : </strong>{{event.Campus.name}}</p>
+        <p><strong>Lieu : </strong>{{event.Location.name}}</p>
+
+        <form method="POST" action="{{ path('event_cancel',{id:event.id })}}">
+        <div>
+            <label for="motif"><strong>Motif : </strong></label>
+            <input type="text" id="motif" name="motif_cancel">
+        </div>
+        <div class="my-4">
+            <input type="submit" value="Continuer" class="btn btn-primary">
+            <a href="{{ path('home')}}" class="btn btn-warning"> Annuler 
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary"></span></a>
+        </div>
+        </form>
+    </div>
+
+>>>>>>> 35917b33199ddf1df29ea104c6e1b3ba03f16d35
 {% endblock %}
