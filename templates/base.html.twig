@@ -47,7 +47,7 @@
 			<ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
 				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-						<i class="fas fa-user fa-fw"></i>
+						<img class="logoUnicorn" src="{{ asset('img/logo_unicorn.png')}}" width="50" alt="logo Unicorn">
 					</a>
 					<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
 						{% if is_granted('ROLE_USER')%}
@@ -58,7 +58,6 @@
 							<li>
 								<a class="dropdown-item" href="{{path('app_update_participant')}}">Modifier mon Profil</a>
 							</li>
-							<li><hr class="dropdown-divider"/></li>
 
 						{% else %}
 							<li>
@@ -77,13 +76,13 @@
 							<div class="sb-sidenav-menu-heading">Actions</div>
 							<a class="nav-link" href="{{path('home')}}">
 								<div class="sb-nav-link-icon">
-									<i class="fas fa-tachometer-alt"></i>
+									<i class="fa-solid fa-feather-pointed"></i>
 								</div>
 								Accueil
 							</a>
 							<a class="nav-link" href="{{path('event_create')}}">
 								<div class="sb-nav-link-icon">
-									<i class="fas fa-tachometer-alt"></i>
+									<i class="fa-solid fa-feather-pointed"></i>
 								</div>
 								Créer une sortie
 							</a>

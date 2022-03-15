@@ -80,7 +80,7 @@ class EventTypeAPI extends AbstractType
                     'mapped' => false,
                     'class' => City::class,
                     'choice_label' => 'name',
-                     'placeholder' => "Choisir une ville"
+                    'placeholder' => "Choisir une ville"
                 ]
             );
     }
