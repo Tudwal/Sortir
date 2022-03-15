@@ -65,15 +65,21 @@ class EventController extends AbstractController
     {
         $user = $this->getUser();
         //Test si l'event est ouvert ou cloturé
-        if ($e->getState()->getCode() == 'OPEN' or $e->getState()->getCode() == 'CLOS') {
+        if ($e->getState()->getCode() != 'OPEN' or $e->getState()->getCode() != 'CLOS') {
             //Test si l'user est organisateur
             if ($e->getOrganizer() == $user) {
                 $em->remove($e);
                 $em->flush();
                 $this->addFlash(
                     'success',
-                    'Votre ' . $e->getName() . ' est supprimée!'
+                    $e->getName() . ' est supprimée!'
                 );
+            } else {
+                $this->addFlash(
+                    'danger',
+                    'Sortie non supprimée'
+                );
+                return $this->redirectToRoute('event_delete');
             }
         }
 
@@ -166,7 +172,6 @@ class EventController extends AbstractController
      */
     public function cancel(StateRepository $stateRepo, Event $e, EntityManagerInterface $em, EventRepository $repo, $id, Request $req): Response
     {
-        // $events = $repo->find($id);
 
         if ($req->get('motif_cancel')) {
 
@@ -178,10 +183,13 @@ class EventController extends AbstractController
             $em->persist($e);
             $em->flush();
 
+
             return $this->redirectToRoute('home');
         }
+
         return $this->render('event/cancel.html.twig', [
             'event' => $e,
+
         ]);
     }
 
@@ -254,56 +262,18 @@ class EventController extends AbstractController
         return $this->redirectToRoute('home');
     }
 
-    /**
-     * @Route("/event-update/{id}", name="event_update")
-     */
-    public function eventUpdate(Event $event, EntityManagerInterface $em, Request $req, StateRepository $stateRepo, CityRepository $cityRepo): Response
-    {
-        $user = $this->getUser();
-        $cityList = $cityRepo->findAll();
-        $form = $this->createForm(EventType::class, $event);
-        $form->handleRequest($req);
 
-        //Test si l'event n'est pas encore publier
-        if ($event->getState()->getCode() == 'CREE') {
-            //Test si l'user est organisateur
-            if ($event->getOrganizer() == $user) {
-                if ($form->isSubmitted() && $form->isValid()) {
-                    $em->flush();
-                    $this->addFlash(
-                        'success',
-                        'Féliciation, votre ' . $event->getName() . ' est modifiée!'
-                    );
-
-                    return $this->redirectToRoute('home');
-                } elseif ($form->isSubmitted() && !$form->isValid()) {
-                    $this->addFlash(
-                        'danger',
-                        'Tu as un problème avec la modification de ta sortie'
-                    );
-                }
-            }
-        }
-
-
-
-        return $this->render('event/update.html.twig', [
-            'formulaire' => $form->createView(),
-            'cityList' => $cityList,
-        ]);
-    }
     /**
      * @Route("/event-updateAPI/{id}", name="event_updateAPI")
      */
     public function eventUpdateAPI(Event $event, EntityManagerInterface $em, Request $req, StateRepository $stateRepo, CityRepository $cityRepo): Response
     {
         $user = $this->getUser();
-        $cityList = $cityRepo->findAll();
-        $form = $this->createForm(EventType::class, $event);
+        $form = $this->createForm(EventTypeAPI::class, $event);
         $form->handleRequest($req);
 
         //Test si l'event n'est pas encore publier
-        if ($event->getState()->getId() == 1) {
+        if ($event->getState()->getCode() == 'CREE') {
             //Test si l'user est organisateur
             if ($event->getOrganizer() == $user) {
                 if ($form->isSubmitted() && $form->isValid()) {

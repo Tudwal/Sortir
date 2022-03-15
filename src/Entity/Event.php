@@ -7,6 +7,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Ignore;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 /**
  * @ORM\Entity(repositoryClass=EventRepository::class)
@@ -22,31 +24,74 @@ class Event
 
     /**
      * @ORM\Column(type="string", length=100)
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *      min = 5,
+     *      max = 100,
+     *      minMessage = "{{ limit }} caractères minimum",
+     *      maxMessage = "{{ limit }} caractères maximum"
+     * )
      */
     private $name;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Assert\NotBlank
+     * @Assert\GreaterThan(
+     *          value ="today",
+     *          message = "La date de début doit être supérieure à la date du jour"            
+     * )
+     * @Assert\Type("\DateTimeInterface")
      */
     private $startDateTime;
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\NotBlank
+     * @Assert\Range(
+     *      min = 5,
+     *      max = 10080,
+     *      notInRangeMessage = "La durée doit être comprise entre {{ min }} minutes et {{ max }} minutes (= 1 semaine)"
+     * )
      */
     private $duration;
 
+
     /**
      * @ORM\Column(type="date")
+     * @Assert\NotBlank
+     * @Assert\GreaterThan(
+     *          value ="today",
+     *          message = "La date d'inscription doit être supérieure à la date du jour" 
+     * )
+     * @Assert\Type("\DateTimeInterface")
+     * @Assert\LessThan(
+     *          propertyPath="startDateTime",
+     *          message = "La date d'inscription doit être inférieure à la date de début de sortie"
+     * )
      */
     private $endRegisterDate;
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\NotBlank
+     * @Assert\Range(
+     *      min = 2,
+     *      max = 999,
+     *      notInRangeMessage = "Le nombre de participants doit être compris entre {{ min }} et {{ max }}",
+     * )
      */
     private $nbParticipantMax;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *      min = 5,
+     *      max = 255,
+     *      minMessage = "{{ limit }} caractères minimum",
+     *      maxMessage = "{{ limit }} caractères maximum"
+     * )
      */
     private $details;
 
@@ -59,6 +104,9 @@ class Event
     /**
      * @ORM\ManyToOne(targetEntity=Location::class, inversedBy="events")
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\NotBlank(
+     *         message = "Veuillez choisir un lieu"
+     * )
      */
     private $location;
 
@@ -66,6 +114,7 @@ class Event
      * @ORM\ManyToOne(targetEntity=Campus::class, inversedBy="events")
      * @ORM\JoinColumn(nullable=false)
      * @Ignore()
+     * @Assert\NotBlank
      */
     private $campus;
 

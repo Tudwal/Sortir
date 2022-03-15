@@ -39,8 +39,8 @@ class EventTypeAPI extends AbstractType
             ->add('duration', null, [
                 'label' => 'Durée (en minutes): ',
                 'attr' => [
-                    'min' => 0,
-                    'max' => 1440
+                    'min' => 5,
+                    'max' => 10080
                 ],
 
             ])
@@ -50,8 +50,8 @@ class EventTypeAPI extends AbstractType
             ->add('nbParticipantMax', null, [
                 'label' => 'Nombre de places: ',
                 'attr' => [
-                    'min' => 1,
-                    'max' => 1440
+                    'min' => 2,
+                    'max' => 999
                 ],
 
             ])
@@ -77,7 +77,8 @@ class EventTypeAPI extends AbstractType
                     'mapped' => false,
                     'class' => City::class,
                     'choice_label' => 'name',
-                    'placeholder' => "Choisir une ville"
+                    'placeholder' => "Choisir une ville",
+                    'required' => true
                 ]
             );
     }

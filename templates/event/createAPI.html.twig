@@ -8,15 +8,6 @@
 		<div class="col-12 my-3">
 
 			{{form_start(formulaire)}}
-
-			<div class="col-2">
-				{{form_errors(formulaire.name)}}
-				{{form_errors(formulaire.startDateTime)}}
-				{{form_errors(formulaire.endRegisterDate)}}
-				{{form_errors(formulaire.duration)}}
-				{{form_errors(formulaire.nbParticipantMax)}}
-				{{form_errors(formulaire.details)}}
-			</div>
 			<fieldset>
 				<legend>Créer une sortie</legend>
 
@@ -31,6 +22,9 @@
 							</label>
 							<div class="col-6">
 								{{form_widget(formulaire.name)}}
+								<div class="text-danger" font-size:'10px'>
+									{{form_errors(formulaire.name)}}
+								</div>
 							</div>
 						</div>
 						<div class="form-group row">
@@ -40,7 +34,11 @@
 							</label>
 							<div class="col-6">
 								{{form_widget(formulaire.startDateTime)}}
+								<div class="text-danger" font-size:'10px'>
+									{{form_errors(formulaire.startDateTime)}}
+								</div>
 							</div>
+
 						</div>
 						<div class="form-group row">
 							<label for="select" class="col-4 col-form-label">
@@ -48,6 +46,9 @@
 							</label>
 							<div class="col-6">
 								{{form_widget(formulaire.endRegisterDate)}}
+								<div class="text-danger" font-size:'10px'>
+									{{form_errors(formulaire.endRegisterDate)}}
+								</div>
 							</div>
 						</div>
 						<div class="form-group row">
@@ -56,6 +57,9 @@
 							</label>
 							<div class="col-6">
 								{{form_widget(formulaire.nbParticipantMax)}}
+								<div class="text-danger" font-size:'10px'>
+									{{form_errors(formulaire.nbParticipantMax)}}
+								</div>
 							</div>
 						</div>
 						<div class="form-group row">
@@ -64,6 +68,9 @@
 							</label>
 							<div class="col-6">
 								{{form_widget(formulaire.duration)}}
+								<div class="text-danger" font-size:'10px'>
+									{{form_errors(formulaire.duration)}}
+								</div>
 							</div>
 						</div>
 
@@ -74,6 +81,9 @@
 							</label>
 							<div class="col-6">
 								{{form_widget(formulaire.details)}}
+								<div class="text-danger" font-size:'10px'>
+									{{form_errors(formulaire.details)}}
+								</div>
 							</div>
 						</div>
 
@@ -106,6 +116,9 @@
 							</label>
 							<div class="col-6" name="location" id="location">
 								{{form_widget(formulaire.location)}}
+								<div class="text-danger" font-size:'10px'>
+									{{form_errors(formulaire.location)}}
+								</div>
 							</div>
 						</div>
 						<div class="form-group row">

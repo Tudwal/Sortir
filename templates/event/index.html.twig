@@ -104,7 +104,7 @@
 									{% endif %}
 									{% if event.state in stateCrea  %}
 										{% if event.organizer.pseudo == app.user.pseudo %}
-											<a href="{{ path('event_update',{id:event.id })}}" class="btn btn-warning">
+											<a href="{{ path('event_updateAPI',{id:event.id })}}" class="btn btn-warning">
 												modifier
 											</a>
 										{% endif %}
