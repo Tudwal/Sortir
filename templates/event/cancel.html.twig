@@ -11,12 +11,12 @@
     <p>Lieu : {{event.Location.name}}</p>
 
     <form method="POST" action="{{ path('event_cancel',{id:event.id })}}">
-    <div>
-        <label for="motif">Motif :</label>
-        <input type="text" id="motif" name="motif_cancel">
-    </div>
-    <div>
-        <input type="submit" value="Continuer">
-    </div>
+        <div>
+            <label for="motif">Motif :</label>
+            <input type="text" id="motif" name="motif_cancel">
+        </div>
+        <div>
+            <input type="submit" value="Continuer">
+        </div>
     </form>
 {% endblock %}

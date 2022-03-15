@@ -171,13 +171,13 @@ class EventController extends AbstractController
         if($req->get('motif_cancel'))
         {
        
-        $eventDetails = $e->getDetails();
-        $annulation = $req->get('motif_cancel');
-        $newDetails = $eventDetails . nl2br('MOTIF D\'ANNULATION: ') . $annulation;
-        $e->setDetails($newDetails);
-        $e->setState($stateRepo->findOneBy(array('code' => 'ANNU')));
-        $em->persist($e);
-        $em->flush();
+            $eventDetails = $e->getDetails();
+            $annulation = $req->get('motif_cancel');
+            $newDetails =  $eventDetails . ' MOTIF D\'ANNULATION: ' . $annulation;
+            $e->setDetails($newDetails);
+            $e->setState($stateRepo->findOneBy(array('code' => 'ANNU')));
+            $em->persist($e);
+            $em->flush();
         
         return $this->redirectToRoute('home');
         }        
