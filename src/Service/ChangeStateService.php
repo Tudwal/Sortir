@@ -42,14 +42,9 @@ class ChangeStateService
             $historyEvent->add(new DateInterval('P1M'));
 
 
-            // MODIFICATION ETAT OPEN
-            if ($today < $endRegistration) {
-                $open = $this->stateRepository->findOneBy(array('code' => 'OPEN'));
-                $event->setState($open);
-            }
 
             // MODIFICATION ETAT CLOS
-            if ($today >= $endRegistration && $today <= $endEvent ) {
+            if ($today >= $endRegistration && $today <= $endEvent) {
                 $clos = $this->stateRepository->findOneBy(array('code' => 'CLOS'));
                 $event->setState($clos);
             }
