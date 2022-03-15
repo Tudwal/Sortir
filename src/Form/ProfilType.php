@@ -27,7 +27,7 @@ class ProfilType extends AbstractType
                 'label' => 'Nom de famille'
             ])
             ->add('phone', TextType::class, [
-                'label' => 'Numéro de téléphonne'
+                'label' => 'Téléphonne'
             ])
             ->add('email', EmailType::class)
             ->add('password', RepeatedType::class, [
