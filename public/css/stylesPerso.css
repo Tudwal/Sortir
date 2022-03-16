@@ -1,0 +1,10 @@
+header.masthead {
+  background-image: url("../img/plage.jpg");
+}
+#mainNav{
+  background-color: #212529;
+}
+.footer{
+  background-color: #212529;
+  color:white;
+}

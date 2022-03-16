@@ -6,49 +6,49 @@
 {% endblock %}
 
 {% block body %}
+	<div class="text-center">
+		<h2 class="section-heading text-uppercase">Rechercher une sortie</h2>
+	</div>
+	{{form_start(formulaire)}}
 
-	<div class="container-fluid px-4 mt-4">
 
-		{{form_start(formulaire)}}
+<div class="d-flex">
+	<div id="colonne-gauche" class="col-6 mt-4">
+		{{form_row(formulaire.campus)}}
+		{{form_errors(formulaire.campus)}}
+		{{form_row(formulaire.startDate)}}
+		{{form_errors(formulaire.startDate)}}
+		{{form_row(formulaire.endDate) }}
+		{{form_errors(formulaire.endDate)}}
+		{{form_row(formulaire.search)}}
+		
+	</div>
 
-		<div class="row">
-			<div class="col-6">
+	<div id="colonne-droite" class="col-6 mt-4">
+		{{form_row(formulaire.eventOrganizer)}}
+		{{form_errors(formulaire.eventOrganizer)}}
 
-				{{form_label(formulaire.campus)}}
-				{{form_widget(formulaire.campus)}}
-				{{form_errors(formulaire.campus)}}
+		{{form_row(formulaire.eventRegister)}}
+		{{form_errors(formulaire.eventRegister)}}
 
-				{{form_label(formulaire.startDate)}}
-				{{form_widget(formulaire.startDate)}}
-				{{form_errors(formulaire.startDate)}}
+		{{form_row(formulaire.eventNotRegister)}}
+		{{form_errors(formulaire.eventNotRegister)}}
 
-				{{form_label(formulaire.endDate)}}
-				{{form_widget(formulaire.endDate)}}
-				{{form_errors(formulaire.endDate)}}
+		{{form_row(formulaire.pastEvent)}}
+		{{form_errors(formulaire.pastEvent)}}
 
-				{{form_label(formulaire.search)}}
-				{{form_widget(formulaire.search)}}
-			</div>
-			<div class="col-6">
+		<div id="submit-button" class="offset-3 mt-5">
+			<button name="submit" type="submit" class="btn btn-primary">Rechercher</button>
+		</div>	
+	</div>
+</div>
+		
+	{{form_end(formulaire)}}
 
-				{{form_row(formulaire.eventOrganizer)}}
-				{{form_errors(formulaire.eventOrganizer)}}
-
-				{{form_row(formulaire.eventRegister)}}
-				{{form_errors(formulaire.eventRegister)}}
-
-				{{form_row(formulaire.eventNotRegister)}}
-				{{form_errors(formulaire.eventNotRegister)}}
-
-				{{form_row(formulaire.pastEvent)}}
-				{{form_errors(formulaire.pastEvent)}}
-
-				<div class="offset-4 col-8">
-					<button name="submit" type="submit" class="btn btn-primary">Rechercher</button>
-				</div>
-			</div>
-		</div>
-		{{form_end(formulaire)}}
+	<div id="sorties" class="mt-5"></div>
+	<div class="text-center">
+		<h2 class="section-heading text-uppercase">Liste des sorties</h2>
+	</div>
 
 		<div class="table-responsive mt-5">
 			<table class="table table-hover table-striped">
@@ -69,10 +69,9 @@
 						{% if 
 							(event.state not in stateCrea or (event.organizer.pseudo == app.user.pseudo and event.state in stateCrea)) 
 						%}
-
 							<tr>
 								<td>{{event.name}}</td>
-								<td>{{event.startDateTime | date('d-m-Y H:i:s') }}</td>
+								<td>{{event.startDateTime | date('d-m-Y') }}</td>
 								<td>{{event.endRegisterDate | date('d-m-Y')}}</td>
 								<td>{{ event.participants | length }}/{{event.nbParticipantMax}}</td>
 								<td>{{event.state.label}}</td>
@@ -130,5 +129,5 @@
 				</tbody>
 			</table>
 		</div>
-	</div>
+	
 {% endblock %}
