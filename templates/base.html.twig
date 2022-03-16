@@ -26,6 +26,9 @@
 		<link href="{{ asset("css/styles.css") }}" rel="stylesheet" />
 		<link href={{asset("css/stylesPerso.css")}} rel="stylesheet"/>
 
+		<!-- Fade animation -->
+		<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
 		{% block stylesheets %}
 			{{ encore_entry_link_tags('app') }}
 		{% endblock %}
@@ -108,7 +111,10 @@
 <!-- Core theme JS-->
 <script src={{asset("js/scripts.js")}}></script>
 
+<!-- Fade animation JS -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 
+<script> AOS.init(); </script>
 
 </body>
 

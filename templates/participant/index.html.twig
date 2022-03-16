@@ -17,29 +17,34 @@
             </div>
         <div class="col my-4">
 
-           <h4><strong> {{ participant.pseudo }}</strong></h4>
-            <p></p>
-            <div class="d-flex">
-                <p><strong>Prénom : </strong></p>
-                <p>{{ participant.firstName }}</p>
-            </div>
-            <div class="d-flex">
-                <p><strong>Nom : </strong></p>
-                <p>{{ participant.lastName }}</p>
-            </div>
-            <div class="d-flex">
-                <p><strong>Téléphone : </strong></p>
-                <p>{{ participant.phone }}</p>
-            </div>
-            <div class="d-flex">
-                <p><strong>Email : </strong></p>
-                <p> {{ participant.email }}</p>
-            </div>
-            <div class="d-flex">
-                <p><strong>Campus : </strong></p>
-                <p>{{ participant.campus.name }}</p>
-            </div>
-            </div>
+       <h4><strong> {{ participant.pseudo }}</strong></h4>
+        <p></p>
+        <div class="d-flex">
+            <p><strong>Prénom : </strong></p>
+            <p>{{ participant.firstName }}</p>
+        </div>
+        <div class="d-flex">
+            <p><strong>Nom : </strong></p>
+            <p>{{ participant.lastName }}</p>
+        </div>
+        <div class="d-flex">
+            <p><strong>Téléphone : </strong></p>
+            <p>{{ participant.phone }}</p>
+        </div>
+        <div class="d-flex">
+            <p><strong>Email : </strong></p>
+            <p> {{ participant.email }}</p>
+        </div>
+        <div class="d-flex">
+            <p><strong>Campus : </strong></p>
+            <p>{{ participant.campus.name }}</p>
+        </div>
+
+
+        <a href="{{ path('home')}}" class="btn btn-info"> Retour
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary"></span></a>
+
+        </div>
         </div>
     </div>
 

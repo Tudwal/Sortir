@@ -51,6 +51,7 @@
 		<h2 class="section-heading text-uppercase mb-5">Liste des sorties</h2>
 	</div>
 
+
 			<table class="table table-responsive table-hover dataTable-pagination">
 				<thead>
 					<tr>
@@ -130,8 +131,8 @@
 					{% endfor %}
 				</tbody>
 			</table>
-	{{ knp_pagination_render(events) }}
-		</div>
+			{{ knp_pagination_render(events) }}
+
 
 	<script>
 		$(document).ready(function () {

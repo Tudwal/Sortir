@@ -25,3 +25,7 @@ table.dataTable thead .sorting_desc_disabled:before {
 .pagination{
   justify-content: center;
 }
+
+img.logo{
+  max-width: 80%;
+}

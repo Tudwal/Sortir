@@ -10,6 +10,7 @@ use App\Form\ModelSearchType;
 use App\Repository\CampusRepository;
 use App\Repository\CityRepository;
 use App\Repository\EventRepository;
+use App\Repository\LocationRepository;
 use App\Repository\StateRepository;
 use App\Service\ChangeStateService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -20,7 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/home")
+ * @Route("/")
  */
 class EventController extends AbstractController
 {
@@ -44,9 +45,7 @@ class EventController extends AbstractController
 
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $data = $form->getData(); // $data = $createSearchType il contient la même chose
-            $search = $form->get('search')->getData();
-            $donnees = $repoEvent->searchByFilter($data, $search);
+            $donnees = $repoEvent->searchByFilter($createSearchType);
         }
         $eventList = $paginator->paginate(
             $donnees,
@@ -54,8 +53,6 @@ class EventController extends AbstractController
             6
         );
         $eventList->setParam('_fragment','sorties');
-      //  $eventList->setTemplate('sliding.html.twig');
-      //  $eventList->setSortableTemplate('sortable_link.html.twig');
 
 
         return $this->render('event/index.html.twig', [
@@ -275,8 +272,12 @@ class EventController extends AbstractController
     /**
      * @Route("/event-updateAPI/{id}", name="event_updateAPI")
      */
-    public function eventUpdateAPI(Event $event, EntityManagerInterface $em, Request $req, StateRepository $stateRepo, CityRepository $cityRepo): Response
+    public function eventUpdateAPI(Event $event, EntityManagerInterface $em, Request $req, LocationRepository $locationRepository, CityRepository $cityRepo): Response
     {
+        $location = $locationRepository->findOneBy(array('id' => $event->getLocation()->getId()));
+        $city = $cityRepo->findOneBy(array('id' => $event->getLocation()->getCity()->getId()));
+        $event->setLocation($location);
+        $event->getLocation()->setCity($city);
         $user = $this->getUser();
         $form = $this->createForm(EventTypeAPI::class, $event);
         $form->handleRequest($req);

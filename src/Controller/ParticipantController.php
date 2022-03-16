@@ -74,7 +74,10 @@ class ParticipantController extends AbstractController
                 $p->setPassword($hashedPassword);
                 $em->persist($p);
             }
-
+            $this->addFlash(
+                'success',
+                'Votre profil est modifié'
+            );
             $em->flush();
             return $this->redirectToRoute('home');
         }

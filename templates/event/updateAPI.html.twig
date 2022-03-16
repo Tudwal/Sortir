@@ -178,24 +178,23 @@
 	</div>
 
 
-	<script>
+<script>
 
-		let cities = {};
-let url = '../api/';
-fetch(url).then(res => res.json()).then(data => {
-cities = data
-afficherLocation(cities[0].id);
-
-});
+	let cities = {};
+	let url = '../api/';
+	fetch(url).then(res => res.json()).then(data => {
+		cities = data
+		afficherLocation(cities[0].id);
+		});
 
 
 // Demander à afficher les bonnes Locations et le code postal à chaque changement de City
 document.querySelector('#event_type_api_city').onchange = function () {
-let cityId = document.querySelector('#event_type_api_city').value;
-let locationId = document.querySelector('#event_type_api_location').value;
-afficherLocation(cityId);
-afficherCodePostal(cityId);
-}
+	let cityId = document.querySelector('#event_type_api_city').value;
+	let locationId = document.querySelector('#event_type_api_location').value;
+	afficherLocation(cityId);
+	afficherCodePostal(cityId);
+	}
 
 
 // alimenter select Location

@@ -33,11 +33,10 @@ class EventSearchType extends AbstractType
                 'label' => 'Campus',
                 'class' => Campus::class,
                 'choice_label' => 'name',
-                'placeholder' => $this->security->getUser()->getCampus(),
+                'placeholder' => 'Tous les campus',
                 'required' => false
             ])
             ->add('search', SearchType::class, [
-                'mapped' => false,
                 'label' => 'Recherche',
                 'attr' => array(
                     'placeholder' => ' Rechercher une sortie'

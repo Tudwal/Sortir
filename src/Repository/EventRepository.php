@@ -48,7 +48,7 @@ class EventRepository extends ServiceEntityRepository
         }
     }
 
-    public function searchByFilter($data, $search)
+    public function searchByFilter($data)
     {
 
         $idUser = $this->user->getId() ? $this->user->getId() : null;
@@ -59,20 +59,25 @@ class EventRepository extends ServiceEntityRepository
         $pastEvent = $data->pastEvent;
         $eventRegistered = $data->eventRegister;
         $eventNotRegister = $data->eventNotRegister;
+        $search = $data->search;
 
         $qb = $this->createQueryBuilder('e');
 
-        $qb->select('e');
+        $qb->innerJoin('e.campus', 'c');
+        $qb->leftJoin('e.participants', 'p');
+        $qb->innerJoin('e.organizer', 'o');
+        $qb->innerJoin('e.state', 's');
+        $qb->orderBy('e.startDateTime');
 
         // Filter on the events of wich I am registered
         if ($eventRegistered) {
-            $qb->orWhere(":user MEMBER OF e.participants")
+            $qb->andWhere(":user MEMBER OF e.participants")
                 ->setParameter("user", $this->user);
         }
 
         // Filter on the events of wich I am not registered
         if ($eventNotRegister) {
-            $qb->orWhere(":user NOT MEMBER OF e.participants")
+            $qb->andWhere(":user NOT MEMBER OF e.participants")
                 ->setParameter("user",  $this->user);
         }
 

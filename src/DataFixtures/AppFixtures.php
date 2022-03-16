@@ -71,21 +71,136 @@ class AppFixtures extends Fixture
     {
         $faker = Factory::create('fr_FR');
 
-        for ($i = 0; $i < 10; $i++) {
-            $participant = new Participant();
 
-            $participant->setFirstName($faker->firstName)
-                ->setLastName($faker->lastName)
+            $angelo = new Participant();
+            $angelo->setFirstName('Angelo')
+                ->setLastName('Fernandes')
                 ->setPhone($faker->phoneNumber)
                 ->setPseudo($faker->word(10))
                 ->setEmail($faker->email)
                 ->setCampus($faker->randomElement($this->manager->getRepository(Campus::class)->findAll()))
-                ->setPassword($this->hasher->hashPassword($participant, '123'))
+                ->setPassword($this->hasher->hashPassword($angelo, '123'))
                 ->setRoles(['ROLE_USER'])
-                ->setIsActif(true);
+                ->setIsActif(true)
+                ->setImgName('licorne5.png');
+            $this->manager->persist($angelo);
 
-            $this->manager->persist($participant);
-        }
+        $tudwal = new Participant();
+        $tudwal->setFirstName('Tudwal')
+            ->setLastName('Corlouer')
+            ->setPhone($faker->phoneNumber)
+            ->setPseudo($faker->word(10))
+            ->setEmail($faker->email)
+            ->setCampus($faker->randomElement($this->manager->getRepository(Campus::class)->findAll()))
+            ->setPassword($this->hasher->hashPassword($tudwal, '123'))
+            ->setRoles(['ROLE_USER'])
+            ->setIsActif(true)
+            ->setImgName('licorne6.png');
+        $this->manager->persist($tudwal);
+
+        $jerome = new Participant();
+        $jerome->setFirstName('Jérôme')
+            ->setLastName('Donal')
+            ->setPhone($faker->phoneNumber)
+            ->setPseudo($faker->word(10))
+            ->setEmail($faker->email)
+            ->setCampus($faker->randomElement($this->manager->getRepository(Campus::class)->findAll()))
+            ->setPassword($this->hasher->hashPassword($jerome, '123'))
+            ->setRoles(['ROLE_USER'])
+            ->setIsActif(true)
+            ->setImgName('licorne1.png');
+        $this->manager->persist($jerome);
+
+        $claire = new Participant();
+        $claire->setFirstName('Claire')
+            ->setLastName('Goarnisson')
+            ->setPhone($faker->phoneNumber)
+            ->setPseudo($faker->word(10))
+            ->setEmail($faker->email)
+            ->setCampus($faker->randomElement($this->manager->getRepository(Campus::class)->findAll()))
+            ->setPassword($this->hasher->hashPassword($claire, '123'))
+            ->setRoles(['ROLE_USER'])
+            ->setIsActif(true)
+            ->setImgName('licorne7.png');
+        $this->manager->persist($claire);
+
+        $sylvain = new Participant();
+        $sylvain->setFirstName('Sylvain')
+            ->setLastName('Tropée')
+            ->setPhone($faker->phoneNumber)
+            ->setPseudo($faker->word(10))
+            ->setEmail($faker->email)
+            ->setCampus($faker->randomElement($this->manager->getRepository(Campus::class)->findAll()))
+            ->setPassword($this->hasher->hashPassword($sylvain, '123'))
+            ->setRoles(['ROLE_USER'])
+            ->setIsActif(true)
+            ->setImgName('licorne2.jpg');
+        $this->manager->persist($sylvain);
+
+        $annest = new Participant();
+        $annest->setFirstName('Annest')
+            ->setLastName('Wheldon')
+            ->setPhone($faker->phoneNumber)
+            ->setPseudo($faker->word(10))
+            ->setEmail($faker->email)
+            ->setCampus($faker->randomElement($this->manager->getRepository(Campus::class)->findAll()))
+            ->setPassword($this->hasher->hashPassword($annest, '123'))
+            ->setRoles(['ROLE_USER'])
+            ->setIsActif(true)
+            ->setImgName('licorne4.jpg');
+        $this->manager->persist($annest);
+
+        $roxane = new Participant();
+        $roxane->setFirstName('Roxanne')
+            ->setLastName('Houlgatte')
+            ->setPhone($faker->phoneNumber)
+            ->setPseudo($faker->word(10))
+            ->setEmail($faker->email)
+            ->setCampus($faker->randomElement($this->manager->getRepository(Campus::class)->findAll()))
+            ->setPassword($this->hasher->hashPassword($roxane, '123'))
+            ->setRoles(['ROLE_USER'])
+            ->setIsActif(true)
+            ->setImgName('licorne3.png');
+        $this->manager->persist($roxane);
+
+        $najim = new Participant();
+        $najim->setFirstName('Nagim')
+            ->setLastName('Amokhtari')
+            ->setPhone($faker->phoneNumber)
+            ->setPseudo($faker->word(10))
+            ->setEmail($faker->email)
+            ->setCampus($faker->randomElement($this->manager->getRepository(Campus::class)->findAll()))
+            ->setPassword($this->hasher->hashPassword($najim, '123'))
+            ->setRoles(['ROLE_USER'])
+            ->setIsActif(true)
+            ->setImgName('licorne9.jpg');
+        $this->manager->persist($najim);
+
+        $lucas = new Participant();
+        $lucas->setFirstName('Lucas')
+            ->setLastName('Feat')
+            ->setPhone($faker->phoneNumber)
+            ->setPseudo($faker->word(10))
+            ->setEmail($faker->email)
+            ->setCampus($faker->randomElement($this->manager->getRepository(Campus::class)->findAll()))
+            ->setPassword($this->hasher->hashPassword($lucas, '123'))
+            ->setRoles(['ROLE_USER'])
+            ->setIsActif(true)
+            ->setImgName('licorne8.jpg');
+        $this->manager->persist($lucas);
+
+        $thimotee = new Participant();
+        $thimotee->setFirstName('Timothée')
+            ->setLastName('Bertin')
+            ->setPhone($faker->phoneNumber)
+            ->setPseudo($faker->word(10))
+            ->setEmail($faker->email)
+            ->setCampus($faker->randomElement($this->manager->getRepository(Campus::class)->findAll()))
+            ->setPassword($this->hasher->hashPassword($thimotee, '123'))
+            ->setRoles(['ROLE_USER'])
+            ->setIsActif(true)
+            ->setImgName('licorne10.jpg');
+        $this->manager->persist($thimotee);
 
         $this->manager->flush();
     }
@@ -171,12 +286,6 @@ class AppFixtures extends Fixture
     {
         $faker = Factory::create('fr_FR');
 
-        $now = new DateTime('now', new DateTimeZone('Europe/Paris'));
-        $past = (new DateTime('now', new DateTimeZone('Europe/Paris')))->modify('-18 days');
-        $past2 = (new DateTime('now', new DateTimeZone('Europe/Paris')))->modify('-5 days');
-        $today = new DateTime('now', new DateTimeZone('Europe/Paris'));
-        $end = $today->add(new DateInterval('P15D'));
-
         $piscine = new Event();
         $piscine->setName('Sortie piscine')
             ->setStartDateTime((new DateTime('now', new DateTimeZone('Europe/Paris')))->modify('+ 2 days'))
@@ -184,7 +293,7 @@ class AppFixtures extends Fixture
             ->setEndRegisterDate((new DateTime('now', new DateTimeZone('Europe/Paris')))->modify('- 10 days'))
             ->setNbParticipantMax(10)
             ->setDetails('Nager la brasse coulée en toute liberté et sans complexe')
-            ->setState($this->manager->getRepository(State::class)->findOneBy(array('code' => 'OPEN'))) /// état ouverte
+            ->setState($this->manager->getRepository(State::class)->findOneBy(array('code' => 'CLOS'))) /// état clôturée
             ->setLocation($faker->randomElement($this->manager->getRepository(Location::class)->findAll()))
             ->setCampus($faker->randomElement($this->manager->getRepository(Campus::class)->findAll()))
             ->setOrganizer($faker->randomElement($this->manager->getRepository(Participant::class)->findAll()))
@@ -194,9 +303,9 @@ class AppFixtures extends Fixture
 
         $patinoire = new Event();
         $patinoire->setName('Sortie patinoire')
-            ->setStartDateTime($now)
+            ->setStartDateTime((new DateTime('now', new DateTimeZone('Europe/Paris')))->modify('+ 2 days'))
             ->setDuration(90)
-            ->setEndRegisterDate((new DateTime('now', new DateTimeZone('Europe/Paris')))->modify('- 2 days'))
+            ->setEndRegisterDate((new DateTime('now', new DateTimeZone('Europe/Paris')))->modify('- 1 days'))
             ->setNbParticipantMax(15)
             ->setDetails('Patiner en toute liberté et sans complexe')
             ->setState($this->manager->getRepository(State::class)->findOneBy(array('code' => 'CLOS'))) // état clôturée
@@ -214,7 +323,7 @@ class AppFixtures extends Fixture
             ->setEndRegisterDate((new DateTime('now', new DateTimeZone('Europe/Paris')))->modify('-15 days'))
             ->setNbParticipantMax(5)
             ->setDetails('Aller au cinéma en toute liberté et sans complexe')
-            ->setState($this->manager->getRepository(State::class)->findOneBy(array('code' => 'ENCO'))) // état en-cours
+            ->setState($this->manager->getRepository(State::class)->findOneBy(array('code' => 'FINI'))) // état terminée
             ->setLocation($faker->randomElement($this->manager->getRepository(Location::class)->findAll()))
             ->setCampus($faker->randomElement($this->manager->getRepository(Campus::class)->findAll()))
             ->setOrganizer($faker->randomElement($this->manager->getRepository(Participant::class)->findAll()))
@@ -224,12 +333,12 @@ class AppFixtures extends Fixture
 
         $karaoke = new Event();
         $karaoke->setName('Sortie karaoké')
-            ->setStartDateTime($now)
+            ->setStartDateTime((new DateTime('now', new DateTimeZone('Europe/Paris')))->modify('+ 25 days'))
             ->setDuration(90)
-            ->setEndRegisterDate($end)
+            ->setEndRegisterDate((new DateTime('now', new DateTimeZone('Europe/Paris')))->modify('+2 days'))
             ->setNbParticipantMax(20)
             ->setDetails('Chanter en toute liberté et sans complexe')
-            ->setState($faker->randomElement($this->manager->getRepository(State::class)->findAll()))
+            ->setState($this->manager->getRepository(State::class)->findOneBy(array('code' => 'OPEN'))) // état ouvert
             ->setLocation($faker->randomElement($this->manager->getRepository(Location::class)->findAll()))
             ->setCampus($faker->randomElement($this->manager->getRepository(Campus::class)->findAll()))
             ->setOrganizer($faker->randomElement($this->manager->getRepository(Participant::class)->findAll()))
@@ -239,12 +348,12 @@ class AppFixtures extends Fixture
 
         $restaurant = new Event();
         $restaurant->setName('Sortie restaurant')
-            ->setStartDateTime($now)
+            ->setStartDateTime((new DateTime('now', new DateTimeZone('Europe/Paris')))->modify('+ 10 days'))
             ->setDuration(90)
-            ->setEndRegisterDate($end)
+            ->setEndRegisterDate((new DateTime('now', new DateTimeZone('Europe/Paris')))->modify('+5 days'))
             ->setNbParticipantMax(5)
             ->setDetails('Manger en toute liberté et sans complexe')
-            ->setState($faker->randomElement($this->manager->getRepository(State::class)->findAll()))
+            ->setState($this->manager->getRepository(State::class)->findOneBy(array('code' => 'OPEN'))) // état ouvert
             ->setLocation($faker->randomElement($this->manager->getRepository(Location::class)->findAll()))
             ->setCampus($faker->randomElement($this->manager->getRepository(Campus::class)->findAll()))
             ->setOrganizer($faker->randomElement($this->manager->getRepository(Participant::class)->findAll()))
@@ -254,12 +363,12 @@ class AppFixtures extends Fixture
 
         $bowling = new Event();
         $bowling->setName('Sortie bowling')
-            ->setStartDateTime($now)
+            ->setStartDateTime((new DateTime('now', new DateTimeZone('Europe/Paris')))->modify('+ 10 days'))
             ->setDuration(90)
-            ->setEndRegisterDate($end)
+            ->setEndRegisterDate((new DateTime('now', new DateTimeZone('Europe/Paris')))->modify('+4 days'))
             ->setNbParticipantMax(10)
             ->setDetails('Bowler en toute liberté et sans complexe')
-            ->setState($faker->randomElement($this->manager->getRepository(State::class)->findAll()))
+            ->setState($this->manager->getRepository(State::class)->findOneBy(array('code' => 'OPEN'))) // état ouvert
             ->setLocation($faker->randomElement($this->manager->getRepository(Location::class)->findAll()))
             ->setCampus($faker->randomElement($this->manager->getRepository(Campus::class)->findAll()))
             ->setOrganizer($faker->randomElement($this->manager->getRepository(Participant::class)->findAll()))
@@ -269,12 +378,12 @@ class AppFixtures extends Fixture
 
         $plage = new Event();
         $plage->setName('Sortie plage')
-            ->setStartDateTime($now)
+            ->setStartDateTime((new DateTime('now', new DateTimeZone('Europe/Paris')))->modify('+20 days'))
             ->setDuration(90)
-            ->setEndRegisterDate($end)
+            ->setEndRegisterDate((new DateTime('now', new DateTimeZone('Europe/Paris')))->modify('+10 days'))
             ->setNbParticipantMax(10)
             ->setDetails('Nager en toute liberté et sans complexe')
-            ->setState($faker->randomElement($this->manager->getRepository(State::class)->findAll()))
+            ->setState($this->manager->getRepository(State::class)->findOneBy(array('code' => 'OPEN'))) // état ouvert
             ->setLocation($faker->randomElement($this->manager->getRepository(Location::class)->findAll()))
             ->setCampus($faker->randomElement($this->manager->getRepository(Campus::class)->findAll()))
             ->setOrganizer($faker->randomElement($this->manager->getRepository(Participant::class)->findAll()));
