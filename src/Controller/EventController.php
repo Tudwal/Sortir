@@ -13,6 +13,7 @@ use App\Repository\EventRepository;
 use App\Repository\StateRepository;
 use App\Service\ChangeStateService;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,13 +27,13 @@ class EventController extends AbstractController
     /**
      * @Route("/", name="home")
      */
-    public function eventList(StateRepository $repoState, ChangeStateService $changeStateService, EventRepository $repoEvent, CampusRepository $repoCampus, Request $request): Response
+    public function eventList(PaginatorInterface $paginator, StateRepository $repoState, ChangeStateService $changeStateService, EventRepository $repoEvent, CampusRepository $repoCampus, Request $request): Response
     {
         $changeStateService->change();
 
 
         // recup les id state 1, 2 et 3
-        $eventList = $repoEvent->findAll();
+        $donnees = $repoEvent->findAll();
         $campus = $repoCampus->findAll();
         $stateCrea = $repoState->findBy(array('code' => 'CREE'));
         $stateOpen = $repoState->findBy(array('code' => 'OPEN'));
@@ -45,8 +46,17 @@ class EventController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData(); // $data = $createSearchType il contient la même chose
             $search = $form->get('search')->getData();
-            $eventList = $repoEvent->searchByFilter($data, $search);    
+            $donnees = $repoEvent->searchByFilter($data, $search);
         }
+        $eventList = $paginator->paginate(
+            $donnees,
+            $request->query->getInt('page', 1),
+            6
+        );
+        $eventList->setParam('_fragment','sorties');
+      //  $eventList->setTemplate('sliding.html.twig');
+      //  $eventList->setSortableTemplate('sortable_link.html.twig');
+
 
         return $this->render('event/index.html.twig', [
             'stateCrea' => $stateCrea,

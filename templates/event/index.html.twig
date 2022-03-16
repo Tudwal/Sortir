@@ -48,11 +48,10 @@
 
 	<div id="sorties" class="mt-5"></div>
 	<div class="text-center">
-		<h2 class="section-heading text-uppercase">Liste des sorties</h2>
+		<h2 class="section-heading text-uppercase mb-5">Liste des sorties</h2>
 	</div>
 
-		<div class="table-responsive mt-5">
-			<table class="table table-hover table-striped">
+			<table class="table table-responsive table-hover dataTable-pagination">
 				<thead>
 					<tr>
 						<th scope="col">Sortie</th>
@@ -131,6 +130,13 @@
 					{% endfor %}
 				</tbody>
 			</table>
+	{{ knp_pagination_render(events) }}
 		</div>
-	
+
+	<script>
+		$(document).ready(function () {
+			$('#tabEventList').DataTable();
+			$('.dataTables_length').addClass('bs-select');
+		});
+	</script>
 {% endblock %}
