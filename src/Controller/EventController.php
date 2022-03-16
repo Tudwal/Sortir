@@ -30,6 +30,7 @@ class EventController extends AbstractController
     {
         $changeStateService->change();
 
+
         // recup les id state 1, 2 et 3
         $eventList = $repoEvent->findAll();
         $campus = $repoCampus->findAll();
@@ -44,7 +45,7 @@ class EventController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData(); // $data = $createSearchType il contient la même chose
             $search = $form->get('search')->getData();
-            $eventList = $repoEvent->searchByFilter($data, $search);
+            $eventList = $repoEvent->searchByFilter($data, $search);    
         }
 
         return $this->render('event/index.html.twig', [
@@ -226,7 +227,7 @@ class EventController extends AbstractController
             }
         }
 
-        return $this->redirectToRoute('home');
+        return $this->redirectToRoute('home',['_fragment'=>'sorties']);
     }
 
     /**
@@ -257,7 +258,7 @@ class EventController extends AbstractController
             }
         }
 
-        return $this->redirectToRoute('home');
+        return $this->redirectToRoute('home',['_fragment'=>'sorties']);
     }
 
 

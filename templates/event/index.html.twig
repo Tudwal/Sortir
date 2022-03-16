@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 {% form_theme formulaire 'bootstrap_5_horizontal_layout.html.twig' %}
 
+
 {% block title %}
 	{{parent()}}
 {% endblock %}
@@ -77,10 +78,12 @@
 								<td>{{event.state.label}}</td>
 								<td>
 									{% if app.user in event.participants %}
-										X
+									<div class="text-center">
+										<i class="fa-solid fa-user-check"></i>
+									</div>
 									{% endif %}
 								</td>
-								<td>{{event.organizer.pseudo}}</td>
+								<td onclick="window.location='{{ path('app_view_participant',{id:event.organizer.id})}}';">{{event.organizer.pseudo}}</td>
 								<td>
 									<a href="{{ path('event_details',{id:event.id })}}" class="btn btn-info">
 										<i class="fa-solid fa-eye"></i>

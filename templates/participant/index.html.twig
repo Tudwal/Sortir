@@ -5,8 +5,8 @@
 {% block body %}
 
     <div class="container-fluid px-4" id="profil">
-        <div class="text-center">
-            <h2 class="section-heading text-uppercase">Mon profil</h2>
+        <div class="text-center mt-5">
+            <h2 class="section-heading text-uppercase">Profil</h2>
         </div>
         <div class="row">
             <div class ="col my-4">
@@ -17,26 +17,26 @@
             </div>
         <div class="col my-4">
 
-            {{ participant.pseudo }}
+           <h4><strong> {{ participant.pseudo }}</strong></h4>
             <p></p>
             <div class="d-flex">
-                <p>Prénom : </p>
+                <p><strong>Prénom : </strong></p>
                 <p>{{ participant.firstName }}</p>
             </div>
             <div class="d-flex">
-                <p>Nom : </p>
+                <p><strong>Nom : </strong></p>
                 <p>{{ participant.lastName }}</p>
             </div>
             <div class="d-flex">
-                <p>Téléphone : </p>
+                <p><strong>Téléphone : </strong></p>
                 <p>{{ participant.phone }}</p>
             </div>
             <div class="d-flex">
-                <p>Email : </p>
+                <p><strong>Email : </strong></p>
                 <p> {{ participant.email }}</p>
             </div>
             <div class="d-flex">
-                <p>Campus : </p>
+                <p><strong>Campus : </strong></p>
                 <p>{{ participant.campus.name }}</p>
             </div>
             </div>
