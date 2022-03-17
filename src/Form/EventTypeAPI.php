@@ -45,8 +45,6 @@ class EventTypeAPI extends AbstractType
 
             ])
 
-
-
             ->add('nbParticipantMax', null, [
                 'label' => 'Nombre de places: ',
                 'attr' => [
@@ -55,7 +53,6 @@ class EventTypeAPI extends AbstractType
                 ],
 
             ])
-
 
             ->add('details', TextareaType::class, ['label' => 'Description et infos: '])
             //->add('state')
