@@ -83,7 +83,7 @@ class ParticipantController extends AbstractController
         }
 
         return $this->render('participant/updateProfil.html.twig', [
-            'formulaire' => $form->createView(),
+            'formulaire' => $form->createView()
         ]);
     }
 }

@@ -4,8 +4,9 @@
 
 {% block body %}
 
+
     <div id="profil"></div>
-<div class="container my-4">
+    <div class="container my-4">
     <div class="text-center">
         <h2 class="section-heading text-uppercase">Mon profil</h2>
     </div>
@@ -22,7 +23,7 @@
             {{ form_widget (formulaire)}}
 
                     <div class="my-4">
-                        <button class="btn btn-primary" type="submit">Enregistrer
+                        <button id="btn-enregistrer" type="submit" id="activateToast">Enregistrer
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary"></span></button> 
                         <a href="{{ path('app_view_participant',{id:app.user.id})}}#profil" class="btn btn-warning"> Annuler
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary"></span></a>
@@ -32,6 +33,7 @@
         </div>
 
 </div>
+
 {% endblock %}
 
 
