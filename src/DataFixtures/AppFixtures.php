@@ -164,7 +164,7 @@ class AppFixtures extends Fixture
         $this->manager->persist($roxane);
 
         $najim = new Participant();
-        $najim->setFirstName('Nagim')
+        $najim->setFirstName('Najim')
             ->setLastName('Amokhtari')
             ->setPhone($faker->phoneNumber)
             ->setPseudo($faker->word(10))
